@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<hta:application id="oHTA"
+		applicationname="myApp">
+
+	<title>test</title>
+	<script src="../src/common.js"></script>
+	<script src="../src/iof.js"></script>
+	<script src="../src/json.js"></script>
+	<script src="../build/crox_all.js"></script>
+	<script src="examples.js"></script>
+	<script src="../config.js"></script>
+	<script>
+		var thePath = (oHTA.commandLine).replace(/"/g, '').replace(/[^/]+$/, '');
+		function fromExamples() {
+			var a = [];
+			for (var i = 0; i < examples.length; ++i) {
+				a.push([examples[i].tmpl, examples[i].data, examples[i].out]);
+			}
+			return a;
+		}
+		var cases = [
+			//ToString
+			['{{1+2}}', , '3'],
+			['{{1+"2"}}', , '12'],
+			['{{root+root}}', {}, '[object Object][object Object]'],
+			['{{root}}', {}, '[object Object]'],
+			['{{root}}', [1, 2], '1,2'],
+			['{{root}}', [null, , 1, 2], ',,1,2'],
+			['{{true}}', , 'true'],
+			['{{false}}', , 'false'],
+			//['{{null}}', , 'null'],
+
+			//ToNumber
+			['{{"12"-2}}', , '10'],
+			['{{"12"-true}}', , '11'],
+			['{{"12"-false}}', , '12'],
+
+			//ToBoolean
+			['{{!!false}}', , 'false'],
+			['{{!!""}}', , 'false'],
+			['{{!!0}}', , 'false'],
+			//['{{!!null}}', , 'false'],
+			['{{!!"0"}}', , 'true'],
+			['{{!!root}}', [], 'true'],
+			['{{!!root}}', {}, 'true'],
+
+			['{root:{{root}}}', 2, '{root:2}'],
+
+			['{{root}}, 你好', '哈喽', '哈喽, 你好'],
+			['{{root}}, 你好\r', '哈喽\n', '哈喽\n, 你好\r'],
+			['{{root}}, 你好\r', '哈喽\r\n', '哈喽\r\n, 你好\r'],
+			['{{root}}, 你好\'\\', '哈喽\'\\', '哈喽\'\\, 你好\'\\']
+		];
+		function renderJs(sFunc, data) {
+			/// <param name="sFunc" type="String"></param>
+			/// <param name="data" type="JSON"></param>
+			var f = eval('0,' + sFunc);
+			return f(data);
+		}
+		function toPhpJson(v) {
+			function isArray(t) {
+				return Object.prototype.toString.call(t) == '[object Array]';
+			}
+			function encode(a) {
+				switch (typeof a) {
+					case 'string':
+						return phpQuote(a);
+					case 'number':
+						if (!isNaN(a) && isFinite(a))
+							return String(a);
+						break;
+					case 'boolean':
+						return String(a);
+					case 'object':
+						if (!a) break;
+						var r = [], i;
+						if (isArray(a)) {
+							for (i = 0; i < a.length; ++i)
+								r[i] = encode(a[i]);
+							return '[' + r.join() + ']';
+						}
+						else {
+							for (i in a) {
+								switch (typeof a[i]) {
+									case 'function':
+									case 'undefined':
+										continue;
+								}
+								try {
+									r.push(phpQuote(i) + '=>' + encode(a[i]));
+								} catch (e) {
+									alert(JSON.stringify(a));
+								}
+							}
+							return '(object)[' + r.join() + ']';
+						}
+				}
+				return 'null';
+			}
+			return encode(v);
+		}
+		function renderPhp(sFunc, data) {
+			/// <param name="sFunc" type="String"></param>
+			/// <param name="data" type="JSON"></param>
+			var s = '<?php\n' + sFunc + '\n';
+			s += '$i_root = ' + toPhpJson(data) + ';\n';
+			s += 'print(temp($i_root));\n';
+			s += '?>';
+			saveFile('temp.php', s, 'gb2312');
+			var wsh = new ActiveXObject('WScript.shell');
+			var obj = wsh.Exec(phpPath + ' temp.php');
+			var r = obj.StdOut.ReadAll();
+			return r;
+		}
+		function errToStr(err) {
+			if (err instanceof Error)
+				return err.message;
+			return String(err);
+		}
+		function runTest(a) {
+			var s = '<table border=1><tr><th>模板</th><th>数据</th><th>输出（js）</th><th>输出（php）</th></tr>';
+			for (var i = 0; i < a.length; ++i) {
+				var tmpl = a[i][0];
+				var data = a[i][1];
+				var out = a[i][2];
+				var fn_js = Crox.compile(tmpl);
+				var jsErr = null;
+				try {
+					var jsOut = fn_js(data);
+				} catch (e) { jsErr = e; }
+				var phpErr = null;
+				//try {
+				var php = Crox.compileToPhp(tmpl);
+				var phpOut = renderPhp(php, data);
+				//} catch (e) { phpErr = e; }
+				s += '<tr>';
+				s += '<td><pre>' + (tmpl) + '</pre></td>';
+				s += '<td><pre>' + (JSON.stringify(data)) + '</pre></td>';
+				s += '<td><pre>' + (jsErr ? errToStr(jsErr).fontcolor('red') : htmlEncode(jsOut).fontcolor(out == jsOut ? 'green' : 'red')) + '</pre></td>';
+				s += '<td><pre>' + (phpErr ? errToStr(phpErr).fontcolor('red') : htmlEncode(phpOut).fontcolor(out == phpOut ? 'green' : 'red')) + '</pre></td>';
+				s += '</tr>';
+			}
+			s += '</table>';
+			document.getElementById('d1').innerHTML = s;
+		}
+		function test() {
+			runTest(fromExamples());
+		}
+		function test2() {
+			runTest(cases);
+		}
+
+	</script>
+</head>
+<body>
+	<input type="button" value="test" onclick="test()" />
+	<input type="button" value="test2" onclick="test2()" />
+	<div id="d1"></div>
+</body>
+</html>

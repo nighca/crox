@@ -1,0 +1,82 @@
+<job>
+	<script src="src/iof.js" language="JScript"></script>
+	<script src="src/json.js" language="JScript"></script>
+	<script src="config.js" language="JScript"></script>
+	<script language="JScript">
+		var wshShell = WScript.CreateObject("WScript.Shell");
+		var btn = wshShell.Popup("build?", 60, "", 0x4 + 0x20);
+		if (btn != 6)
+			WScript.Quit();
+
+		var buildVersion = JSON.parse(readFile('package.json')).version;
+		var a_js = ['common.js', 'createLexer.js', 'lexer.js', 'parser.js', 'codegen_common.js', 'codegen_js.js', 'crox_js.js'];
+		var out_js = ['crox.js', 'crox-min.js'];
+
+		var a_all_js = ['common.js', 'createLexer.js', 'lexer.js', 'parser.js', 'codegen_common.js', 'codegen_js.js', 'crox_js.js', 'codegen_php.js', 'crox_php.js'];
+		var out_all_js = ['crox-all.js', 'crox-all-min.js'];
+
+		function comb(a) {
+			var s = 'var Crox = (function() {\r\n';
+			for (var i = 0; i < a.length; ++i) {
+				s += readFile('src/' + a[i]) + '\r\n';
+			}
+			s += 'Crox.version = "' + buildVersion + '";';
+			s += 'return Crox;';
+			s += '})();';
+			return s;
+		}
+
+		function build(s, out) {
+			var outfile = 'build/' + out[0];
+			var outfilemin = 'build/' + out[1];
+			var copy = '/**\r\n\
+ * @preserve Crox v' + buildVersion + '\r\n\
+ * https://github.com/thx/crox\r\n\
+ *\r\n\
+ * Released under the MIT license\r\n\
+ * Date: ' + sDate + '\r\n\
+ */\r\n';
+			saveFile(outfile, copy + s);
+			var tempFile = gccPath + "temp.js";
+
+			function gcc(jspath, outName) {
+				wshShell.Run("java -jar " + gccPath + " --js=" + jspath + ' --js_output_file=' + outName, 0, true);
+			}
+			gcc(outfile, outfilemin);
+		}
+
+		var theDate = new Date;
+		var sDate = theDate.getFullYear() + '-' + (theDate.getMonth() + 1) + '-' + theDate.getDate() + ' ' + theDate.getHours() + ':' + theDate.getMinutes() + ':' + theDate.getSeconds();
+		sDate = theDate.toUTCString();
+
+		var jscode = comb(a_js);
+		build(jscode, out_js);
+		var allcode = comb(a_all_js);
+		build(allcode, out_all_js);
+		//WScript.Quit();
+
+		var fso = WScript.CreateObject('Scripting.FileSystemObject');
+		function createFolder(path) {
+			if (!fso.FolderExists(path))
+				fso.CreateFolder(path);
+		}
+
+		// for kissy
+		createFolder('build/kissy');
+		build('KISSY.add("crox",function(){' + jscode + 'return Crox;});', ['kissy/crox.js', 'kissy/crox-min.js']);
+
+		// for seajs
+		createFolder('build/seajs');
+		build('define("crox",function(){' + jscode + 'return Crox;});', ['seajs/crox.js', 'seajs/crox-min.js']);
+
+		// for nodejs
+		createFolder('build/nodejs');
+		build('module.exports = (function(){' + allcode + 'return Crox;})();', ['nodejs/crox.js', 'nodejs/crox-min.js']);
+
+		// for amd
+		createFolder('build/amd');
+		build('define(function(){' + jscode + 'return Crox;});', ['amd/crox.js', 'amd/crox-min.js']);
+
+		WScript.Echo('done!');
+	</script>
+</job>

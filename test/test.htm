@@ -1,0 +1,79 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>模板测试</title>
+	<script>
+		onerror = function() {
+			alert([].join.call(arguments, '\n'));
+		};
+	</script>
+	<script src="../src/common.js"></script>
+	<script src="../build/crox_all.js"></script>
+	<script src="/kissy/build/seed.js"></script>
+	<script>
+		function test() {
+			var s_temp = document.getElementById('ta1').value;
+			var s_data = document.getElementById('ta2').value;
+
+			var f = Crox.compile(s_temp);
+			document.getElementById('ta3').value = f;
+
+			var r = f(JSON.parse(s_data));
+			document.getElementById('ta4').value = r;
+		}
+		onload = function() {
+			document.getElementById('ta2').value = JSON.stringify({
+				summary: "this is a book list",
+				list: [
+				  { name: '<JavaScript 权威指南>', price: 68.5 },
+				  { name: 'ECMA 262', price: 2 },
+				  { name: 'CSS 手册', price: 15 }
+				]
+			}, null, 2);
+		};
+		function toPhp() {
+			var s = document.getElementById('ta1').value;
+			var r = Crox.compileToPhp(s);
+			document.getElementById('ta3').value = r;
+		}
+		function xtTest() {
+			if (typeof KISSY == 'undefined') {
+				alert('需要 /kissy/build/seed.js');
+				return;
+			}
+			var s_temp = document.getElementById('ta1').value;
+			var s_data = document.getElementById('ta2').value;
+
+			KISSY.use('xtemplate', function(S, XTemplate) {
+				var t = XTemplate.compiler.compileToStr(s_temp);
+				document.getElementById('ta3').value = t;
+				var r = new XTemplate(s_temp).render(JSON.parse(s_data));
+				document.getElementById('ta4').value = r;
+			});
+		}
+
+	</script>
+</head>
+<body>
+	<textarea id="ta1" rows="10" cols="80">{{"2"+1}}
+<table summary="{{root.summary}}">
+  <tr>
+    <th>书名</th>
+    <th>价格</th>
+  </tr>
+  {{#each root.list 'v' 'i'}}
+  <tr{{#if i%2===1}} class=odd{{/if}}>
+	<td>{{v.name}}</td>
+    <td>{{v.price}}</td>
+  </tr>
+  {{/each}}
+</table></textarea><br />
+	<textarea id="ta2" rows="10" cols="80"></textarea>
+	<input type="button" value="test" onclick="test()" />
+	<input type="button" value="to php" onclick="toPhp()" />
+	<input type="button" value="use XT" onclick="xtTest()" /><br />
+	<textarea id="ta3" rows="10" cols="80"></textarea><br />
+	<textarea id="ta4" rows="10" cols="80"></textarea>
+</body>
+</html>

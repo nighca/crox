@@ -1,0 +1,40 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>examples</title>
+	<script src="../src/common.js"></script>
+	<script src="../build/crox.js"></script>
+	<script src="examples.js"></script>
+	<script>
+		onload = function() {
+			var a = examples;
+			var s = '<ol>';
+			var errNum = 0;
+			for (var i = 0; i < a.length; ++i) {
+				var ex = a[i];
+				s += '<li>';
+				s += '<h3>' + htmlEncode(ex.title) + '</h3>';
+				if (ex.desc) s += '<p>' + htmlEncode(ex.desc) + '</p>';
+				try {
+					var f = Crox.compile(ex.tmpl);
+					var r2 = f(ex.data);
+				} catch (e) {
+					r2 = e.message;
+					throw e;
+				}
+				s += '<table border=1 cellspacing=0><tr><td>模板：</td><td><pre>' + (ex.tmpl) + '</pre></td></tr><tr><td>数据：</td><td><pre>' + (JSON.stringify(ex.data)) + '</pre></td></tr><tr><td>输出：</td><td><pre>' + (r2 == ex.out ? htmlEncode(ex.out).fontcolor('green') : (++errNum, htmlEncode(r2).fontcolor('red'))) + '</pre></td></tr></table></li>';
+			}
+			s += '</ol>';
+			s = 'err: ' + errNum + '/' + i + '<br>' + s;
+			document.getElementById('d1').innerHTML = s;
+		};
+
+		//alert([String(null), null + '']);
+	</script>
+
+</head>
+<body>
+	<div id="d1"></div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+#start program;
+program:
+	statements { $$ = ['prog', $1]; }
+;
+statements:
+	{ $$ = []; }
+|	statements statement { $1.push($2); $$ = $1; }
+;
+statement:
+	"{{#if" expr "}}" statements "{{/if}}" { $$ = ['if', $2, $4]; }
+|	"{{#if" expr "}}" statements "{{else}}" statements "{{/if}}" { $$ = ['if', $2, $4, $6]; }
+|	"{{#each" expr string string? "}}" statements "{{/each}}" { $$ = ['each', $2, $6, $4 && eval($4.text), eval($3.text)];
+ }
+|	"{{" "set" id "=" expr "}}" { $$ = ['set', $3.text, $5]; }
+|	"{{" expr "}}" { $$ = ['eval', $2, true]; }
+|	"{{{" expr "}}}" { $$ = ['eval', $2, false]; }
+|	text { $$ = ['text', $1.text]; }
+;
+id: realId | set;
+
+PrimaryExpression:
+	string { $$ = ['lit', eval($1.text)]; }
+|	number { $$ = ['lit', eval($1.text)]; }
+|	boolean { $$ = ['lit', $1.text == 'true']; }
+|	id { $$ = ['id', $1.text]; }
+|	"(" expr ")" { $$ = $2; }
+;
+MemberExpression:
+	PrimaryExpression
+|	MemberExpression "." id { $$ = ['.', $1, $3.text]; }
+|	MemberExpression "[" expr "]" { $$ = ['[]', $1, $3]; }
+;
+UnaryExpression:
+	MemberExpression
+|	"!" UnaryExpression { $$ = ['!', $2]; }
+|	"-" UnaryExpression { $$ = ['u-', $2]; }
+;
+MultiplicativeExpression:
+	UnaryExpression
+|	MultiplicativeExpression "*" UnaryExpression { $$ = [$2.text, $1, $3]; }
+|	MultiplicativeExpression "/" UnaryExpression { $$ = [$2.text, $1, $3]; }
+|	MultiplicativeExpression "%" UnaryExpression { $$ = [$2.text, $1, $3]; }
+;
+AdditiveExpression:
+	MultiplicativeExpression
+|	AdditiveExpression "+" MultiplicativeExpression { $$ = [$2.text, $1, $3]; }
+|	AdditiveExpression "-" MultiplicativeExpression { $$ = [$2.text, $1, $3]; }
+;
+RelationalExpression:
+	AdditiveExpression
+|	RelationalExpression "<" AdditiveExpression { $$ = [$2.text, $1, $3]; }
+|	RelationalExpression ">" AdditiveExpression { $$ = [$2.text, $1, $3]; }
+|	RelationalExpression "<=" AdditiveExpression { $$ = [$2.text, $1, $3]; }
+|	RelationalExpression ">=" AdditiveExpression { $$ = [$2.text, $1, $3]; }
+;
+EqualityExpression:
+	RelationalExpression
+|	EqualityExpression eq RelationalExpression { $$ = ['eq', $1, $3]; }
+|	EqualityExpression ne RelationalExpression { $$ = ['ne', $1, $3]; }
+;
+LogicalAndExpression:
+	EqualityExpression
+|	LogicalAndExpression "&&" EqualityExpression { $$ = [$2.text, $1, $3]; }
+;
+LogicalOrExpression:
+	LogicalAndExpression
+|	LogicalOrExpression "||" LogicalAndExpression { $$ = [$2.text, $1, $3]; }
+;
+expr:
+	LogicalOrExpression
+;

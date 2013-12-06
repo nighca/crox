@@ -1,0 +1,87 @@
+#start program;
+program:
+	statements {
+	 $$ = Function('$data', "var obj = { '<': '&lt;', '>': '&gt;', '&': '&amp;', '\"': '&quot;' };\n\
+	function $htmlEncode(s) {\n\
+		return String(s).replace(/[<>&\"]/g, function(c) {\n\
+			return obj[c];\n\
+		});\n\
+	}\
+var $s = '';\
+function $print(s){ $s += s; }"
+ + $1 + "return $s;"); }
+;
+statements:
+	{ $$ = ''; }
+|	statements statement { $$ = $1 + $2; }
+;
+statement:
+	"{{#if" expr "}}" statements "{{/if}}" {
+		$$ = 'if(' + $2 + '){' + $4 + '}';
+	}
+|	"{{#if" expr "}}" statements "{{else}}" statements "{{/if}}" {
+		$$ = 'if(' + $2 + '){' + $4 + '}else{' + $6 + '}';
+	}
+|	"{{#each" expr string string? "}}" statements "{{/each}}" {
+		var k = $4 ? eval($4.text) : '$i';
+		$$ = 'for(var ' + k + ' in ' + $2 + '){'
+			+ 'var ' + eval($3.text) + ' = ' + $2 + '[' + k + '];' + $6 + '}';
+ }
+|	"{{" "set" id "=" expr "}}" { $$ = 'var ' + $3.text + ' = ' + $5 + ';'; }
+|	"{{" expr "}}" { $$ = '$print($htmlEncode(' + $2 + '));'; }
+|	"{{{" expr "}}}" { $$ = '$print(' + $2 + ');'; }
+|	text { $$ = '$print(' + quote($1.text) + ');'; }
+;
+id: realId | set;
+
+PrimaryExpression:
+	string { $$ = $1.text; }
+|	number { $$ = $1.text; }
+|	boolean { $$ = $1.text; }
+|	id { $$ = $1.text; }
+|	"(" expr ")" { $$ = '(' + $2 + ')'; }
+;
+MemberExpression:
+	PrimaryExpression
+|	MemberExpression "." id { $$ = $1 + '.' + $3.text; }
+|	MemberExpression "[" expr "]" { $$ = $1 + '[' + $3 + ']'; }
+;
+UnaryExpression:
+	MemberExpression
+|	"!" UnaryExpression { $$ = '!' + $2; }
+|	"-" UnaryExpression { $$ = '- ' + $2; }
+;
+MultiplicativeExpression:
+	UnaryExpression
+|	MultiplicativeExpression "*" UnaryExpression { $$ = $1 + $2.text + $3; }
+|	MultiplicativeExpression "/" UnaryExpression { $$ = $1 + $2.text + $3; }
+|	MultiplicativeExpression "%" UnaryExpression { $$ = $1 + $2.text + $3; }
+;
+AdditiveExpression:
+	MultiplicativeExpression
+|	AdditiveExpression "+" MultiplicativeExpression { $$ = $1 + $2.text + $3; }
+|	AdditiveExpression "-" MultiplicativeExpression { $$ = $1 + $2.text + $3; }
+;
+RelationalExpression:
+	AdditiveExpression
+|	RelationalExpression "<" AdditiveExpression { $$ = $1 + $2.text + $3; }
+|	RelationalExpression ">" AdditiveExpression { $$ = $1 + $2.text + $3; }
+|	RelationalExpression "<=" AdditiveExpression { $$ = $1 + $2.text + $3; }
+|	RelationalExpression ">=" AdditiveExpression { $$ = $1 + $2.text + $3; }
+;
+EqualityExpression:
+	RelationalExpression
+|	EqualityExpression eq RelationalExpression { $$ = $1 + $2.text + $3; }
+|	EqualityExpression ne RelationalExpression { $$ = $1 + $2.text + $3; }
+;
+LogicalAndExpression:
+	EqualityExpression
+|	LogicalAndExpression "&&" EqualityExpression { $$ = $1 + $2.text + $3; }
+;
+LogicalOrExpression:
+	LogicalAndExpression
+|	LogicalOrExpression "||" LogicalAndExpression { $$ = $1 + $2.text + $3; }
+;
+expr:
+	LogicalOrExpression
+;
