@@ -1,0 +1,7 @@
+build.wsf 使用说明：
+
+1. 在 windows 系统下
+
+2. 从 http://code.google.com/p/closure-compiler/ 下载，解压到 D:\gcc\ 下（因为程序需要 D:\gcc\compiler.jar，该路径可在 config.js 内更改）
+
+3. 双击 build.wsf 就可以产生一系列文件到 build 目录

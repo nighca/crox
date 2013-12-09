@@ -1,0 +1,19 @@
+文件目录
+
+src: 源码
+build: 存放 build.wsf 产生的文件
+test: 测试
+	examples.htm:  各种语法的例子
+	test.htm:  翻译、渲染的演示
+	test.hta:  翻译到 js、php 的综合测试
+	[其他]
+
+docs:
+	crox_design_overview.md: 设计文档
+	crox_spec.pdf: Crox 语法规范
+	build.txt: build.wsf 使用说明
+	test.txt: test.hta 使用说明
+	tree.txt: 文件目录介绍
+
+config.js: 包含 php、gcc 路径设置
+build.wsf: 合并、压缩 src 下的 js，产生到 build 目录

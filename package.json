@@ -1,30 +1,31 @@
 {
-    "name": "crox",
-    "version": "1.1.0",
-    "description": "Crox is a high performance cross-language template engine, written by the JavaScript.",
-    "homepage": "http://thx.github.io/corx",
-    "keywords": [
-        "front end",
-        "template"
-    ],
-    "author": "shtml <shtml@live.com>",
-    "contributors": [
-        "lenel <lenel@outlook.com>"
-    ],
-    "engines": {
-        "node": ">= 0.8.17"
-    },
-    "dependencies": {
-    },
-    "devDependencies": {
-      "grunt": "0.4.1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/thx/crox"
-    },
-    "main": "./build/nodejs/crox.js",
-    "scripts": {
-    },
-    "preferGlobal": false
+  "name": "crox",
+  "version": "1.1.0",
+  "description": "Crox is a high performance cross-language template engine, written by the JavaScript.",
+  "homepage": "http://github.com/thx/crox",
+  "keywords": [
+    "front end",
+    "template"
+  ],
+  "author": "shtml <shtml@live.com>",
+  "contributors": [
+    "shtml <shtml@live.com>",
+    "lenel <lenel@outlook.com>"
+  ],
+  "engines": {
+    "node": ">= 0.8.17"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "0.4.1",
+    "semver": "~2.2.1",
+    "async": "~0.2.9"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thx/crox"
+  },
+  "main": "./build/nodejs/crox.js",
+  "scripts": {},
+  "preferGlobal": false
 }
