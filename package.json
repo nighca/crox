@@ -1,0 +1,31 @@
+{
+  "name": "crox",
+  "version": "1.1.0",
+  "description": "Crox is a high performance cross-language template engine, written by the JavaScript.",
+  "homepage": "http://thx.github.io/corx",
+  "keywords": [
+    "front end",
+    "template"
+  ],
+  "author": "shtml <shtml@live.com>",
+  "contributors": [
+    "lenel <lenel@outlook.com>"
+  ],
+  "engines": {
+    "node": ">= 0.8.17"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "0.4.1",
+    "unzip": "~0.1.9",
+    "request": "~2.27.0",
+    "glob": "~3.2.7",
+    "q": "~0.9.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thx/crox"
+  },
+  "scripts": {},
+  "preferGlobal": false
+}
