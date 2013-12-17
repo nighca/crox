@@ -3,6 +3,8 @@ layout: post
 title: Crox
 ---
 
+{% raw %}
+
 ## Crox 说明
 
 ### 简介
@@ -70,18 +72,12 @@ Crox模板可以直接在JavaScript环境中使用，也可以翻译成PHP等其
 
 ```json
 {
-
   "name": "Chris",
-
   "value": 10000,
-
   "taxed_value": 10000 - (10000 * 0.4),
-
   "in_ca": true
-
 }
 ```
-
 
 将产生以下结果：
 
@@ -102,3 +98,5 @@ var result = Crox.render(tmpl, data);
 \\如果想拿到编译后的JS函数
 var fn = Crox.compile(tmpl);
 ```
+
+{% endraw %}
