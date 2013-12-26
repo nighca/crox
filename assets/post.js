@@ -38,7 +38,8 @@ KISSY.use('node,event', function(S, Node) {
 
 KISSY.config('packages', {
     mosaics: {
-        base: 'http://g.tbcdn.cn/thx/m',
+        base: 'http://g.tbcdn.cn/a',
+        ignorePackageNameInUri: true,
         combine: true,
         debug: false,
         tag: '20130905'
