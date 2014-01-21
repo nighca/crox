@@ -79,11 +79,15 @@ Crox将保证翻译后的结果具备最佳执行效率。
 
 将Crox模板编译成 `原生JS Function`
 
-### 4. Crox.compileToPhp
+### 4. Crox.compileToJs
+
+将Crox模板编译成 `原生JS Function` 的字符串
+
+### 5. Crox.compileToPhp
 
 将Crox模板编译成 `PHP函数`
 
-### 5. Crox.compileToVM
+### 6. Crox.compileToVM
 
 将Crox模板翻译成 `Velocity模板`
 
