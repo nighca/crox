@@ -46,7 +46,7 @@ function codegen_vm_tran(prog, nl) {
 				//emit('#set($t = ' + vmQuote(a[1]) + ')${t}');
 				break;
 			case 'inc':
-				emit("#parse('" + a[1] + "')");
+				emit("#parse('" + a[1].replace(/\.\w+$/, '.vm') + "')");
 				break;
 			default:
 				throw Error('unknown stmt: ' + a[0]);

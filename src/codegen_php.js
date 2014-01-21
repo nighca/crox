@@ -59,7 +59,7 @@ function codegen_php_tran(prog) {
 			case 'eval': compileEval(a); break;
 			case 'text': compileContent(a); break;
 			case 'inc':
-				emit("include '" + a[1] + "';");
+				//emit("include '" + a[1] + "';");
 				break;
 			default: throw Error('unknown stmt: ' + a[0]);
 		}
