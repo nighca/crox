@@ -12,7 +12,7 @@
 		var a_js = ['common.js', 'createLexer.js', 'lexer.js', 'parser.js', 'codegen_common.js', 'codegen_js.js', 'crox_js.js'];
 		var out_js = ['crox.js', 'crox-min.js'];
 
-		var a_all_js = ['common.js', 'createLexer.js', 'lexer.js', 'parser.js', 'codegen_common.js', 'codegen_js.js', 'crox_js.js', 'codegen_php.js', 'crox_php.js'];
+		var a_all_js = a_js.concat('codegen_php.js', 'codegen_vm.js', 'crox_extra.js');
 		var out_all_js = ['crox-all.js', 'crox-all-min.js'];
 
 		function comb(a) {
@@ -50,33 +50,19 @@
 		sDate = theDate.toUTCString();
 
 		var jscode = comb(a_js);
-		build(jscode, out_js);
-		var allcode = comb(a_all_js);
-		build(allcode, out_all_js);
-		//WScript.Quit();
-
-		var fso = WScript.CreateObject('Scripting.FileSystemObject');
-		function createFolder(path) {
-			if (!fso.FolderExists(path))
-				fso.CreateFolder(path);
+		function wrap(s) {
+			return '(function(root) {' + s + '\
+if ( typeof module == "object" && module && typeof module.exports == "object" ) module.exports = Crox;\
+else if (typeof define == "function" && (define.amd || define.cmd) ) define(function () { return Crox; } );\
+else if (typeof KISSY != "undefined") KISSY.add("crox",function(){ return Crox; });\
+if (root) root.Crox = Crox; })(this);';
 		}
 
-		// for kissy
-		createFolder('build/kissy');
-		build('KISSY.add("crox",function(){' + jscode + 'return Crox;});', ['kissy/crox.js', 'kissy/crox-min.js']);
-
-		// for seajs
-		createFolder('build/seajs');
-		build('define("crox",function(){' + jscode + 'return Crox;});', ['seajs/crox.js', 'seajs/crox-min.js']);
-
-		// for nodejs
-		createFolder('build/nodejs');
-		build('module.exports = (function(){' + allcode + 'return Crox;})();', ['nodejs/crox.js', 'nodejs/crox-min.js']);
-
-		// for amd
-		createFolder('build/amd');
-		build('define(function(){' + jscode + 'return Crox;});', ['amd/crox.js', 'amd/crox-min.js']);
+		build(wrap(jscode), out_js);
+		var allcode = comb(a_all_js);
+		build(wrap(allcode), out_all_js);
 
 		WScript.Echo('done!');
+
 	</script>
 </job>
