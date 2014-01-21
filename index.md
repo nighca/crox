@@ -14,6 +14,10 @@ Crox将保证翻译后的结果具备最佳执行效率。
 * 版本：1.1
 * 作者：三冰，李牧，思竹，陆辉，思霏
 
+## 在线尝鲜
+
+<iframe width="100%" height="300" src="http://jsfiddle.net/4HYvm/2/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+
 ## 认识 Crox
 
 ### 1 为什么“又”做一个模板引擎
