@@ -8,14 +8,14 @@ var Lexer = function() {
 		return " abstract boolean break byte case catch char class const continue debugger default delete do double else enum export extends final finally float for function goto if implements import in instanceof int interface let long native new package private protected public return short static super switch synchronized this throw throws transient try typeof var void volatile while with yield ".indexOf(' ' + s + ' ') != -1;
 	}
 	var code = [
-		[/\s+/, function() { return 'ws'; }],
+		[/\s+/, function() { return null; }],
 		[re_id, function(a) {
 			switch (a) {
 				case 'true':
 				case 'false':
 					return 'boolean';
 				case 'set':
-					//case 'include':
+				case 'include':
 					//case 'this':
 					return a;
 				default:

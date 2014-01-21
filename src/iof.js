@@ -6,9 +6,9 @@ function readFile(fname, charset) {
 	//stm.mode = 1;
 	stm.charset = charset || 'utf-8';
 	stm.open();
-	try {
-		stm.loadFromFile(fname);
-	} catch (e) { WScript.Echo(fname); throw e; }
+	//try {
+	stm.loadFromFile(fname);
+	//} catch (e) { alert(fname); throw e; }
 	s = stm.readtext();
 	stm.close();
 	return s;

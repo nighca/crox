@@ -1,58 +1,52 @@
 /// <reference path="common.js"/>
 /// <reference path="codegen_common.js"/>
-function codegen_js_tran(prog) {
+function codegen_vm_tran(prog, nl) {
 	/// <param name="prog" type="Array">AST</param>
+	/// <param name="nl" type="String" optional="true"></param>
 	/// <returns type="String" />
 
-	var sIndent = '\t';
-	function indent() {
-		sIndent += '\t';
-	}
-	function outdent() {
-		sIndent = sIndent.slice(0, -1);
-	}
+	if (!nl) nl = '\r\n';
 	function emit(s) {
-		body += sIndent + s + '\n';
+		body += s;
 	}
 	function stmtGen(a) {
 		switch (a[0]) {
 			case 'if':
-				emit('if(' + exprGen(a[1]) + '){');
-				indent();
+				emit('#if(' + exprGen(a[1]) + ')');
 				stmtsGen(a[2]);
-				outdent();
-				emit('}');
 				if (a[3]) {
-					emit('else{');
-					indent();
+					emit('#{else}');
 					stmtsGen(a[3]);
-					outdent();
-					emit('}');
 				}
+				emit('#{end}');
 				break;
 			case 'each':
-				var k = a[3] || '$i';
-				emit('var $list = ' + exprGen(a[1]) + ';');
-				emit('for(var ' + k + ' in $list) {');
-				indent();
-				emit('var ' + a[4] + ' = $list[' + k + '];');
+				var k = a[3] ? '$_' + a[3] : '$k';
+				emit('#set ($list = ' + exprGen(a[1]) + ')');
+				emit('#foreach($_' + a[4] + ' in $list)');
+				if (a[3]) {
+					emit('#set(' + k + ' = $velocityCount - 1)');
+				}
 				stmtsGen(a[2]);
-				outdent();
-				emit('}');
+				emit('#{end}');
 				break;
 			case 'set':
-				emit('var ' + a[1] + '=' + exprGen(a[2]) + ';');
+				emit('#set ($_' + a[1] + '=' + exprGen(a[2]) + ')');
 				break;
 			case 'eval':
 				var s = exprGen(a[1]);
-				if (a[2]) s = '$htmlEncode(' + s + ')';
-				emit('$print(' + s + ');');
+				if (/^\$([\w-]+)$/.test(s))
+					emit('${' + RegExp.$1 + '}');
+				else {
+					emit('#set($t = ' + s + ')$!{t}');
+				}
 				break;
 			case 'text':
-				emit('$print(' + quote(a[1]) + ');');
+				emit(a[1].replace(/\$/g, '$${dollar}').replace(/#/g, '$${sharp}'));
+				//emit('#set($t = ' + vmQuote(a[1]) + ')${t}');
 				break;
 			case 'inc':
-				//stmtsGen(a[2][1]);
+				emit("#parse('" + a[1] + "')");
 				break;
 			default:
 				throw Error('unknown stmt: ' + a[0]);
@@ -72,10 +66,10 @@ function codegen_js_tran(prog) {
 	function exprGen(x) {
 		switch (x[0]) {
 			case 'id':
-				return x[1];
+				return '$_' + x[1];
 			case 'lit':
 				if (typeof x[1] == 'string')
-					return quote(x[1]);
+					return vmQuote(x[1]);
 				return String(x[1]);
 			case '.':
 				return exprToStr(x[1], isMember) + '.' + x[2];
@@ -84,7 +78,8 @@ function codegen_js_tran(prog) {
 			case '!':
 				return '!' + exprToStr(x[1], isUnary);
 			case 'u-':
-				return '- ' + exprToStr(x[1], isUnary);
+				if (x[1][0] == 'u-') throw Error("禁止两个负号连用");
+				return '-' + exprToStr(x[1], isUnary);
 			case '*': case '/': case '%':
 				return exprToStr(x[1], isMul) + x[0] + exprToStr(x[2], isUnary);
 			case '+': case '-':
@@ -92,7 +87,7 @@ function codegen_js_tran(prog) {
 			case '<': case '>': case '<=': case '>=':
 				return exprToStr(x[1], isRel) + x[0] + exprToStr(x[2], isAdd);
 			case 'eq': case 'ne':
-				return exprToStr(x[1], isEquality) + (x[0] == 'eq' ? '===' : '!==') + exprToStr(x[2], isRel);
+				return exprToStr(x[1], isEquality) + (x[0] == 'eq' ? '==' : '!=') + exprToStr(x[2], isRel);
 			case '&&':
 				return exprToStr(x[1], isLogicalAnd) + '&&' + exprToStr(x[2], isEquality);
 			case '||':
@@ -101,33 +96,14 @@ function codegen_js_tran(prog) {
 				throw Error("unknown expr: " + x[0]);
 		}
 	}
-
-	var body = '';
+	function vmQuote(s) {
+		/// <param name="s" type="String"></param>
+		if (s.indexOf("'") == -1) return "'" + s + "'";
+		var a = s.split("'");
+		return "('" + a.join("'+\"'\"+'") + "')";
+	}
+	var body = "#set($dollar='$')#set($sharp='#')";
 	stmtsGen(prog[1]);
 
 	return body;
-}
-function codegen_js_wrap(s) {
-	/// <param name="s" type="String"></param>
-	/// <returns type="Function" />
-	var body = "var obj = { '<': '&lt;', '>': '&gt;', '&': '&amp;', '\"': '&quot;' };\n\
-	function $htmlEncode(s) {\n\
-		return String(s).replace(/[<>&\"]/g, function(c) {\n\
-			return obj[c];\n\
-		});\n\
-	}";
-	body += ("var $s = '';");
-	body += ("function $print(s){ $s += s; }");
-	body += s;
-	body += ("return $s;");
-
-	var f = Function('root', body);
-	return f;
-}
-function codegen_js_tofn(prog) {
-	/// <param name="prog" type="Array">AST</param>
-	/// <returns type="Function" />
-	var s = codegen_js_tran(prog);
-	var f = codegen_js_wrap(s);
-	return f;
 }

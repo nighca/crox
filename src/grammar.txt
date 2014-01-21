@@ -15,8 +15,9 @@ statement:
 |	"{{" expr "}}" { $$ = ['eval', $2, true]; }
 |	"{{{" expr "}}}" { $$ = ['eval', $2, false]; }
 |	text { $$ = ['text', $1.text]; }
+|	"{{" include string "}}" { $$ = ['inc', eval($3.text)]; }
 ;
-id: realId | set;
+id: realId | set | include;
 
 PrimaryExpression:
 	string { $$ = ['lit', eval($1.text)]; }
