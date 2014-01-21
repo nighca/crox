@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title></title>
+	<script>
+		onerror = function() {
+			alert('ERROR: ' + [].join.call(arguments, '\n'));
+		};
+	</script>
+	<script src="../build/crox-all.js"></script>
+	<script>
+		function test() {
+			var tolang = document.getElementsByName('tolang');
+			for (var i = 0; i < tolang.length; ++i)
+				if (tolang[i].checked) {
+					tolang = tolang[i].value;
+					break;
+				}
+			var s = document.getElementById('ta1').value;
+			var ast = Crox.parse(s);
+			document.getElementById('ta2').value = JSON.stringify(ast);
+			var r;
+			switch (tolang) {
+				case 'js': r = Crox.compileToJs(s); break;
+				case 'php': r = Crox.compileToPhp(s); break;
+				case 'vm': r = Crox.compileToVM(s); break;
+				default: throw Error('unknown tolang: ' + tolang);
+			}
+			document.getElementById('ta3').value = r;
+		}
+	</script>
+</head>
+<body>
+	<textarea rows="10" cols="80" id="ta1">hello {{root.a}}</textarea><br />
+	tolang:
+	<label>
+		<input type="radio" name="tolang" value="js" checked />
+		js</label>
+	<label>
+		<input type="radio" name="tolang" value="php" />
+		php</label>
+	<label>
+		<input type="radio" name="tolang" value="vm" />
+		vm</label>
+	<input type="button" value="compile" onclick="test()" /><br />
+	<textarea rows="10" cols="80" id="ta2"></textarea><br />
+	<textarea rows="10" cols="80" id="ta3"></textarea>
+
+</body>
+</html>
