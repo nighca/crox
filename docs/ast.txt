@@ -1,0 +1,23 @@
+program:
+	['prog', stmts]
+
+stmt:
+	['if', expr, stmts, stmts?]
+	['each', expr, stmts, strValName, strKeyName?]
+	['set', strName, expr]
+	['eval', expr, blnEncode]
+	['text', string]
+	['inc', strFileName]
+
+expr:
+	['lit', string]
+	['lit', number]
+	['lit', boolean]
+	['id', strName]
+	['.', expr, strProperty]
+	['[]', expr, exprProperty]
+	['!', expr]
+	['u-', expr]
+	[binaryOp, expr, expr]
+
+binaryOp: * / % + - < > <= >= eq ne && ||
