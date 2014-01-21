@@ -91,9 +91,9 @@ Crox将保证翻译后的结果具备最佳执行效率。
 
 将Crox模板翻译成 `Velocity模板`
 
-API详细介绍请参见 [Crox JS API](./apis/js-api)
+API详细介绍请参见 [Crox JS API](/crox/apis/js-api)
 
-API的使用Demo，请参见 [Crox Demos](./demos)
+API的使用Demo，请参见 [Crox Demos](/crox/demos)
 
 ## 导航
 
