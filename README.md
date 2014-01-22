@@ -123,6 +123,8 @@ Crox的所有接口都声明在 `Crox` 这个JS对象上的。目前，具体的
 
 - Crox.compile：将Crox模板编译成 `原生JS Function`
 
+- Crox.compileToJs：将Crox模板编译成 `原生JS Function` 字符串
+
 - Crox.compileToPhp：将Crox模板编译成 `PHP函数`
 
 - Crox.compileToVM：将Crox模板翻译成 `Velocity模板`
@@ -135,7 +137,7 @@ Crox的所有接口都声明在 `Crox` 这个JS对象上的。目前，具体的
 
 ```html
 <!-- 加载 Crox -->
-<script src="http://g.tbcdn.cn/thx/crox/1.1.0/crox-all.js"></script>
+<script src="https://raw.github.com/thx/crox/master/build/crox-all.js"></script>
 ```
 
 ```js
@@ -195,7 +197,7 @@ KISSY.use('gallery/crox/1.0/index', function (S, Crox) {
 // 配置 Crox 路径
 seajs.config({
     alias:{
-        'crox':'http://g.tbcdn.cn/thx/crox/1.1.0/seajs/crox.js'
+        'crox':'https://raw.github.com/thx/crox/master/build/crox-all.js'
     }
 })
 
@@ -221,7 +223,7 @@ seajs.use('crox', function(Crox){
 // 配置 Crox 路径
 require.config({
     paths:{
-        'crox':'http://g.tbcdn.cn/thx/crox/1.1.0/amd/crox'
+        'crox':'https://raw.github.com/thx/crox/master/build/crox-all'
     }
 })
 
@@ -302,9 +304,9 @@ return $t_r;
 
 - `-e` | `--encoding` 设置Crox模板文件的编码方式，默认是 `utf-8`
 
-- `--target-type` 翻译成的目标语言，比如：php|js等，默认是 `js`
+- `-t` | `--target-type` 翻译成的目标语言，比如：php|js等，默认是 `js`
 
-- `--tpl-suffix` 模板文件后缀，默认是 `tpl`
+- `-x` | `--tpl-suffix` 模板文件后缀，默认是 `tpl`
 
 - `-o` | `--output` 翻译后文件的目标文件夹，默认是 `当前路径`
 
