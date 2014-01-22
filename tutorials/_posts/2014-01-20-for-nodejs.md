@@ -66,9 +66,9 @@ return $t_r;
 
 - `-e` | `--encoding` 设置Crox模板文件的编码方式，默认是 `utf-8`
 
-- `--target-type` 翻译成的目标语言，比如：php|js等，默认是 `js`
+- `-t` | `--target-type` 翻译成的目标语言，比如：php|js|vm等，默认是 `js`
 
-- `--tpl-suffix` 模板文件后缀，默认是 `tpl`
+- `-x` | `--tpl-suffix` 模板文件后缀，默认是 `tpl`
 
 - `-o` | `--output` 翻译后文件的目标文件夹，默认是 `当前路径`
 
