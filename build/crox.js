@@ -1,9 +1,9 @@
 /**
- * @preserve Crox v1.1.0
+ * @preserve Crox v1.2.0
  * https://github.com/thx/crox
  *
  * Released under the MIT license
- * Date: Tue, 21 Jan 2014 09:13:34 UTC
+ * Date: Wed, 22 Jan 2014 06:20:35 UTC
  */
 (function(root) {var Crox = (function() {
 function Class(base, constructor, methods) {
@@ -637,4 +637,4 @@ var Crox = {
 	}
 };
 
-Crox.version = "1.1.0";return Crox;})();if ( typeof module == "object" && module && typeof module.exports == "object" ) module.exports = Crox;else if (typeof define == "function" && (define.amd || define.cmd) ) define(function () { return Crox; } );else if (typeof KISSY != "undefined") KISSY.add("crox",function(){ return Crox; });if (root) root.Crox = Crox; })(this);
+Crox.version = "1.2.0";return Crox;})();if ( typeof module == "object" && module && typeof module.exports == "object" ) module.exports = Crox;else if (typeof define == "function" && (define.amd || define.cmd) ) define(function () { return Crox; } );else if (typeof KISSY != "undefined") KISSY.add("crox",function(){ return Crox; });if (root) root.Crox = Crox; })(this);

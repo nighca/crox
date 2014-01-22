@@ -1,9 +1,9 @@
 /*
- Crox v1.1.0
+ Crox v1.2.0
  https://github.com/thx/crox
 
  Released under the MIT license
- Date: Tue, 21 Jan 2014 09:13:34 UTC
+ Date: Wed, 22 Jan 2014 06:20:35 UTC
 */
 (function(p){var r=function(){function r(b,a){this.row=b;this.col=a}function v(b,a){var d=b.substring(0,a),e=d.match(/\r\n?|\n/g),h=1;e&&(h+=e.length);d=1+/[^\r\n]*$/.exec(d)[0].length;return new r(h,d)}function p(b){return'"'+b.replace(/[\x00-\x1f"\\\u2028\u2029]/g,function(a){switch(a){case '"':return'\\"';case "\\":return"\\\\";case "\b":return"\\b";case "\f":return"\\f";case "\n":return"\\n";case "\r":return"\\r";case "\t":return"\\t"}return"\\u"+("000"+a.charCodeAt(0).toString(16)).slice(-4)})+
 '"'}function G(b){function a(a,b,e,h){this.tag=a;this.text=b;this.index=e;this.subMatches=h}function d(){}function e(a){for(var b=1,e=[],h=[1],c=[],k=0;k<a.length;++k)h.push(b+=RegExp("|"+a[k][0].source).exec("").length),c.push(a[k][1]||d),e.push("("+a[k][0].source+")");return[RegExp(e.join("|")+"|","g"),h,c]}a.prototype.toString=function(){return this.text};var h=b.$||"$",c={},g;for(g in b)"$"!=g.charAt(0)&&(c[g]=e(b[g]));return function(b){var e=b.length,f=0,d=[""],g={text:"",index:0,source:b,pushState:function(a){d.push(a)},
@@ -26,4 +26,4 @@ _:0},{_:-19},{_:-15},{_:-14},{25:55,_:0},{35:56,_:0},{36:57,_:0},{_:-25},{5:58,_
 [51,51,50],[50,29,47,35,51,31],[50,29,47,35,51,32,51,31],[50,28,47,25,46,35,51,30],[50,28,47,25,25,35,51,30],[50,27,24,48,13,47,35],[50,27,47,35],[50,33,47,36],[50,26],[50,27,20,25,35],[48,23],[48,24],[48,20],[43,25],[43,22],[43,18],[43,48],[43,4,47,5],[41,43],[41,41,9,48],[41,41,16,47,17],[45,41],[45,1,45],[45,8,45],[42,45],[42,42,6,45],[42,42,10,45],[42,42,2,45],[37,42],[37,37,7,42],[37,37,8,42],[44,37],[44,44,11,37],[44,44,14,37],[44,44,12,37],[44,44,15,37],[38,44],[38,38,19,44],[38,38,21,44],
 [39,38],[39,39,3,38],[40,39],[40,40,34,39],[47,40],[46]],tFuncs:function(){function b(a,b,c,d,r,p,f){return["each",b,p,d&&eval(d.text),eval(c.text)]}function a(a){return["lit",eval(a.text)]}function d(a,b,c){return[b.text,a,c]}return[,function(a){return["prog",a]},function(){return[]},function(a,b){a.push(b);return a},function(a,b,c,d,p){return["if",b,d]},function(a,b,c,d,p,r,f){return["if",b,d,r]},b,b,function(a,b,c,d,p,r){return["set",c.text,p]},function(a,b,c){return["eval",b,!0]},function(a,b,
 c){return["eval",b,!1]},function(a){return["text",a.text]},function(a,b,c,d){return["inc",eval(c.text)]},,,,a,a,function(a){return["lit","true"==a.text]},function(a){return["id",a.text]},function(a,b,c){return b},,function(a,b,c){return[".",a,c.text]},function(a,b,c,d){return["[]",a,c]},,function(a,b){return["!",b]},function(a,b){return["u-",b]},,d,d,d,,d,d,,d,d,d,d,,function(a,b,c){return["eq",a,c]},function(a,b,c){return["ne",a,c]},,d,,d]}()})}();return{parse:C,compile:F,compileToJs:function(b){return E(C(b))},
-render:function(b,a){return F(b)(a)},version:"1.1.0"}}();"object"==typeof module&&module&&"object"==typeof module.exports?module.exports=r:"function"==typeof define&&(define.amd||define.cmd)?define(function(){return r}):"undefined"!=typeof KISSY&&KISSY.add("crox",function(){return r});p&&(p.Crox=r)})(this);
+render:function(b,a){return F(b)(a)},version:"1.2.0"}}();"object"==typeof module&&module&&"object"==typeof module.exports?module.exports=r:"function"==typeof define&&(define.amd||define.cmd)?define(function(){return r}):"undefined"!=typeof KISSY&&KISSY.add("crox",function(){return r});p&&(p.Crox=r)})(this);

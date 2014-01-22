@@ -1,9 +1,9 @@
 /**
- * @preserve Crox v1.1.0
+ * @preserve Crox v1.2.0
  * https://github.com/thx/crox
  *
  * Released under the MIT license
- * Date: Tue, 21 Jan 2014 09:13:34 UTC
+ * Date: Wed, 22 Jan 2014 06:20:35 UTC
  */
 (function(root) {var Crox = (function() {
 function Class(base, constructor, methods) {
@@ -698,7 +698,7 @@ function codegen_php_tran(prog) {
 			case 'eval': compileEval(a); break;
 			case 'text': compileContent(a); break;
 			case 'inc':
-				emit("include '" + a[1] + "';");
+				//emit("include '" + a[1] + "';");
 				break;
 			default: throw Error('unknown stmt: ' + a[0]);
 		}
@@ -843,7 +843,7 @@ function codegen_vm_tran(prog, nl) {
 				//emit('#set($t = ' + vmQuote(a[1]) + ')${t}');
 				break;
 			case 'inc':
-				emit("#parse('" + a[1] + "')");
+				emit("#parse('" + a[1].replace(/\.\w+$/, '.vm') + "')");
 				break;
 			default:
 				throw Error('unknown stmt: ' + a[0]);
@@ -921,4 +921,4 @@ Crox.compileToVM = function(s, currentPath) {
 	return codegen_vm_tran(parsetmpl(s));
 };
 
-Crox.version = "1.1.0";return Crox;})();if ( typeof module == "object" && module && typeof module.exports == "object" ) module.exports = Crox;else if (typeof define == "function" && (define.amd || define.cmd) ) define(function () { return Crox; } );else if (typeof KISSY != "undefined") KISSY.add("crox",function(){ return Crox; });if (root) root.Crox = Crox; })(this);
+Crox.version = "1.2.0";return Crox;})();if ( typeof module == "object" && module && typeof module.exports == "object" ) module.exports = Crox;else if (typeof define == "function" && (define.amd || define.cmd) ) define(function () { return Crox; } );else if (typeof KISSY != "undefined") KISSY.add("crox",function(){ return Crox; });if (root) root.Crox = Crox; })(this);
