@@ -3,7 +3,7 @@
  * https://github.com/thx/crox
  *
  * Released under the MIT license
- * Date: Wed, 22 Jan 2014 06:20:35 UTC
+ * md5: f6a902f291da47642a4a9215e9759c28
  */
 (function(root) {var Crox = (function() {
 function Class(base, constructor, methods) {
