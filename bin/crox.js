@@ -10,8 +10,8 @@ var shelljs = require('shelljs');
 program
     .option('-p, --package-path [packagePath]', 'Set crox package path', '.')
     .option('-e, --encoding [encoding]', 'Set template file encoding', 'utf-8')
-    .option('--target-type [targetType]', 'Setting the target template type [php|js|vm]', 'js')
-    .option('--tpl-suffix [tplSuffix]', 'Set template suffix [tpl]', 'tpl')
+    .option('-t, --target-type [targetType]', 'Setting the target template type [php|js|vm]', 'js')
+    .option('-x, --tpl-suffix [tplSuffix]', 'Set template suffix [tpl]', 'tpl')
     .option('-o, --output [dir]', 'Set the output directory for compiled template', '.')
     .parse(process.argv);
 
