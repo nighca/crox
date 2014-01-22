@@ -1,6 +1,6 @@
 {
   "name": "crox",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Crox is a high performance cross-language template engine, written by the JavaScript.",
   "homepage": "http://github.com/thx/crox",
   "keywords": [
@@ -10,7 +10,8 @@
   "author": "shtml <shtml@live.com>",
   "contributors": [
     "shtml <shtml@live.com>",
-    "lenel <lenel@outlook.com>"
+    "lenel <lenel@outlook.com>",
+    "wangjeaf <wangjeaf@gmail.com>"
   ],
   "engines": {
     "node": ">= 0.8.17"
@@ -25,7 +26,7 @@
     "type": "git",
     "url": "https://github.com/thx/crox"
   },
-  "main": "./build/nodejs/crox.js",
+  "main": "./build/crox-all.js",
   "scripts": {},
   "preferGlobal": false
 }
