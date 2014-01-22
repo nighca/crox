@@ -8,51 +8,51 @@ github的 markdown 无法很好的表达我对 `Crox` 的深情厚意。
 
 ## 目录
 
-[综述](#toc_2)
+[综述](#%E7%BB%BC%E8%BF%B0)
 
-[Crox模板语法](#toc_3)
+[Crox模板语法](#crox%E6%A8%A1%E6%9D%BF%E8%AF%AD%E6%B3%95)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [表达式](#toc_4)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [表达式](#%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BE%93%E5%87%BA)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [if选择语句](#toc_5)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [if选择语句](#if%E9%80%89%E6%8B%A9%E8%AF%AD%E5%8F%A5)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [each循环语句](#toc_6)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [each循环语句](#each%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [set赋值语句](#toc_7)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [set赋值语句](#set%E8%B5%8B%E5%80%BC%E8%AF%AD%E5%8F%A5)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [include子模板导入](#toc_8)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [include子模板导入](#include%E5%AD%90%E6%A8%A1%E6%9D%BF%E5%AF%BC%E5%85%A5)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [其他](#toc_9)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [其他](#%E5%85%B6%E4%BB%96)
 
-[Crox API说明](#toc_10)
+[Crox API说明](#crox-api%E8%AF%B4%E6%98%8E)
 
-[在web环境中使用Crox](#toc_11)
+[在web环境中使用Crox](#%E5%9C%A8web%E7%8E%AF%E5%A2%83%E4%B8%AD%E4%BD%BF%E7%94%A8crox)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [浏览器原生JS](#toc_12)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [浏览器原生JS](#%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%94%9Fjs)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [Kissy](#toc_13)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [Kissy](#kissy)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [SeaJS(CMD)](#toc_14)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [SeaJS(CMD)](#seajscmd)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [Requirejs(AMD)](#toc_15)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [Requirejs(AMD)](#requirejsamd)
 
-[在Nodejs环境中使用Crox](#toc_16)
+[在Nodejs环境中使用Crox](#%E5%9C%A8nodejs%E7%8E%AF%E5%A2%83%E4%B8%AD%E4%BD%BF%E7%94%A8crox)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [将Crox作为node模块引入](#toc_17)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [将Crox作为node模块引入](#%E5%B0%86crox%E4%BD%9C%E4%B8%BAnode%E6%A8%A1%E5%9D%97%E5%BC%95%E5%85%A5)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [使用Crox命令行工具](#toc_18)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [使用Crox命令行工具](#%E4%BD%BF%E7%94%A8crox%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7)
 
-[Kissy中Crox include的使用](#toc_21)
+[Kissy中Crox include的使用](#kissy%E4%B8%ADcrox-include%E7%9A%84%E4%BD%BF%E7%94%A8)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [在Kissy下支持Crox include的翻译示例](#toc_22)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [在Kissy下支持Crox include的翻译示例](#%E5%9C%A8kissy%E4%B8%8B%E6%94%AF%E6%8C%81crox-include%E7%9A%84%E7%BF%BB%E8%AF%91%E7%A4%BA%E4%BE%8B)
 
-[其他](#toc_27)
+[其他](#%E5%85%B6%E4%BB%96-1)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [Crox相关介绍](#toc_28)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [Crox相关介绍](#crox%E7%9B%B8%E5%85%B3%E8%AF%B4%E6%98%8E)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [Demos](#toc_29)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [Demos](#demos)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [相关资源](#toc_30)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [相关资源](#%E7%9B%B8%E5%85%B3%E8%B5%84%E6%BA%90)
 
 &nbsp;
 
@@ -477,8 +477,10 @@ return {
 * [Kissy下使用Crox include的Demo](http://gallery.kissyui.com/crox/1.0/demo/index-grunt.html)
 
 ### 相关资源
-* Crox试用旺旺群：`891026490`，欢迎进群或提Issue反馈意见
+* [npmjs](https://npmjs.org/package/crox)
 * [github](https://github.com/thx/crox)
 * [gitlab](http://gitlab.alibaba-inc.com/thx/crox)
 * [Kissy Gallary](http://gallery.kissyui.com/crox/1.0/guide/index.html)
 * [thx官网](http://thx.github.io/crox/)
+
+* Crox试用旺旺群：`891026490`，欢迎进群或提Issue反馈意见
