@@ -27,6 +27,9 @@
     "url": "https://github.com/thx/crox"
   },
   "main": "./build/crox-all.js",
+  "bin": {
+    "crox": "./bin/crox.js"
+  },
   "scripts": {},
   "preferGlobal": false
 }
