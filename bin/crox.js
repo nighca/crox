@@ -3,7 +3,7 @@
 var fs = require('fs');
 var path = require('path');
 var program = require('commander');
-var crox = require('../build/nodejs/crox');
+var crox = require('../build/crox-all');
 var iconv = require('iconv-lite');
 var shelljs = require('shelljs');
 
