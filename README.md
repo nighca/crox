@@ -1,4 +1,4 @@
-# 高性能跨语言模板引擎 Crox 使用说明
+# 高性能跨语言模板引擎 Crox
 
 ## ;-)
 
@@ -481,6 +481,6 @@ return {
 * [github](https://github.com/thx/crox)
 * [gitlab](http://gitlab.alibaba-inc.com/thx/crox)
 * [Kissy Gallary](http://gallery.kissyui.com/crox/1.0/guide/index.html)
-* [thx官网](http://thx.github.io/crox/)
+* [Crox的thx官网](http://thx.github.io/crox/)
 
 * Crox试用旺旺群：`891026490`，欢迎进群或提Issue反馈意见
