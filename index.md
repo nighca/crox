@@ -106,6 +106,16 @@ API详细介绍请参见 [Crox JS API](/crox/apis/js-api)
 
 API的使用Demo，请参见 [Crox Demos](/crox/demos)
 
+## Crox Nodejs 命令行工具
+
+如何将Crox模板文件批量翻译成 `js` | `vm` | `php`？
+
+Crox提供了命令行工具来完成此任务。
+
+通过 `npm install -g crox` 安装后，即可使用 `crox` 命令。
+
+命令的具体参数和使用示例，请参见 [Crox Nodejs命令行工具](/crox/apis/nodejs-api)
+
 ## 导航
 
 - [快速上手](./tutorials)
