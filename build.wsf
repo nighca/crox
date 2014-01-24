@@ -4,6 +4,7 @@
 	<script src="config.js" language="JScript"></script>
 	<script language="JScript">
 		var wshShell = WScript.CreateObject("WScript.Shell");
+		wshShell.currentDirectory = '.';
 		var btn = wshShell.Popup("build?", 60, "", 0x4 + 0x20);
 		if (btn != 6)
 			WScript.Quit();
@@ -15,18 +16,31 @@
 		var a_all_js = a_js.concat('codegen_php.js', 'codegen_vm.js', 'crox_extra.js');
 		var out_all_js = ['crox-all.js', 'crox-all-min.js'];
 
+		function md5xor(a, b) {
+			if (a && b) {
+				var c = '';
+				for (var i = 0; i < 32; ++i)
+					c += (parseInt(a.charAt(i), 16) ^ parseInt(b.charAt(i), 16)).toString(16);
+				return c;
+			}
+			else {
+				return a || b;
+			}
+		}
 		function comb(a) {
+			var md5 = '';
 			var s = 'var Crox = (function() {\r\n';
 			for (var i = 0; i < a.length; ++i) {
 				s += readFile('src/' + a[i]) + '\r\n';
+				md5 = md5xor(md5, calcMd5('src/' + a[i]));
 			}
 			s += 'Crox.version = "' + buildVersion + '";';
 			s += 'return Crox;';
 			s += '})();';
-			return s;
+			return { s: s, md5: md5 };
 		}
 
-		function build(s, out) {
+		function build(s, md5, out) {
 			var outfile = 'build/' + out[0];
 			var outfilemin = 'build/' + out[1];
 			var copy = '/**\r\n\
@@ -34,7 +48,7 @@
  * https://github.com/thx/crox\r\n\
  *\r\n\
  * Released under the MIT license\r\n\
- * Date: ' + sDate + '\r\n\
+ * md5: ' + md5 + '\r\n\
  */\r\n';
 			saveFile(outfile, copy + s);
 			var tempFile = gccPath + "temp.js";
@@ -43,6 +57,12 @@
 				wshShell.Run("java -jar " + gccPath + " --js=" + jspath + ' --js_output_file=' + outName, 0, true);
 			}
 			gcc(outfile, outfilemin);
+		}
+
+		function calcMd5(fpath) {
+			var t = wshShell.Exec('E:\\fciv ' + fpath);
+			t = t.StdOut.ReadAll();
+			return /\w{32}/.exec(t)[0];
 		}
 
 		var theDate = new Date;
@@ -58,9 +78,9 @@ else if (typeof KISSY != "undefined") KISSY.add("crox",function(){ return Crox; 
 if (root) root.Crox = Crox; })(this);';
 		}
 
-		build(wrap(jscode), out_js);
+		build(wrap(jscode.s), jscode.md5, out_js);
 		var allcode = comb(a_all_js);
-		build(wrap(allcode), out_all_js);
+		build(wrap(allcode.s), allcode.md5, out_all_js);
 
 		WScript.Echo('done!');
 
