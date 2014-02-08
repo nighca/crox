@@ -6,14 +6,14 @@ function codegen_php_tran(prog) {
 	var s_indent = '';
 
 	function indent() {
-		s_indent += '  ';
+		//s_indent += '  ';
 	}
 	function outdent() {
-		s_indent = s_indent.substr(0, s_indent.length - 2);
+		//s_indent = s_indent.substr(0, s_indent.length - 2);
 	}
 
 	function emit(s) {
-		s_output += s_indent + s + '\n';
+		s_output += s_indent + s;
 	}
 	function compileEval(stmt) {
 		var t = walkExpr(stmt[1]);
@@ -25,7 +25,12 @@ function codegen_php_tran(prog) {
 		emit('echo ' + t + ';');
 	}
 	function compileContent(stmt) {
-		emit('echo ' + phpQuote(stmt[1]) + ';');
+		var t = stmt[1];
+		if (/<\?(?:php)?|\?>/.test(t))
+			emit('echo ' + phpQuote(stmt[1]) + ';');
+		else {
+			emit('?>' + t + '<?php ');
+		}
 	}
 	function compileIf(stmt) {
 		emit('if(' + walkExpr(stmt[1]) + '){');
@@ -61,7 +66,7 @@ function codegen_php_tran(prog) {
 			case 'eval': compileEval(a); break;
 			case 'text': compileContent(a); break;
 			case 'inc':
-				//emit("include '" + a[1] + "';");
+				emit("include '" + changeExt(a[1], 'php') + "';");
 				break;
 			default: throw Error('unknown stmt: ' + a[0]);
 		}
@@ -114,6 +119,6 @@ function codegen_php_tran(prog) {
 
 	var s_output = "";
 	compileStmts(prog[1]);
-
+	s_output = '<?php ' + s_output + '?>';
 	return s_output;
 }

@@ -31,6 +31,6 @@ function crox_ToBoolean($a) {
 	return (bool)$a;
 }
 function crox_encode($s) {
-	return htmlspecialchars($s, ENT_COMPAT, 'GB2312');
+	return htmlspecialchars(crox_ToString($s), ENT_COMPAT, 'GB2312');
 }
 ?>
