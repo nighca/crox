@@ -64,7 +64,7 @@ Crox模板可以直接在JavaScript环境中使用，也可以翻译成PHP、JSP
 
 Crox将保证翻译后的结果具备最佳执行效率。
 
-* 版本：1.1
+* 版本：1.2
 * 作者：三冰，李牧，思竹，陆辉，思霏
 
 ## Crox模板语法
@@ -157,7 +157,7 @@ console.log(html);  // 1 - 2
 
 ### Kissy
 
-目前Crox已经加入 [Kissy Gallary](http://gallery.kissyui.com/crox/1.0/guide/index.html) ，通过以下方式即可使用Crox。
+目前Crox已经加入 [Kissy Gallary](http://gallery.kissyui.com/crox/1.2/guide/index.html) ，通过以下方式即可使用Crox。
 
 - 配置Kissy (Kissy 1.3.0+ 不需要编写此代码)
 
@@ -176,7 +176,7 @@ KISSY.config({
 - 引用Crox
 
 ```js
-KISSY.use('gallery/crox/1.0/index', function (S, Crox) {
+KISSY.use('gallery/crox/1.2/index', function (S, Crox) {
      var tmpl = '{{root.a}} - {{root.b}}';
 
      // 编译成原生js Function
@@ -350,9 +350,9 @@ Crox支持子模板导入(include)，一个模板可能include多个子模板，
 
 此工具在不同的使用场景时所做的具体工作如下：
 
-- 开发时，Crox模板tpl被编译成一个Kissy模块，该模块保留原模板内容，并依赖Crox和其他子模板。[Demo](http://gallery.kissyui.com/crox/1.0/demo/demo/before.html)
+- 开发时，Crox模板tpl被编译成一个Kissy模块，该模块保留原模板内容，并依赖Crox和其他子模板。[Demo](http://gallery.kissyui.com/crox/1.2/demo/demo/before.html)
 
-- 发布时，Crox模板tpl被Crox.compile翻译成原生js Function，并被包装成Kissy模块（所有子模板依赖都将被替换）。该模块不依赖Crox，也不依赖子模块。 [Demo](http://gallery.kissyui.com/crox/1.0/demo/demo/after.html)
+- 发布时，Crox模板tpl被Crox.compile翻译成原生js Function，并被包装成Kissy模块（所有子模板依赖都将被替换）。该模块不依赖Crox，也不依赖子模块。 [Demo](http://gallery.kissyui.com/crox/1.2/demo/demo/after.html)
 
 ### 在Kissy下支持Crox include的翻译示例
 
@@ -462,27 +462,28 @@ return {
 });
 ```
 
-具体使用示例，请参见 [开发时的示例](http://gallery.kissyui.com/crox/1.0/demo/demo/before.html) 和 [发布后的示例](http://gallery.kissyui.com/crox/1.0/demo/demo/after.html)
+具体使用示例，请参见 [开发时的示例](http://gallery.kissyui.com/crox/1.2/demo/demo/before.html) 和 [发布后的示例](http://gallery.kissyui.com/crox/1.2/demo/demo/after.html)
 
 更多介绍，请移步：[http://gitlab.alibaba-inc.com/thx/crox-kissy](http://gitlab.alibaba-inc.com/thx/crox-kissy/blob/master/README.md).
 
 ## 其他
 
 ### Crox相关说明
-* Crox版本1.1.0 发布说明 [http://gitlab.alibaba-inc.com/thx/crox/blob/master/release_notes.md](http://gitlab.alibaba-inc.com/thx/crox/blob/master/release_notes.md)
-* Crox概要设计 [http://gitlab.alibaba-inc.com/thx/crox/blob/master/docs/crox_design_overview.md](http://gitlab.alibaba-inc.com/thx/crox/blob/master/docs/crox_design_overview.md)
-* Crox语法规范 [http://gitlab.alibaba-inc.com/thx/crox/blob/master/docs/crox_spec.pdf](http://gitlab.alibaba-inc.com/thx/crox/blob/master/docs/crox_spec.pdf)
+* Crox版本1.2 发布说明 [http://thx.github.io/crox/releases/crox_1.2_release_notes/](http://thx.github.io/crox/releases/crox_1.2_release_notes/)
+* Crox版本1.1 发布说明 [http://thx.github.io/crox/releases/crox_1.1_release_notes/](http://thx.github.io/crox/releases/crox_1.1_release_notes/)
+* Crox概要设计 [http://thx.github.io/crox/articles/crox_design_overview/](http://thx.github.io/crox/articles/crox_design_overview/)
+* Crox语言规范 [http://thx.github.io/crox/articles/crox_spec/](http://thx.github.io/crox/articles/crox_spec/)
 
 
 ### Demos
-* [Crox Kissy Demo](http://gallery.kissyui.com/crox/1.0/demo/index.html)
-* [Kissy下使用Crox include的Demo](http://gallery.kissyui.com/crox/1.0/demo/index-grunt.html)
+* [Crox Kissy Demo](http://gallery.kissyui.com/crox/1.2/demo/index.html)
+* [Kissy下使用Crox include的Demo](http://gallery.kissyui.com/crox/1.2/demo/index-grunt.html)
 
 ### 相关资源
-* [npmjs](https://npmjs.org/package/crox)
-* [github](https://github.com/thx/crox)
-* [gitlab](http://gitlab.alibaba-inc.com/thx/crox)
-* [Kissy Gallary](http://gallery.kissyui.com/crox/1.0/guide/index.html)
-* [Crox的thx官网](http://thx.github.io/crox/)
+* [Npmjs](https://npmjs.org/package/crox)
+* [Github](https://github.com/thx/crox)
+* [Gitlab](http://gitlab.alibaba-inc.com/thx/crox)
+* [Kissy Gallary](http://gallery.kissyui.com/crox/1.2/guide/index.html)
+* [Crox官网](http://thx.github.io/crox/)
 
 * Crox试用旺旺群：`891026490`，欢迎进群或提Issue反馈意见
