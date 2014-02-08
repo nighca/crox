@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -22,7 +22,7 @@
 			document.getElementById('ta2').value = JSON.stringify(ast);
 			var r;
 			switch (tolang) {
-				case 'js': r = Crox.compileToJs(s); break;
+				case 'js': r = Crox.compile(s); break;
 				case 'php': r = Crox.compileToPhp(s); break;
 				case 'vm': r = Crox.compileToVM(s); break;
 				default: throw Error('unknown tolang: ' + tolang);
