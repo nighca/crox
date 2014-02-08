@@ -1,6 +1,6 @@
 <div>
 <h2>start</h2>
-{{{root.a}}}fdafda
+{{root.a}}fdafda
 fdasfdas
 
 <h3>import sub tmpls</h3>

@@ -127,7 +127,7 @@ function doCompile(source, targetFile) {
   }
 
   if (targetType === 'php') {
-    result = '<?php \n' + crox.compileToPhp(tpl) + '\n?>';
+    result = crox.compileToPhp(tpl);
   } else if (targetType == 'vm') {
     result = crox.compileToVM(tpl);
   } else {

@@ -1,20 +1,12 @@
-<?php 
-echo '<div>
+<?php ?><div>
 <h2>start</h2>
-';
-echo crox_ToString($crox_root->a);
-echo 'fdafda
+<?php echo crox_encode($crox_root->a);?>fdafda
 fdasfdas
 
 <h3>import sub tmpls</h3>
 <p>
-';
-echo '
-';
-echo '
-';
-echo '
+<?php include dirname(__FILE__) . DIRECTORY_SEPARATOR . 'b.php';?>
+<?php include dirname(__FILE__) . DIRECTORY_SEPARATOR . 'c.php';?>
+<?php include dirname(__FILE__) . DIRECTORY_SEPARATOR . 'd/d.php';?>
 </p>
-</div>';
-
-?>
+</div><?php ?>
