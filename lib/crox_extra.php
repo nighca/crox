@@ -33,7 +33,4 @@ function crox_ToBoolean($a) {
 function crox_encode($s) {
 	return htmlspecialchars(crox_ToString($s), ENT_COMPAT, 'GB2312');
 }
-function crox_join($f, $i) {
-   return dirname($f) . DIRECTORY_SEPARATOR . $i;
-}
 ?>
