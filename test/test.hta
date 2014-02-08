@@ -53,7 +53,7 @@
 			['{{root}}, 你好\r', '哈喽\n', '哈喽\n, 你好\r'],
 			['{{root}}, 你好\r', '哈喽\r\n', '哈喽\r\n, 你好\r'],
 			['{{root}}, 你好\'\\', '哈喽\'\\', '哈喽\'\\, 你好\'\\']
-		];
+		].slice(-1);
 		function renderJs(sFunc, data) {
 			/// <param name="sFunc" type="String"></param>
 			/// <param name="data" type="JSON"></param>
@@ -102,12 +102,13 @@
 			}
 			return encode(v);
 		}
-		function renderPhp(sFunc, data) {
+		function renderPhp(t, data) {
 			/// <param name="sFunc" type="String"></param>
 			/// <param name="data" type="JSON"></param>
-			var s = '<?php\n' + sFunc + '\n';
-			s += '$i_root = ' + toPhpJson(data) + ';\n';
-			s += 'print(temp($i_root));\n';
+			var s = '<?php\n';
+			s += 'include "../lib/crox_extra.php";';
+			s += '$crox_root = ' + toPhpJson(data) + ';\n';
+			s += t + '\n';
 			s += '?>';
 			saveFile('temp.php', s, 'gb2312');
 			var wsh = new ActiveXObject('WScript.shell');
