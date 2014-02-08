@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+
+    <script src="http://g.tbcdn.cn/kissy/k/1.4.1/seed.js" data-config="{combine:true}"></script>
+    <script src="http://g.tbcdn.cn/thx/crox/1.2.0/crox.js"></script>
+
+    <script type="text/javascript">
+        var developing = true;
+        KISSY.config({
+            packages:[{
+                name: 'app',
+                combine: false,
+                path:'../',
+                debug: true,
+                tag: new Date().getTime()
+            }]
+        });
+    </script>
+</head>
+<body>
+    <div id="page"></div>
+    <script type="text/javascript">
+        KISSY.use('app/a.tpl', function(S, tmp) {
+            var fn = tmp.fn;
+            document.writeln(fn({
+                a: 1, 
+                b: 2,
+                c: 2322
+            }));
+        })
+    </script>
+</body>
+</html>
