@@ -1,1 +1,1 @@
-<?php include 'b.php';?>
+<?php include crox_join(__FILE__, 'b.php');?>

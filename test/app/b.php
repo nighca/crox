@@ -1,1 +1,1 @@
-<?php ?>This is B;<?php ?>
+This is B;
