@@ -7,4 +7,3 @@
 <div>change more</div>
 <div>change more</div>
 
-{{include "../b.tpl"}}

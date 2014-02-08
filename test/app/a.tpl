@@ -1,12 +1,12 @@
 <div>
-<h2>start</h2>
-{{root.a}}fdafda
-fdasfdas
+<h2>This is A</h2>
 
-<h3>import sub tmpls</h3>
-<p>
-{{include "b.tpl"}}
-{{include "c.tpl"}}
-{{include "d/d.tpl"}}
-</p>
+<div>
+root.a --> {{root.a}}
+</div>
+
+<h3>pagelets</h3>
+<div class="B">{{include "b.tpl"}}</div>
+<div class="C">{{include "c.tpl"}}</div>
+<div class="d-d">{{include "d/d.tpl"}}</div>
 </div>

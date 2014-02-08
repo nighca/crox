@@ -1,1 +1,0 @@
-<?php include crox_join(__FILE__, 'b.php');?>

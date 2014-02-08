@@ -1,1 +1,1 @@
-This is B;
+<div>This is B</div>

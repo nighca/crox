@@ -19,6 +19,7 @@ program
     .option('-w, --watch', 'Watch crox template file change')
     .option('-k, --kissy', 'Compile crox template file to Kissy module')
     .option('-f, --kissyfn', 'Compile crox template file to Kissy fn module')
+    .option('-s, --silent', 'Do not show log in command line tools')
     .parse(process.argv);
 
 if (process.argv.length === 2) {
@@ -68,7 +69,7 @@ function compileAllFiles() {
     doCompile(source, target);
   });
 
-  console.info('[Crox] Compile success! ' + sources.length + ' files compiled');
+  !program.silent && console.info('[Crox] Compile success! ' + sources.length + ' files compiled');
 }
 
 function watchTplFileChange() {
@@ -148,7 +149,7 @@ function doCompile(source, targetFile) {
   }
 
   fs.writeFileSync(targetFile, result);
-  console.info('[Crox] ' + source + ' --> ' + targetFile);
+  !program.silent && console.info('[Crox] ' + source + ' --> ' + targetFile);
 }
 
 function getTarget(source) {
