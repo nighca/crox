@@ -3,7 +3,7 @@
  * https://github.com/thx/crox
  *
  * Released under the MIT license
- * md5: 5a132dd3cf7f740848cc8f00be859ea4
+ * md5: 6f8a089adcd27af7e915f48807655a74
  */
 (function(root) {var Crox = (function() {
 function Class(base, constructor, methods) {
@@ -647,8 +647,8 @@ function codegen_php_tran(prog) {
 		//s_indent = s_indent.substr(0, s_indent.length - 2);
 	}
 
-	function emit(s) {
-		s_output += s_indent + s;
+	function emit(t) {
+		s += t;
 	}
 	function compileEval(stmt) {
 		var t = walkExpr(stmt[1]);
@@ -752,10 +752,15 @@ function codegen_php_tran(prog) {
 		}
 	}
 
-	var s_output = "";
+	var s = "";
 	compileStmts(prog[1]);
-	s_output = '<?php ' + s_output + '?>';
-	return s_output;
+	if (s.slice(0, 2) == '?>')
+		s = s.slice(2);
+	else s = '<?php ' + s;
+	if (s.slice(-6) == '<?php ')
+		s = s.slice(0, -6);
+	else s += '?>';
+	return s;
 }
 
 /// <reference path="common.js"/>
