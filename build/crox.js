@@ -3,7 +3,7 @@
  * https://github.com/thx/crox
  *
  * Released under the MIT license
- * md5: f6a902f291da47642a4a9215e9759c28
+ * md5: fe7c8a0bad0eda7fd248609d71e17d77
  */
 (function(root) {var Crox = (function() {
 function Class(base, constructor, methods) {
@@ -473,8 +473,9 @@ function isLogicalOr(op) {
 
 /// <reference path="common.js"/>
 /// <reference path="codegen_common.js"/>
-function codegen_js_tran(prog) {
+function codegen_js_tran(prog, encodeName) {
 	/// <param name="prog" type="Array">AST</param>
+	/// <param name="encodeName" type="String"></param>
 	/// <returns type="String" />
 
 	var sIndent = '\t';
@@ -518,11 +519,11 @@ function codegen_js_tran(prog) {
 				break;
 			case 'eval':
 				var s = exprGen(a[1]);
-				if (a[2]) s = '$htmlEncode(' + s + ')';
-				emit('$print(' + s + ');');
+				if (a[2]) s = encodeName + '(' + s + ')';
+				emit('$s += ' + s + ';');
 				break;
 			case 'text':
-				emit('$print(' + quote(a[1]) + ');');
+				emit('$s += ' + quote(a[1]) + ';');
 				break;
 			case 'inc':
 				//stmtsGen(a[2][1]);
@@ -580,28 +581,26 @@ function codegen_js_tran(prog) {
 
 	return body;
 }
-function codegen_js_wrap(s) {
-	/// <param name="s" type="String"></param>
+function codegen_js_tofn(prog, config) {
+	/// <param name="prog" type="Array">AST</param>
+	/// <param name="config" type="Object" optional="true"></param>
 	/// <returns type="Function" />
-	var body = "var obj = { '<': '&lt;', '>': '&gt;', '&': '&amp;', '\"': '&quot;' };\n\
+	var encodeName;
+	if (config) encodeName = config.htmlEncode;
+	var s = codegen_js_tran(prog, encodeName || '$htmlEncode');
+	var body = '';
+	if (!encodeName)
+		body += "var obj = { '<': '&lt;', '>': '&gt;', '&': '&amp;', '\"': '&quot;' };\n\
 	function $htmlEncode(s) {\n\
 		return String(s).replace(/[<>&\"]/g, function(c) {\n\
 			return obj[c];\n\
 		});\n\
 	}";
-	body += ("var $s = '';");
-	body += ("function $print(s){ $s += s; }");
+	body += "var $s = '';";
 	body += s;
-	body += ("return $s;");
+	body += "return $s;";
 
 	var f = Function('root', body);
-	return f;
-}
-function codegen_js_tofn(prog) {
-	/// <param name="prog" type="Array">AST</param>
-	/// <returns type="Function" />
-	var s = codegen_js_tran(prog);
-	var f = codegen_js_wrap(s);
 	return f;
 }
 
@@ -612,22 +611,17 @@ function parsetmpl(s) {
 	var ast = parse(Lexer(s));
 	return ast;
 }
-function compile2jsfn(s) {
+function compile2jsfn(s, config) {
 	/// <summary>编译模板，得到一个 js 函数</summary>
+	/// <param name="config" type="Object" optional="true"></param>
 	/// <param name="s" type="String">模板</param>
 	/// <returns type="Function" />
 	var ast = parsetmpl(s);
-	return codegen_js_tofn(ast);
+	return codegen_js_tofn(ast, config);
 }
 var Crox = {
 	parse: parsetmpl,
 	compile: compile2jsfn,
-	compileToJs: function(s) {
-		/// <summary>返回编译后的 js 代码</summary>
-		/// <param name="s" type="String"></param>
-		/// <returns type="String" />
-		return codegen_js_tran(parsetmpl(s));
-	},
 	render: function(s, data) {
 		/// <summary>将数据 data 填充到模板 s</summary>
 		/// <param name="s" type="String">模板</param>
