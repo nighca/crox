@@ -8,6 +8,5 @@ fdasfdas
 {{include "b.tpl"}}
 {{include "c.tpl"}}
 {{include "d/d.tpl"}}
-
 </p>
 </div>
