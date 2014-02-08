@@ -109,7 +109,7 @@
 			s += 'include "../lib/crox_extra.php";\n';
 			s += '$crox_root = ' + toPhpJson(data) + ';\n';
 			s += '?>';
-			s += t + '\n';
+			s += t;
 			saveFile('temp.php', s, 'gb2312');
 			var wsh = new ActiveXObject('WScript.shell');
 			var obj = wsh.Exec(phpPath + ' temp.php');
