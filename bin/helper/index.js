@@ -15,6 +15,7 @@
     var KISSY_FN_TEMPLATE = heredoc(function() {
         /*
         KISSY.add(function(S, require) {
+            
             var fn = {{code}};
 
             return {
@@ -89,7 +90,11 @@
         if (includeStrs) {
             replaces = '\n' + getReplaces(includeStrs) + '\n';
         }
-        var fn = crox.compile(tmpl).toString();
+        var fn = crox.compile(tmpl, {
+            htmlEncode: "KISSY.escapeHtml"
+        }).toString();
+
+        fn = fn.replace('function anonymous', 'function');
 
         recorders.forEach(function(rec, index) {
             rec = relative(rec);

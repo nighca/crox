@@ -1,3 +1,1 @@
-fdasfdasdfafdafsafdafdasfdas
-
-{{include "d/d.tpl"}}
+This is B;

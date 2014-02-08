@@ -42,6 +42,7 @@ if (subcommand == 'build') {
   // build
 }
 
+
 if (program.watch) {
     watchTplFileChange();
 } else {
@@ -107,8 +108,11 @@ function watching(filePath) {
     if (!tplSuffixReg.test(filePath)) {
       return;
     }
-    modulePath = filePath + '.' + targetType;
-    doCompile(filePath, modulePath);
+    var target = getTarget(filePath);
+    if (targetType == 'js') {
+      target = target.replace('.' + targetType, '.' + program.tplSuffix + '.' + targetType)
+    }
+    doCompile(filePath, target);
 }
 
 function doCompile(source, targetFile) {
