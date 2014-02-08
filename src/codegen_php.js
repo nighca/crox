@@ -66,7 +66,7 @@ function codegen_php_tran(prog) {
 			case 'eval': compileEval(a); break;
 			case 'text': compileContent(a); break;
 			case 'inc':
-				emit("include '" + changeExt(a[1], 'php') + "';");
+				emit("include crox_join(__FILE__, '" + changeExt(a[1], 'php') + "');");
 				break;
 			default: throw Error('unknown stmt: ' + a[0]);
 		}

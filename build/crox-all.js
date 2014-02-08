@@ -3,7 +3,7 @@
  * https://github.com/thx/crox
  *
  * Released under the MIT license
- * md5: 6f8a089adcd27af7e915f48807655a74
+ * md5: 2e271c86fedea1c59544765ecf7b33ee
  */
 (function(root) {var Crox = (function() {
 function Class(base, constructor, methods) {
@@ -701,7 +701,7 @@ function codegen_php_tran(prog) {
 			case 'eval': compileEval(a); break;
 			case 'text': compileContent(a); break;
 			case 'inc':
-				emit("include '" + changeExt(a[1], 'php') + "';");
+				emit("include crox_join(__FILE__, '" + changeExt(a[1], 'php') + "');");
 				break;
 			default: throw Error('unknown stmt: ' + a[0]);
 		}
