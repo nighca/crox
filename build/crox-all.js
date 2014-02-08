@@ -3,7 +3,7 @@
  * https://github.com/thx/crox
  *
  * Released under the MIT license
- * md5: 85cc6a80cafdc4e8499b13a021b01fd3
+ * md5: 5a132dd3cf7f740848cc8f00be859ea4
  */
 (function(root) {var Crox = (function() {
 function Class(base, constructor, methods) {
@@ -469,7 +469,9 @@ function isLogicalAnd(op) {
 function isLogicalOr(op) {
 	return isLogicalAnd(op) || op == '||';
 }
-
+function changeExt(s, ext) {
+	return s.replace(/\.\w+$/, '.' + ext);
+}
 
 /// <reference path="common.js"/>
 /// <reference path="codegen_common.js"/>
@@ -639,14 +641,14 @@ function codegen_php_tran(prog) {
 	var s_indent = '';
 
 	function indent() {
-		s_indent += '  ';
+		//s_indent += '  ';
 	}
 	function outdent() {
-		s_indent = s_indent.substr(0, s_indent.length - 2);
+		//s_indent = s_indent.substr(0, s_indent.length - 2);
 	}
 
 	function emit(s) {
-		s_output += s_indent + s + '\n';
+		s_output += s_indent + s;
 	}
 	function compileEval(stmt) {
 		var t = walkExpr(stmt[1]);
@@ -658,7 +660,12 @@ function codegen_php_tran(prog) {
 		emit('echo ' + t + ';');
 	}
 	function compileContent(stmt) {
-		emit('echo ' + phpQuote(stmt[1]) + ';');
+		var t = stmt[1];
+		if (/<\?(?:php)?|\?>/.test(t))
+			emit('echo ' + phpQuote(stmt[1]) + ';');
+		else {
+			emit('?>' + t + '<?php ');
+		}
 	}
 	function compileIf(stmt) {
 		emit('if(' + walkExpr(stmt[1]) + '){');
@@ -694,7 +701,7 @@ function codegen_php_tran(prog) {
 			case 'eval': compileEval(a); break;
 			case 'text': compileContent(a); break;
 			case 'inc':
-				//emit("include '" + a[1] + "';");
+				emit("include '" + changeExt(a[1], 'php') + "';");
 				break;
 			default: throw Error('unknown stmt: ' + a[0]);
 		}
@@ -747,7 +754,7 @@ function codegen_php_tran(prog) {
 
 	var s_output = "";
 	compileStmts(prog[1]);
-
+	s_output = '<?php ' + s_output + '?>';
 	return s_output;
 }
 
@@ -799,7 +806,7 @@ function codegen_vm_tran(prog, nl) {
 				//emit('#set($t = ' + vmQuote(a[1]) + ')${t}');
 				break;
 			case 'inc':
-				emit("#parse('" + a[1].replace(/\.\w+$/, '.vm') + "')");
+				emit("#parse('" + changeExt(a[1], 'vm') + "')");
 				break;
 			default:
 				throw Error('unknown stmt: ' + a[0]);

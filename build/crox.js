@@ -3,7 +3,7 @@
  * https://github.com/thx/crox
  *
  * Released under the MIT license
- * md5: fe7c8a0bad0eda7fd248609d71e17d77
+ * md5: bc81deebd44c663eda891e3092161ebc
  */
 (function(root) {var Crox = (function() {
 function Class(base, constructor, methods) {
@@ -469,7 +469,9 @@ function isLogicalAnd(op) {
 function isLogicalOr(op) {
 	return isLogicalAnd(op) || op == '||';
 }
-
+function changeExt(s, ext) {
+	return s.replace(/\.\w+$/, '.' + ext);
+}
 
 /// <reference path="common.js"/>
 /// <reference path="codegen_common.js"/>

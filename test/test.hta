@@ -53,7 +53,7 @@
 			['{{root}}, 你好\r', '哈喽\n', '哈喽\n, 你好\r'],
 			['{{root}}, 你好\r', '哈喽\r\n', '哈喽\r\n, 你好\r'],
 			['{{root}}, 你好\'\\', '哈喽\'\\', '哈喽\'\\, 你好\'\\']
-		].slice(-1);
+		];
 		function renderJs(sFunc, data) {
 			/// <param name="sFunc" type="String"></param>
 			/// <param name="data" type="JSON"></param>
@@ -106,10 +106,10 @@
 			/// <param name="sFunc" type="String"></param>
 			/// <param name="data" type="JSON"></param>
 			var s = '<?php\n';
-			s += 'include "../lib/crox_extra.php";';
+			s += 'include "../lib/crox_extra.php";\n';
 			s += '$crox_root = ' + toPhpJson(data) + ';\n';
-			s += t + '\n';
 			s += '?>';
+			s += t + '\n';
 			saveFile('temp.php', s, 'gb2312');
 			var wsh = new ActiveXObject('WScript.shell');
 			var obj = wsh.Exec(phpPath + ' temp.php');

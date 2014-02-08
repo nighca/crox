@@ -52,4 +52,6 @@ function isLogicalAnd(op) {
 function isLogicalOr(op) {
 	return isLogicalAnd(op) || op == '||';
 }
-
+function changeExt(s, ext) {
+	return s.replace(/\.\w+$/, '.' + ext);
+}
