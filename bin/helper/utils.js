@@ -1,6 +1,12 @@
-function relative(include) {
+var path = require('path');
+var SEP = path.sep;
+
+function relative(include, modulePrefix) {
     if (include.indexOf('"') == 0) {
         include = include.slice(1, -1);
+    }
+    if (modulePrefix && include.indexOf(modulePrefix + '/') == 0) {
+        return include;
     }
     if (include.indexOf('.') != 0 // 不是./ 或 ../的相对路径
         && include.indexOf('/') != 0) { // 不是 / 开头的绝对路径
@@ -15,12 +21,12 @@ function placeholder(index) {
     return '__CROX_PLACEHOLDER__' + index + '__CROX_PLACEHOLDER__';
 }
 
-function getReplaces(includeStrs) {
+function getReplaces(includeStrs, modulePrefix) {
     var mapper = {};
     var replaces = [];
     includeStrs.forEach(function(s) {
         var include = s.replace(/(\{\{\s*include\s+"\s*)|(\s*\.tpl\s*"\s*\}\}\s*)/g, '');
-        include = relative(include);
+        include = relative(include, modulePrefix);
         // 避免重复replace
         if (mapper[include]) {
             return;

@@ -21,7 +21,7 @@
             return placeholder(index);
         });
         if (includeStrs) {
-            replaces = '\n' + getReplaces(includeStrs) + '\n';
+            replaces = '\n' + getReplaces(includeStrs, options.modulePrefix) + '\n';
         }
         var fn = crox.compile(tmpl, {
             htmlEncode: options.htmlEncode || ''
@@ -30,7 +30,7 @@
         fn = fn.replace('function anonymous', 'function');
 
         recorders.forEach(function(rec, index) {
-            rec = relative(rec);
+            rec = relative(rec, options.modulePrefix);
             fn = fn.replace(placeholder(index), "\" + \n require('" + rec + ext + "')(root) + \n \"");
         })        
         code = code.replace('{{code}}', fn);
@@ -85,7 +85,7 @@
 
         tmpl = tmpl.replace(/\n/g, '\\\n');
         if (includeStrs) {
-            replaces = '\n' + getReplaces(includeStrs) + '\n';
+            replaces = '\n' + getReplaces(includeStrs, options.modulePrefix) + '\n';
         }
 
         code = code.replace('{{tmpl}}', tmpl);

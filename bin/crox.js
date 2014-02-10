@@ -24,6 +24,7 @@ program
     .option('--kissy', 'Compile crox template file to Kissy module')
     .option('--kissyfn', 'Compile crox template file to Kissy fn module')
     .option('--silent', 'Do not show log in command line tools')
+    .option('-m, --module-prefix [modulePrefix]', 'Top module prefix in Crox template files')
     .parse(process.argv);
 
 if (process.argv.length === 2) {
@@ -40,6 +41,7 @@ var encoding = program.encoding;
 var targetType = program.targetType;
 var htmlEncode = program.htmlEncode || '';
 var tplSuffixReg = new RegExp('\\.' + program.tplSuffix + '$');
+var modulePrefix = program.modulePrefix || '';
 
 var subcommand = process.argv[2];
 
@@ -132,7 +134,8 @@ function doCompile(source, targetFile) {
     result = crox.compileToVM(tpl);
   } else {
     var options = {
-      htmlEncode: htmlEncode
+      htmlEncode: htmlEncode,
+      modulePrefix: modulePrefix
     };
     // js 
     if (program.kissyfn) {
