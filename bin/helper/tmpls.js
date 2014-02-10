@@ -28,7 +28,7 @@ var CMD_TEMPLATE = heredoc(function() {
 
 var COMMONJS_TEMPLATE = heredoc(function() {
     /*
-        module.exports = {{code}};
+    module.exports = {{code}};
     */
 });
 
