@@ -37,6 +37,9 @@ title: Crox的Nodejs命令行工具
 
 - `--silent` 在控制台不输出翻译时的log信息
 
+- `-m` `--module-prefix` Crox模板文件中引用的模块路径前缀，避免全路径访问的模块被当成相对路径。
+
+比如： `app/sub/module/name.js`的 路径前缀 为 `app`，如果不配置module-prefix，则翻译成模块后路径将变为 `./app/sub/module/name.js`，配置以后就不会出现此问题。
 
 
 ## 工具使用示例
