@@ -106,7 +106,7 @@ KISSY.add(function(S, require) {
 
 运行 `crox -t vm`，将会翻译 `a.tpl` 并生成php文件 `a.vm`
 
-```vm
+```
 #set($t = $_root.a)$!{t} - #set($t = $_root.b)$!{t}
 ```
 
