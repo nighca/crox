@@ -77,11 +77,53 @@ KISSY.add(function(S, require) {
 });
 ```
 
-同理：
+运行 `crox -t js --html-encode KISSY.escapeHTML --kissy`，Crox会将 `a.tpl`文件内容翻译成Kissy模块，生成 `a.tpl.js` 文件的内容如下
 
-- 运行 `crox -t php`，将会翻译 `a.tpl` 并生成php文件 `a.php`
-- 运行 `crox -t vm`，将会翻译 `a.tpl` 并生成php文件 `a.vm`
+```js
+KISSY.add(function(S, require) {
+    var Crox = require('crox');
+
+    var tmpl = '{{root.a}} - {{root.b}}\
+';
+
+
+    var fn = Crox.compile(tmpl);
+    fn.tmpl = tmpl;
+
+    return fn;
+});
+```
+
+可见，`--kissyfn` 和 `--kissy` 翻译出的两种不同的Kissy模块之间的差异。
+
+另外：
+
+运行 `crox -t php`，将会翻译 `a.tpl` 并生成php文件 `a.php`
+
+```php
+<?php echo crox_encode($crox_root->a);?> - <?php echo crox_encode($crox_root->b);?>
+```
+
+运行 `crox -t vm`，将会翻译 `a.tpl` 并生成php文件 `a.vm`
+
+```vm
+#set($t = $_root.a)$!{t} - #set($t = $_root.b)$!{t}
+```
 
 如果目录下有多个 `.tpl` 文件，则都会进行翻译操作。
+
+## 其他
+
+- Crox命令行工具只负责将tpl文件翻译成目标文件，并放置在同目录下，如果涉及到打包、combo服务的配置，请参考相关工具，例如Kissy的 `kmc` 工具
+
+- `kissy` 和 `kissyfn`是翻译成kissy模块的两种模式，翻译时可根据要求选择
+
+- 如果是翻译成 `php`，则在使用翻译的php文件时，需要引入 `CROX/lib/crox_extra.php` 文件
+
+- 翻译后只有js文件会在原文件名后添加 `.js` 后缀，其他文件类型是直接替换后缀名，比如 `.php`，`.vm`
+
+- 翻译成的 `php` 要求数据变量名称必须是 `$crox_root`
+
+- 翻译成的 `vm` 要求数据变量名称必须是 `$_root`
 
 {% endraw %}
