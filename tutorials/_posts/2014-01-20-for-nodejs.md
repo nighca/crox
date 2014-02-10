@@ -35,22 +35,8 @@ console.log(php);
 
 用node运行这段JS，控制台输出是一段 `php` 代码，内容如下：
 
-```js
-function temp($i_root) {
-// 为了篇幅，这里忽略一部分辅助方法 :-)
-$t_r = '';
-$i_ok = $i_root->ok;
-$t_r .= ' ';
-if($i_ok){
-  $t_r .= ' 好 ';
-}
-else{
-  $t_r .= ' 不好 ';
-}
-$t_r .= '
-';
-return $t_r;
-}
+```php
+<?php $crox_ok = $crox_root->ok;?> <?php if($crox_ok){?> 好 <?php }else{?> 不好 <?php }?>
 
 ```
 

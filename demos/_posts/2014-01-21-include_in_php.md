@@ -25,27 +25,16 @@ title: PHP中使用Crox include
 
 `a.php`
 
-```
-function temp($i_root) {
-    // helpers
-    $t_r = '';
-    $t_r .= '- ';
-    $t_r .= htmlspecialchars(ToString($i_root->a), ENT_COMPAT, 'GB2312');
-    include 'b.php';
-    return $t_r;
-}
+```php
+- <?php echo crox_encode($crox_root->a);?>
+
+<?php include 'b.php';?>
 ```
 
 `b.php`
 
-```
-function temp($i_root) {
-    // helpers
-    $t_r = '';
-    $t_r .= '- ';
-    $t_r .= htmlspecialchars(ToString($i_root->b), ENT_COMPAT, 'GB2312');
-    return $t_r;
-}
+```php
+- <?php echo crox_encode($crox_root->b);?>
 ```
 
 {% endraw %}
