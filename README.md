@@ -11,6 +11,18 @@ Crox将保证翻译后的结果具备最佳执行效率。
 * 版本：1.2
 * 作者：三冰，李牧，思竹，陆辉，思霏
 
+## Crox官网导航
+
+- [Crox官网首页](http://thx.github.io/crox/)
+- [快速上手](http://thx.github.io/crox/tutorials)
+- [Demos](http://thx.github.io/crox/demos)
+- [API介绍](http://thx.github.io/crox/apis)
+- [Crox Nodejs命令行工具](http://thx.github.io/crox/apis/nodejs-api/)
+- [Crox相关文章](http://thx.github.io/crox/articles)
+- [Crox相关资源](http://thx.github.io/crox/resources)
+- [常见问题与回答](http://thx.github.io/crox/faq)
+- [发布历史](http://thx.github.io/crox/releases)
+
 ## Demo
 
 这里举一个简单的例子，展示Crox将Crox模板翻译成其他语言或模板的强大能力。
@@ -133,16 +145,3 @@ KISSY.add(function(S, require) {
 以上翻译过程可由Crox提供的[nodejs命令行工具](http://thx.github.io/crox/apis/nodejs-api/)完成。
 
 更多[Crox模板语法](http://thx.github.io/crox/apis/tpl-api/)和[目标语言](http://thx.github.io/crox/demos/)翻译，请参见[Crox官网](http://thx.github.io/crox/)。
-
-
-## Crox官网导航
-
-- [Crox官网首页](http://thx.github.io/crox/)
-- [快速上手](http://thx.github.io/crox/tutorials)
-- [Demos](http://thx.github.io/crox/demos)
-- [API介绍](http://thx.github.io/crox/apis)
-- [Crox Nodejs命令行工具](http://thx.github.io/crox/apis/nodejs-api/)
-- [Crox相关文章](http://thx.github.io/crox/articles)
-- [Crox相关资源](http://thx.github.io/crox/resources)
-- [常见问题与回答](http://thx.github.io/crox/faq)
-- [发布历史](http://thx.github.io/crox/releases)
