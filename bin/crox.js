@@ -17,13 +17,13 @@ program
     .option('-x, --tpl-suffix [tplSuffix]', 'Set template suffix [tpl]', 'tpl')
     .option('-o, --output [dir]', 'Set the output directory for compiled template', '.')
     .option('-w, --watch', 'Watch crox template file change')
-    .option('--commonjs', 'Compile crox template file to CommonJS module')
+    .option('--nodejs', 'Compile crox template file to NodeJS module')
     .option('--cmd', 'Compile crox template file to CMD module')
     .option('--amd', 'Compile crox template file to AMD module')
-    .option('--html-encode [htmlEncode]', 'set htmlEncode function name (global)')
-    .option('-k, --kissy', 'Compile crox template file to Kissy module')
-    .option('-f, --kissyfn', 'Compile crox template file to Kissy fn module')
-    .option('-s, --silent', 'Do not show log in command line tools')
+    .option('--html-encode [htmlEncode]', 'set htmlEncode function name')
+    .option('--kissy', 'Compile crox template file to Kissy module')
+    .option('--kissyfn', 'Compile crox template file to Kissy fn module')
+    .option('--silent', 'Do not show log in command line tools')
     .parse(process.argv);
 
 if (process.argv.length === 2) {
@@ -42,11 +42,6 @@ var htmlEncode = program.htmlEncode || '';
 var tplSuffixReg = new RegExp('\\.' + program.tplSuffix + '$');
 
 var subcommand = process.argv[2];
-
-if (subcommand == 'build') {
-  // build
-}
-
 
 if (program.watch) {
     watchTplFileChange();
@@ -148,7 +143,7 @@ function doCompile(source, targetFile) {
       result = doJsBeautify(CroxUtils.compileToKissy(source, options));
     } else if (program.cmd) {
       result = doJsBeautify(CroxUtils.compileToCMD(source, options));
-    } else if (program.commonjs) {
+    } else if (program.nodejs) {
       result = doJsBeautify(CroxUtils.compileToCommonJS(source, options));
     } else if (program.amd) {
       result = doJsBeautify(CroxUtils.compileToAMD(source, options));

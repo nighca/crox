@@ -1,9 +1,12 @@
 # !/bin/sh
+
+sh cleanup.sh
 clear
+
 echo ''
 echo ' ---------------------------------- VM ---------------------------------- '
 echo ''
-node ../../bin/crox.js -p -t vm -s
+node ../../bin/crox.js -p -t vm --silent
 TPL=index.vm
 #echo "Running Example with input file '$TPL'"
 
@@ -28,7 +31,7 @@ echo ""
 echo ''
 echo ' ---------------------------------- PHP ---------------------------------- '
 echo ''
-node ../../bin/crox.js -p -t php -s
+node ../../bin/crox.js -p -t php --silent
 
 php index.php
 
@@ -37,24 +40,45 @@ php index.php
 echo ''
 echo ' ---------------------------------- JS-KISSY ---------------------------------- '
 echo ''
-node ../../bin/crox.js -p -t js --kissy -s
+node ../../bin/crox.js -p --kissy --silent
 
 node index.js
-
-rm a.tpl.js
-rm b.tpl.js
-rm c.tpl.js
-rm d/d.tpl.js
-
 
 
 echo ''
 echo ''
 echo ' ---------------------------------- JS-KISSY-FN ---------------------------------- '
 echo ''
-node ../../bin/crox.js -p -t js --kissyfn -s
+node ../../bin/crox.js -p --kissyfn --silent
 
 node index.js
+
+
+echo ''
+echo ''
+echo ' ---------------------------------- CommonJS ---------------------------------- '
+echo ''
+node ../../bin/crox.js -p --nodejs --silent
+
+node index-nodejs.js
+
+
+echo ''
+echo ''
+echo ' ---------------------------------- CMD ---------------------------------- '
+echo ''
+node ../../bin/crox.js -p --cmd --silent
+
+node index-cmd.js
+
+
+echo ''
+echo ''
+echo ' ---------------------------------- AMD ---------------------------------- '
+echo ''
+node ../../bin/crox.js -p --amd --silent
+
+node index-amd.js
 # 1. ../b.xxx的引用方式不一样
 # 2. 对于空格、回车的处理有区别
 

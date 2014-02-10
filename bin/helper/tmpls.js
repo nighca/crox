@@ -10,9 +10,7 @@ var KISSY_FN_TEMPLATE = heredoc(function() {
     /*
     KISSY.add(function(S, require) {
         
-        var fn = {{code}};
-
-        return fn;
+        return {{code}};
 
     });
     */
@@ -22,9 +20,7 @@ var CMD_TEMPLATE = heredoc(function() {
     /*
     define(function(require) {
         
-        var fn = {{code}};
-
-        return fn;
+        return {{code}};
 
     });
     */
@@ -32,9 +28,7 @@ var CMD_TEMPLATE = heredoc(function() {
 
 var COMMONJS_TEMPLATE = heredoc(function() {
     /*
-        var fn = {{code}};
-
-        module.exports = fn;
+        module.exports = {{code}};
     */
 });
 
@@ -42,9 +36,7 @@ var AMD_TEMPLATE = heredoc(function() {
     /*
     define(function(require) {
         
-        var fn = {{code}};
-
-        return fn;
+        return {{code}};
 
     });
     */

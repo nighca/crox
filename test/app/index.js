@@ -18,8 +18,7 @@ KISSY.config({
     }]
 });
 
-KISSY.use('app/a.tpl', function(S, tmp) {
-    var fn = tmp.fn;
+KISSY.use('app/a.tpl', function(S, fn) {
     console.log(fn({
         a: '<h2>fdafad</h2>', 
         b: 2,
