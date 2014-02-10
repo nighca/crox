@@ -17,6 +17,10 @@ program
     .option('-x, --tpl-suffix [tplSuffix]', 'Set template suffix [tpl]', 'tpl')
     .option('-o, --output [dir]', 'Set the output directory for compiled template', '.')
     .option('-w, --watch', 'Watch crox template file change')
+    .option('--commonjs', 'Compile crox template file to CommonJS module')
+    .option('--cmd', 'Compile crox template file to CMD module')
+    .option('--amd', 'Compile crox template file to AMD module')
+    .option('--html-encode [htmlEncode]', 'set htmlEncode function name (global)')
     .option('-k, --kissy', 'Compile crox template file to Kissy module')
     .option('-f, --kissyfn', 'Compile crox template file to Kissy fn module')
     .option('-s, --silent', 'Do not show log in command line tools')
@@ -34,8 +38,8 @@ var output = program.packagePath != '.' && program.output == '.' ? program.packa
 var outputPath = path.resolve(cwd, output);
 var encoding = program.encoding;
 var targetType = program.targetType;
+var htmlEncode = program.htmlEncode || '';
 var tplSuffixReg = new RegExp('\\.' + program.tplSuffix + '$');
-
 
 var subcommand = process.argv[2];
 
@@ -132,15 +136,24 @@ function doCompile(source, targetFile) {
   } else if (targetType == 'vm') {
     result = crox.compileToVM(tpl);
   } else {
+    var options = {
+      htmlEncode: htmlEncode
+    };
     // js 
-    if (!program.kissy && !program.kissyfn) {
-      result = doJsBeautify(crox.compile(tpl).toString());
-    } else if (program.kissyfn) {
+    if (program.kissyfn) {
       // compile to kissy fn
-      result = doJsBeautify(CroxUtils.compileToKissyFn(source));
+      result = doJsBeautify(CroxUtils.compileToKissyFn(source, options));
+    } else if (program.kissy) {
+      // compile to kissy fn
+      result = doJsBeautify(CroxUtils.compileToKissy(source, options));
+    } else if (program.cmd) {
+      result = doJsBeautify(CroxUtils.compileToCMD(source, options));
+    } else if (program.commonjs) {
+      result = doJsBeautify(CroxUtils.compileToCommonJS(source, options));
+    } else if (program.amd) {
+      result = doJsBeautify(CroxUtils.compileToAMD(source, options));
     } else {
-      // compile to kissy module, replace requires
-      result = doJsBeautify(CroxUtils.compileToKissy(source));
+      result = doJsBeautify(crox.compile(tpl, options).toString());
     }
   }
 
