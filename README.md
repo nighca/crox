@@ -97,51 +97,6 @@ module.exports = function(root) {
 };
 ```
 
-### 翻译成seajs模块
-
-```js
-define(function(require) {
-
-    return function(root) {
-        // 忽略$htmlEncode方法源码
-        var $s = '';
-        $s += "<div>\n<h2>This is A</h2>\n\n<div>\nroot.a --> ";
-        $s += $htmlEncode(root.a);
-        $s += "\n</div>\n\n<h3>pagelets</h3>\n<div class=\"B\">" +
-            require('./b.tpl')(root) +
-            "</div>\n<div class=\"C\">" +
-            require('./c.tpl')(root) +
-            "</div>\n<div class=\"d-d\">" +
-            require('./d/d.tpl')(root) +
-            "</div>\n</div>";
-        return $s;
-    };
-
-});
-```
-
-### 翻译成kissy模块
-
-```js
-KISSY.add(function(S, require) {
-
-    return function(root) {
-        var $s = '';
-        $s += "<div>\n<h2>This is A</h2>\n\n<div>\nroot.a --> ";
-        $s += KISSY.escapeHtml(root.a);
-        $s += "\n</div>\n\n<h3>pagelets</h3>\n<div class=\"B\">" +
-            require('./b.tpl')(root) +
-            "</div>\n<div class=\"C\">" +
-            require('./c.tpl')(root) +
-            "</div>\n<div class=\"d-d\">" +
-            require('./d/d.tpl')(root) +
-            "</div>\n</div>";
-        return $s;
-    };
-
-});
-```
-
 以上翻译过程可由Crox提供的[nodejs命令行工具](http://thx.github.io/crox/apis/nodejs-api/)完成。
 
 更多[Crox模板语法](http://thx.github.io/crox/apis/tpl-api/)和[目标语言](http://thx.github.io/crox/demos/)翻译，请参见[Crox官网](http://thx.github.io/crox/)。
