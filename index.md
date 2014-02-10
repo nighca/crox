@@ -11,7 +11,7 @@ Crox模板可以直接在JavaScript环境中使用，也可以翻译成PHP、JSP
 
 Crox将保证翻译后的结果具备最佳执行效率。
 
-* 版本：1.1
+* 版本：1.2
 * 作者：三冰，李牧，思竹，陆辉，思霏
 
 ## 在线尝鲜
@@ -90,15 +90,11 @@ Crox是如何做到 `高性能` 和 `跨语言` 的呢？请先看看 [Crox的�
 
 将Crox模板编译成 `原生JS Function`
 
-### 4. Crox.compileToJs
+### 4. Crox.compileToPhp
 
-将Crox模板编译成 `原生JS Function` 的字符串
+将Crox模板编译成 `PHP文件`
 
-### 5. Crox.compileToPhp
-
-将Crox模板编译成 `PHP函数`
-
-### 6. Crox.compileToVM
+### 5. Crox.compileToVM
 
 将Crox模板翻译成 `Velocity模板`
 
@@ -108,9 +104,15 @@ API的使用Demo，请参见 [Crox Demos](/crox/demos)
 
 ## Crox Nodejs 命令行工具
 
-如何将Crox模板文件批量翻译成 `js` | `vm` | `php`？
+- 如何将Crox模板文件批量翻译成 `php` | `vm` | `Nodejs模块` | `Seajs模块` | `Kissy模块`？
 
-Crox提供了命令行工具来完成此任务。
+- 如何watch模板文件的改动？
+
+- 如何指定翻译时的html转义方法？
+
+- 如何指定crox模板文件的后缀名？
+
+Crox提供了命令行工具来完成以上任务。
 
 通过 `npm install -g crox` 安装后，即可使用 `crox` 命令。
 
@@ -121,6 +123,7 @@ Crox提供了命令行工具来完成此任务。
 - [快速上手](./tutorials)
 - [Demos](./demos)
 - [API介绍](./apis)
+- [Crox Nodejs命令行工具](/crox/apis/nodejs-api)
 - [Crox文章](./articles)
 - [相关资源](./resources)
 - [常见问题与回答](./faq)
