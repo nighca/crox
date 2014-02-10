@@ -42,6 +42,8 @@ console.log(php);
 
 ### 使用Crox命令行工具
 
+Crox命令行工具提供了模板的翻译、模板文件改动监听等功能。
+
 命令的具体介绍和使用示例，请参见 [Crox Nodejs命令行工具](/crox/apis/nodejs-api)
 
 

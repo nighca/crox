@@ -10,7 +10,7 @@ title: for RequireJS(AMD)
 ```js
 require.config({
     paths:{
-        'crox':'http://g.tbcdn.cn/thx/crox/1.1.0/amd/crox'
+        'crox':'http://g.tbcdn.cn/thx/crox/1.2.0/amd/crox'
     }
 })
 ```
