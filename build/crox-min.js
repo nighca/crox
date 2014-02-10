@@ -1,5 +1,5 @@
 /*
- Crox v1.2.0
+ Crox v1.2.1
  https://github.com/thx/crox
 
  Released under the MIT license
@@ -26,4 +26,4 @@ _:0},{_:-19},{_:-15},{_:-14},{25:55,_:0},{35:56,_:0},{36:57,_:0},{_:-25},{5:58,_
 [51,51,50],[50,29,47,35,51,31],[50,29,47,35,51,32,51,31],[50,28,47,25,46,35,51,30],[50,28,47,25,25,35,51,30],[50,27,24,48,13,47,35],[50,27,47,35],[50,33,47,36],[50,26],[50,27,20,25,35],[48,23],[48,24],[48,20],[43,25],[43,22],[43,18],[43,48],[43,4,47,5],[41,43],[41,41,9,48],[41,41,16,47,17],[45,41],[45,1,45],[45,8,45],[42,45],[42,42,6,45],[42,42,10,45],[42,42,2,45],[37,42],[37,37,7,42],[37,37,8,42],[44,37],[44,44,11,37],[44,44,14,37],[44,44,12,37],[44,44,15,37],[38,44],[38,38,19,44],[38,38,21,44],
 [39,38],[39,39,3,38],[40,39],[40,40,34,39],[47,40],[46]],tFuncs:function(){function a(a,b,c,e,d,l,r){return["each",b,l,e&&eval(e.text),eval(c.text)]}function d(a){return["lit",eval(a.text)]}function c(a,b,c){return[b.text,a,c]}return[,function(a){return["prog",a]},function(){return[]},function(a,b){a.push(b);return a},function(a,b,c,e,d){return["if",b,e]},function(a,b,c,d,l,r,w){return["if",b,d,r]},a,a,function(a,b,c,d,l,r){return["set",c.text,l]},function(a,b,c){return["eval",b,!0]},function(a,b,
 c){return["eval",b,!1]},function(a){return["text",a.text]},function(a,b,c,d){return["inc",eval(c.text)]},,,,d,d,function(a){return["lit","true"==a.text]},function(a){return["id",a.text]},function(a,b,c){return b},,function(a,b,c){return[".",a,c.text]},function(a,b,c,d){return["[]",a,c]},,function(a,b){return["!",b]},function(a,b){return["u-",b]},,c,c,c,,c,c,,c,c,c,c,,function(a,b,c){return["eq",a,c]},function(a,b,c){return["ne",a,c]},,c,,c]}()})}();return{parse:E,compile:F,render:function(a,d){return F(a)(d)},
-version:"1.2.0"}}();"object"==typeof module&&module&&"object"==typeof module.exports?module.exports=r:"function"==typeof define&&(define.amd||define.cmd)?define(function(){return r}):"undefined"!=typeof KISSY&&KISSY.add("crox",function(){return r});l&&(l.Crox=r)})(this);
+version:"1.2.1"}}();"object"==typeof module&&module&&"object"==typeof module.exports?module.exports=r:"function"==typeof define&&(define.amd||define.cmd)?define(function(){return r}):"undefined"!=typeof KISSY&&KISSY.add(function(){return r});l&&(l.Crox=r)})(this);
