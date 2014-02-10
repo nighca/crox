@@ -13,8 +13,7 @@
 	<script src="examples.js"></script>
 	<script src="../config.js"></script>
 	<script>
-		var thePath = (oHTA.commandLine).replace(/"/g, '').replace(/[^/]+$/, '');
-		function fromExamples() {
+		function fromExamples(examples) {
 			var a = [];
 			for (var i = 0; i < examples.length; ++i) {
 				a.push([examples[i].tmpl, examples[i].data, examples[i].out]);
@@ -52,14 +51,14 @@
 			['{{root}}, 你好', '哈喽', '哈喽, 你好'],
 			['{{root}}, 你好\r', '哈喽\n', '哈喽\n, 你好\r'],
 			['{{root}}, 你好\r', '哈喽\r\n', '哈喽\r\n, 你好\r'],
-			['{{root}}, 你好\'\\', '哈喽\'\\', '哈喽\'\\, 你好\'\\']
+			['{{root}}, 你好\'\\', '哈喽\'\\', '哈喽\'\\, 你好\'\\'],
+			['{{set t="t"}}{{set s="$"+root}}{{s}}', '_t', '$_t'],
+			['$t{{set t="t"}}{{set s=root}}{{s}}#a', '$_t', '$t$_t#a'],
+			['{{#each root "val" "key"}}{{key}}:{{val}}$velocityCount{{/each}}$velocityCount', [1, 2], '0:1$velocityCount1:2$velocityCount$velocityCount'],
+			['{{#each root "val" "key"}}{{key}}:{{val}}$velocityCount{{/each}}$velocityCount', { a: 1, b: 2 }, 'a:1$velocityCountb:2$velocityCount$velocityCount'],
+			['{{#each root "val" "key"}}\n{{key}}:{{val}}\n{{/each}}\n', [1, 2, 3], '\n0:1\n\n1:2\n\n2:3\n\n']
 		];
-		function renderJs(sFunc, data) {
-			/// <param name="sFunc" type="String"></param>
-			/// <param name="data" type="JSON"></param>
-			var f = eval('0,' + sFunc);
-			return f(data);
-		}
+
 		function toPhpJson(v) {
 			function isArray(t) {
 				return Object.prototype.toString.call(t) == '[object Array]';
@@ -112,6 +111,7 @@
 			s += t;
 			saveFile('temp.php', s, 'gb2312');
 			var wsh = new ActiveXObject('WScript.shell');
+			wsh.CurrentDirectory = testPath;
 			var obj = wsh.Exec(phpPath + ' temp.php');
 			var r = obj.StdOut.ReadAll();
 			return r;
@@ -121,8 +121,60 @@
 				return err.message;
 			return String(err);
 		}
+		function toJava_getData(data) {
+			//data: ['a', 'b', 'c']
+			var s = 'public ArrayList getData()\r\n\
+			{\r\n\
+				Object obj=JSONValue.parse(' + JSON.stringify(JSON.stringify([data])) + ');\r\n\
+				JSONArray array=(JSONArray)obj;\r\n\
+				return array;\r\n\
+			}\r\n\
+		';
+			return s;
+		}
+		var fso = new ActiveXObject('Scripting.FileSystemObject');
+		var classpath = ['.'];
+		function appendVELCP(path, prefix) {
+			var fd = fso.getFolder(path);
+			var f = new Enumerator(fd.Files);
+			for (; !f.atEnd() ; f.moveNext()) {
+				var file = f.item();
+				if (/\.jar$/.test(file.name))
+					classpath.push(prefix + file.name);
+			}
+		}
+		appendVELCP(velocityPath, '..\\..\\');
+		appendVELCP(velocityPath + 'lib\\', '..\\');
+
+		function renderVM(vm, data) {
+			var vmPath = velocityPath + 'examples\\myexample\\';
+			saveFile(vmPath + 'example.vm', vm, 'gb2312');
+			var sGetData = toJava_getData(data);
+			var java = readFile(vmPath + 'ExampleTemplate.java', 'gb2312');
+			java = java.replace('//__getData__', sGetData);
+			saveFile(vmPath + 'Example.java', java, 'gb2312');
+
+			var wsh = new ActiveXObject('WScript.shell');
+			wsh.CurrentDirectory = vmPath;
+
+			wsh.Run('javac -cp ' + classpath.join(';') + ' Example.java', 0, true);
+			var obj = wsh.Exec('java -cp ' + classpath.join(';') + ' Example example.vm');
+			var r = obj.StdOut.ReadAll();
+			return r;
+		}
+		function approxEqual(s1, s2) {
+			/// <param name="s1" type="String"></param>
+			/// <param name="s2" type="String"></param>
+			return s1.replace(/[\r\n]/g, '') == s2.replace(/[\r\n]/g, '');
+		}
+
 		function runTest(a) {
-			var s = '<table border=1><tr><th>模板</th><th>数据</th><th>输出（js）</th><th>输出（php）</th></tr>';
+			var bPhp = document.getElementById('box_php').checked;
+			var bVm = document.getElementById('box_vm').checked;
+			var s = '<table border=1><tr><th>模板</th><th>数据</th><th>输出（js）</th>';
+			if (bPhp) s += '<th>输出（php）</th>';
+			if (bVm) s += '<th>输出（vm）</th>';
+			s += '</tr>';
 			for (var i = 0; i < a.length; ++i) {
 				var tmpl = a[i][0];
 				var data = a[i][1];
@@ -132,33 +184,93 @@
 				try {
 					var jsOut = fn_js(data);
 				} catch (e) { jsErr = e; }
-				var phpErr = null;
-				//try {
-				var php = Crox.compileToPhp(tmpl);
-				var phpOut = renderPhp(php, data);
-				//} catch (e) { phpErr = e; }
+
 				s += '<tr>';
 				s += '<td><pre>' + (tmpl) + '</pre></td>';
 				s += '<td><pre>' + (JSON.stringify(data)) + '</pre></td>';
 				s += '<td><pre>' + (jsErr ? errToStr(jsErr).fontcolor('red') : htmlEncode(jsOut).fontcolor(out == jsOut ? 'green' : 'red')) + '</pre></td>';
-				s += '<td><pre>' + (phpErr ? errToStr(phpErr).fontcolor('red') : htmlEncode(phpOut).fontcolor(out == phpOut ? 'green' : 'red')) + '</pre></td>';
+				if (bPhp) {
+					var phpErr = null;
+					//try {
+					var php = Crox.compileToPhp(tmpl);
+					var phpOut = renderPhp(php, data);
+					//} catch (e) { phpErr = e; }
+					s += '<td><pre>' + (phpErr ? errToStr(phpErr).fontcolor('red') : htmlEncode(phpOut).fontcolor(out == phpOut ? 'green' : 'red')) + '</pre></td>';
+				}
+				if (bVm) {
+					var vmErr = null;
+					var vm = Crox.compileToVM(tmpl);
+					var vmOut = renderVM(vm, data);
+					s += '<td><pre>' + (vmErr ? errToStr(vmErr).fontcolor('red') : htmlEncode(vmOut).fontcolor(approxEqual(out, vmOut) ? 'green' : 'red')) + '</pre></td>';
+				}
 				s += '</tr>';
 			}
 			s += '</table>';
 			document.getElementById('d1').innerHTML = s;
 		}
 		function test() {
-			runTest(fromExamples());
+			runTest(fromExamples(examples));
 		}
 		function test2() {
 			runTest(cases);
 		}
+		function test3() {
+			runTest(fromExamples(examples).concat(cases));
+			return;
+			runTest(fromExamples([
 
+	new Example('一元表达式：负号',
+		'',
+		'{{-1-root}}',
+		2,
+		'-3'),
+	new Example('二元表达式：逻辑与',
+		'',
+		'{{1 && 2}}',
+		null,
+		'2'),
+	new Example('二元表达式：逻辑或',
+		'',
+		'{{1 || 2}}',
+		null,
+		'1'),
+
+	new Example('循环语句',
+		'只输出值',
+		'{{#each root "value"}}\n\t{{value}}\n{{/each}}',
+		[1, 2, 3],
+		'\n\t1\n\n\t2\n\n\t3\n'),
+	new Example('循环语句 2',
+		'输出名和值',
+		'{{#each root "value" "key"}}\n\t{{key}}=>{{value}}\n{{/each}}',
+		{ a: 1, b: 2, c: 3 },
+		'\n\ta=>1\n\n\tb=>2\n\n\tc=>3\n')
+			]).concat([
+				['{{set a=-root}}{{a}}', 2, '-2'],
+				['{{root||0}}', -1, '-1'],
+				['{{root&&root}}{{root}}', -2, '-2-2']
+			]).slice(-1));
+		}
+		function testInc() {
+			runTest([
+				['111{{include "F:/gitlab/crox/test/inc.txt"}}', null, '111inc.txt content好啊\r\n']
+			]);
+		}
 	</script>
 </head>
 <body>
+	<textarea rows="5" cols="80" id="ta1"></textarea><br />
+	<label>
+		<input type="checkbox" id="box_php" />
+		PHP</label>
+	<label>
+		<input type="checkbox" id="box_vm" />
+		VM</label>
+
 	<input type="button" value="test" onclick="test()" />
 	<input type="button" value="test2" onclick="test2()" />
+	<input type="button" value="test3" onclick="test3()" />
+	<input type="button" value="test include" onclick="testInc()" />
 	<div id="d1"></div>
 </body>
 </html>
