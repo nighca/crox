@@ -36,7 +36,8 @@ module.exports = function(grunt) {
     addSrcPrefix(filesClean);
 
     var pkg = grunt.file.readJSON('package.json');
-
+    pkg.upperName = pkg.name.slice(0, 1).toUpperCase() + pkg.name.slice(1);
+    
     grunt.initConfig({
         pkg: pkg,
 
