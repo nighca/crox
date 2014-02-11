@@ -57,14 +57,24 @@ var Lexer = function() {
 				this.pushState(a);
 				return a;
 			}],
-			// {{/if}} {{else}} {{/each}}
-			[/{{(?:\/if|else|\/each)}}/, function(a) {
+			// {{/if}} {{else}} {{/each}} {{/raw}}
+			[/{{(?:\/if|else|\/each|\/raw)}}/, function(a) {
+				return a;
+			}],
+			[/{{#raw}}/, function(a) {
+				this.pushState('raw');
 				return a;
 			}],
 			// {{ {{#if {{#each
 			[/{{(?:#(?:if|each)(?=\s))?/, function(a) {
 				this.pushState('{{');
 				return a;
+			}]
+		],
+		raw: [
+			[/(?:(?!{{\/raw}})[\s\S])+/, function(a) {
+				this.popState();
+				return 'rawtext';
 			}]
 		],
 		'{{': code.concat([

@@ -123,34 +123,3 @@ function phpQuote(s) {
 	/// <returns type="String" />
 	return "'" + String(s).replace(/['\\]/g, '\\$&') + "'";
 }
-
-function formatPath(s) {
-	/// <param name="s" type="String"></param>
-	/// <returns type="String" />
-	s = s.replace(/\\/g, '/');
-	s = s.replace(/\/\/+/g, '/');
-	if (s.indexOf('/') == -1)
-		return s;
-	else {
-		var a = s.split('/');
-		var b = [];
-		for (var i = 0; i < a.length; ++i) {
-			if (a[i].indexOf('..') != -1) {
-				b.pop();
-			}
-			else if (a[i] != '.') {
-				b.push(a[i]);
-			}
-		}
-		return b.join('/');
-	}
-}
-function buildPath(currentPath, path) {
-	/// <param name="currentPath" type="String"></param>
-	/// <param name="path" type="String"></param>
-	/// <returns type="String" />
-	if (path.charAt(0) != '/' && path.charAt(0) != '\\') {
-		path = currentPath.replace(/[^/\\]+$/, '') + path;
-	}
-	return formatPath(path);
-}
