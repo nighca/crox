@@ -3,7 +3,7 @@
  * https://github.com/thx/crox
  *
  * Released under the MIT license
- * md5: 6f8a089adcd27af7e915f48807655a74
+ * md5: 77263821c96934adb10404730d75ce53
  */
 (function(root) {var Crox = (function() {
 function Class(base, constructor, methods) {
@@ -786,17 +786,16 @@ function codegen_vm_tran(prog, nl) {
 				emit('#{end}');
 				break;
 			case 'each':
-				var k = a[3] ? '$_' + a[3] : '$k';
 				emit('#set ($list = ' + exprGen(a[1]) + ')');
 				emit('#foreach($_' + a[4] + ' in $list)');
 				if (a[3]) {
-					emit('#set(' + k + ' = $velocityCount - 1)');
+					emit('#set($_' + a[3] + ' = $velocityCount - 1)');
 				}
 				stmtsGen(a[2]);
 				emit('#{end}');
 				break;
 			case 'set':
-				emit('#set ($_' + a[1] + '=' + exprGen(a[2]) + ')');
+				emit('#set ($' + encodeCommonName(a[1]) + '=' + exprGen(a[2]) + ')');
 				break;
 			case 'eval':
 				var s = exprGen(a[1]);
@@ -821,7 +820,9 @@ function codegen_vm_tran(prog, nl) {
 		for (var i = 0; i < a.length; ++i)
 			stmtGen(a[i]);
 	}
-
+	function encodeCommonName(s) {
+		return s == 'root' ? 'crox_root' : '_' + s;
+	}
 
 	function exprToStr(x, check) {
 		var t = exprGen(x);
@@ -831,7 +832,7 @@ function codegen_vm_tran(prog, nl) {
 	function exprGen(x) {
 		switch (x[0]) {
 			case 'id':
-				return '$_' + x[1];
+				return '$' + encodeCommonName(x[1]);
 			case 'lit':
 				if (typeof x[1] == 'string')
 					return vmQuote(x[1]);
