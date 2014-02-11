@@ -1,5 +1,5 @@
 /*!
- * @preserve crox v1.2.1
+ * Crox v1.2.1
  * https://github.com/thx/crox
  *
  * Released under the MIT license

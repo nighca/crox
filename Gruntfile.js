@@ -3,7 +3,7 @@ module.exports = function(grunt) {
     var buildDir = './build';
 
     var banner = '/*!\n\
- * @preserve <%= pkg.name %> v<%= pkg.version %>\n\
+ * <%= pkg.upperName %> v<%= pkg.version %>\n\
  * <%= pkg.repository.url %>\n\
  *\n\
  * Released under the MIT license\n\
