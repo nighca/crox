@@ -1,5 +1,5 @@
 /*!
- * Crox v1.2.5
+ * Crox v1.2.6
  * https://github.com/thx/crox
  *
  * Released under the MIT license
@@ -621,7 +621,7 @@ var Crox = {
 	}
 };
 
-    Crox.version = '1.2.5';
+    Crox.version = '1.2.6';
     return Crox;
 })();
 
