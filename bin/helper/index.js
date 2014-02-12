@@ -79,6 +79,8 @@
     function compileToKissy(file, options) {
         var tmpl = fs.readFileSync(file, 'utf8');
 
+        tmpl = tmpl.replace(/'/g, '\\\'');
+
         var code = TMPLS.KISSY_TEMPLATE;
         var replaces = '';
         var includeStrs = tmpl.match(/\{\{\s*include\s+([^\s]*)\s*\}\}/gm);
