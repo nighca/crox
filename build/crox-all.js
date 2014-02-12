@@ -1,5 +1,5 @@
 /*!
- * Crox v1.2.3
+ * Crox v1.2.4
  * https://github.com/thx/crox
  *
  * Released under the MIT license
@@ -864,7 +864,7 @@ Crox.compileToVM = function(s, currentPath) {
 	return codegen_vm_tran(parsetmpl(s));
 };
 
-    Crox.version = '1.2.3';
+    Crox.version = '1.2.4';
     return Crox;
 })();
 
