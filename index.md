@@ -47,27 +47,27 @@ Crox是如何做到 `高性能` 和 `跨语言` 的呢？请先看看 [Crox的�
 {% raw %}
 
 
-### 1 表达式输出
+### 表达式输出
 
 - `{{root.name}}` // 输出 data.name
 
-### 2 if选择语句
+### if选择语句
 
 - `{{#if root.length > 0}}` 有 `{{else}}` 没了 `{{/if}}`
 
-### 3 each循环语句
+### each循环语句
 
 - `{{#each root 'val' 'key'}}` `{{key}}` => `{{val}}` `{{/each}}`
 
-### 4 set赋值语句
+### set赋值语句
 
 - `{{set a = data.lilei.mother.phone.brand}}` 然后可以 `{{a.prop}}`
 
-### 5 include子模板导入
+### include子模板导入
 
 - `{{include "path/to/file.tpl"}}` // 导入file.tpl
 
-### 6 raw保留原始内容
+### raw保留原始内容
 
 - `{{#raw}}<script>console.log('{{#if}}{{/if}}')</script>{{/raw}}` Crox翻译输出 `<script>console.log('{{#if}}{{/if}}')</script>`
 
@@ -82,23 +82,23 @@ Crox是如何做到 `高性能` 和 `跨语言` 的呢？请先看看 [Crox的�
 
 ## Crox JS API
 
-### 1. Crox.parse
+### Crox.parse
 
 解析Crox模板生成语法树 `AST`
 
-### 2. Crox.render
+### Crox.render
 
 将数据填充到Crox模板中，并生成渲染后的结果
 
-### 3. Crox.compile
+### Crox.compile
 
 将Crox模板编译成 `原生JS Function`
 
-### 4. Crox.compileToPhp
+### Crox.compileToPhp
 
 将Crox模板编译成 `PHP文件`
 
-### 5. Crox.compileToVM
+### Crox.compileToVM
 
 将Crox模板翻译成 `Velocity模板`
 
