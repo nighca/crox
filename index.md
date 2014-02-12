@@ -67,6 +67,10 @@ Crox是如何做到 `高性能` 和 `跨语言` 的呢？请先看看 [Crox的�
 
 - `{{include "path/to/file.tpl"}}` // 导入file.tpl
 
+### 6 raw保留原始内容
+
+- `{{#raw}}<script>console.log('{{#if}}{{/if}}')</script>{{/raw}}` Crox翻译输出 `<script>console.log('{{#if}}{{/if}}')</script>`
+
 **Crox模板语法已被 [Kissy XTemplate](http://docs.kissyui.com/1.4/docs/html/api/xtemplate/index.html) 模板（有限）兼容**
 
 更多Crox模板语法说明，请点击 [这里](./apis/tpl-api)
