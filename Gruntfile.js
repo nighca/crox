@@ -7,8 +7,6 @@ module.exports = function(grunt) {
  * <%= pkg.repository.url %>\n\
  *\n\
  * Released under the MIT license\n\
- * @date: <%= grunt.template.today("yyyy-mm-dd") %>\n\
- * @author: <%= pkg.author %>\n\
  */\n';
 
     function addSrcPrefix(files) {
