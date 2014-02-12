@@ -16,7 +16,7 @@ Crox将保证翻译后的结果具备最佳执行效率。
 
 ## 在线尝鲜
 
-<iframe width="100%" height="500" src="http://jsfiddle.net/4HYvm/2/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+<iframe width="100%" height="500" src="http://jsfiddle.net/4HYvm/3/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
 ## 认识 Crox
 
