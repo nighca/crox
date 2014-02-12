@@ -17,6 +17,7 @@ program
     .option('-x, --tpl-suffix [tplSuffix]', 'Set template suffix [tpl]', 'tpl')
     .option('-o, --output [dir]', 'Set the output directory for compiled template', '.')
     .option('-w, --watch', 'Watch crox template file change')
+    .option('-m, --module-prefix [modulePrefix]', 'Top module prefix in Crox template files')
     .option('--nodejs', 'Compile crox template file to NodeJS module')
     .option('--cmd', 'Compile crox template file to CMD module')
     .option('--amd', 'Compile crox template file to AMD module')
@@ -24,7 +25,7 @@ program
     .option('--kissy', 'Compile crox template file to Kissy module')
     .option('--kissyfn', 'Compile crox template file to Kissy fn module')
     .option('--silent', 'Do not show log in command line tools')
-    .option('-m, --module-prefix [modulePrefix]', 'Top module prefix in Crox template files')
+    .option('--print', 'Print result to cmd console')
     .parse(process.argv);
 
 if (process.argv.length === 2) {
@@ -160,6 +161,9 @@ function doCompile(source, targetFile) {
   }
 
   fs.writeFileSync(targetFile, result);
+  if (program.print) {
+    console.log(result);
+  }
   !program.silent && console.info('[Crox] ' + source + ' --> ' + targetFile);
 }
 
