@@ -620,14 +620,6 @@ var Crox = {
 function codegen_php_tran(prog) {
 	/// <param name="prog" type="Array">AST</param>
 	/// <returns type="String" />
-	var s_indent = '';
-
-	function indent() {
-		//s_indent += '  ';
-	}
-	function outdent() {
-		//s_indent = s_indent.substr(0, s_indent.length - 2);
-	}
 
 	function emit(t) {
 		s += t;
@@ -651,15 +643,11 @@ function codegen_php_tran(prog) {
 	}
 	function compileIf(stmt) {
 		emit('if(' + walkExpr(stmt[1]) + '){');
-		indent();
 		compileStmts(stmt[2]);
-		outdent();
 		emit('}');
 		if (stmt[3]) {
 			emit('else{');
-			indent();
 			compileStmts(stmt[3]);
-			outdent();
 			emit('}');
 		}
 	}
@@ -667,9 +655,7 @@ function codegen_php_tran(prog) {
 		var idKey = stmt[3] ? '$crox_' + stmt[3] + '=>' : '';
 		emit('foreach(' + walkExpr(stmt[1]) + ' as ' + idKey + '$crox_' + stmt[4] + ')');
 		emit('{');
-		indent();
 		compileStmts(stmt[2]);
-		outdent();
 		emit('}');
 	}
 	function compileSet(stmt) {

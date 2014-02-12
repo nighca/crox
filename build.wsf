@@ -1,6 +1,6 @@
 <job>
-	<script src="src/iof.js" language="JScript"></script>
-	<script src="src/json.js" language="JScript"></script>
+	<script src="tools/iof.js" language="JScript"></script>
+	<script src="tools/json.js" language="JScript"></script>
 	<script src="config.js" language="JScript"></script>
 	<script language="JScript">
 		var wshShell = WScript.CreateObject("WScript.Shell");
