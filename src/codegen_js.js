@@ -55,7 +55,6 @@ function codegen_js_tran(prog, encodeName) {
 			case 'inc':
 				//stmtsGen(a[2][1]);
 				break;
-			case 'raw': emit(a[1]); break;
 			default:
 				throw Error('unknown stmt: ' + a[0]);
 		}

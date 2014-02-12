@@ -47,7 +47,6 @@ function codegen_vm_tran(prog, nl) {
 			case 'inc':
 				emit("#parse('" + changeExt(a[1], 'vm') + "')");
 				break;
-			case 'raw': emit(a[1]); break;
 			default:
 				throw Error('unknown stmt: ' + a[0]);
 		}

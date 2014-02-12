@@ -68,7 +68,6 @@ function codegen_php_tran(prog) {
 			case 'inc':
 				emit("include '" + changeExt(a[1], 'php') + "';");
 				break;
-			case 'raw': emit(a[1]); break;
 			default: throw Error('unknown stmt: ' + a[0]);
 		}
 	}
