@@ -1,9 +1,9 @@
 /*!
- * Crox v1.2.1
+ * Crox v1.2.3
  * https://github.com/thx/crox
  *
  * Released under the MIT license
- * @date: 2014-02-11
+ * @date: 2014-02-12
  * @author: shtml <shtml@live.com>
  */
 (function(root) { 
@@ -621,7 +621,7 @@ var Crox = {
 	}
 };
 
-    Crox.version = '1.2.1';
+    Crox.version = '1.2.3';
     return Crox;
 })();
 
