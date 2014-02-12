@@ -16,7 +16,7 @@ statement:
 |	"{{{" expr "}}}" { $$ = ['eval', $2, false]; }
 |	text { $$ = ['text', $1.text]; }
 |	"{{" include string "}}" { $$ = ['inc', eval($3.text)]; }
-|	"{{#raw}}" rawtext "{{/raw}}" { $$ = ['raw', $2.text]; }
+|	"{{#raw}}" rawtext "{{/raw}}" { $$ = ['text', $2.text]; }
 ;
 id: realId | set | include;
 
