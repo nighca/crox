@@ -35,7 +35,7 @@
 
 JSON数据:
 
-```
+```js
 {
   "name": "Chris",
   "value": 10000,
@@ -45,7 +45,7 @@ JSON数据:
 ```
 Crox模板:
 
-```
+```html
 你好 {{root.name}} 
 你刚赢了 ￥{{ root.value}}
 {{#if root.in_ca}}
@@ -55,7 +55,7 @@ Crox模板:
 
 翻译后的JavaScript函数:
 
-```
+```js
 function (root) {
     // 忽略$htmlEncode源码
     var $s = '';
@@ -75,7 +75,7 @@ function (root) {
 
 翻译后的Php文件内容:
 
-```
+```php
 你好 <?php echo crox_encode($crox_root->name);?> 
 你刚赢了 ￥<?php echo crox_encode($crox_root->value);?>
 <?php if($crox_root->in_ca){?>
