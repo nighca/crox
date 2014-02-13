@@ -78,7 +78,7 @@ Crox是如何做到 `高性能` 和 `跨语言` 的呢？请先看看 [Crox的�
 
 ## 在线尝鲜
 
-<iframe width="100%" height="500" src="http://jsfiddle.net/4HYvm/3/embedded/js,html,result/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+<iframe width="100%" height="500" src="http://jsfiddle.net/4HYvm/3/embedded/html,js,result/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
 ## Crox JS API
 
