@@ -5,19 +5,15 @@ title: for NodeJS
 
 {% raw %}
 
-## 在Nodejs环境中使用Crox
+## 将Crox模板预翻译成Nodejs模块
 
-Crox已经加入npmjs，Crox本身是一个nodejs模块，可被其他模块引用。
+使用 [Crox命令行工具](http://thx.github.io/crox/apis/nodejs-api/) 或 [Crox Grunt插件](http://thx.github.io/crox/tutorials/for-grunt/)，将Crox模板翻译成Nodejs模块，然后通过模块加载器直接使用
 
-另外，Crox也提供命令行工具，可以很方便的将Crox模板转化成js文件或php文件。
+Nodejs 预翻译的demo在这里：[http://thx.github.io/crox/demos/generate/](http://thx.github.io/crox/demos/generate/)
 
- - 如果想引用Crox模块，可以用 `npm install crox` 命令，将Crox安装到nodejs中。
+## 将Crox作为Node模块引入
 
- - 如果同时想使用命令行工具，可以用 `npm install -g crox` (可能需要sudo) 命令，安装Crox模块，并生成Crox命令行工具。
-
-Crox API列出的所有功能，在 Nodejs版本 中同样可用。
-
-### 将Crox作为node模块引入
+请先通过 `npm install crox` 安装。
 
 使用时，将 `crox` 模块 通过 `require` 引入即可使用。
 
@@ -37,14 +33,18 @@ console.log(php);
 
 ```php
 <?php $crox_ok = $crox_root->ok;?> <?php if($crox_ok){?> 好 <?php }else{?> 不好 <?php }?>
-
 ```
 
-### 使用Crox命令行工具
+## 使用Crox命令行工具
+
+通过 `npm install crox -g` 安装Crox命令行工具
 
 Crox命令行工具提供了模板的翻译、模板文件改动监听等功能。
 
 命令的具体介绍和使用示例，请参见 [Crox Nodejs命令行工具](/crox/apis/nodejs-api)
 
+## 使用Crox的Grunt插件
+
+请参见 [http://thx.github.io/crox/tutorials/for-grunt/](http://thx.github.io/crox/tutorials/for-grunt/)
 
 {% endraw %}

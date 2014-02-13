@@ -47,4 +47,6 @@ require(['crox'], function(Crox){
 
 使用 [Crox命令行工具](http://thx.github.io/crox/apis/nodejs-api/) 或 [Crox Grunt插件](http://thx.github.io/crox/tutorials/for-grunt/)，将Crox模板翻译成AMD模块，然后通过模块加载器直接使用
 
+Requirejs 预翻译的demo在这里：[http://thx.github.io/crox/demos/generate/](http://thx.github.io/crox/demos/generate/)
+
 {% endraw %}
