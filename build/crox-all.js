@@ -1,13 +1,11 @@
-/*!
- * Crox v1.2.6
+/**
+ * @preserve Crox v1.2.6
  * https://github.com/thx/crox
  *
  * Released under the MIT license
+ * md5: 4ecf66f9fee2489dfddc7bb45730f4a9
  */
-(function(root) { 
-
-var Crox = (function() {
-    
+(function(root) {var Crox = (function() {
 function Class(base, constructor, methods) {
 	/// <param name="base" type="Function"></param>
 	/// <param name="constructor" type="Function"></param>
@@ -478,6 +476,7 @@ function codegen_js_tran(prog, encodeName) {
 	function emit(s) {
 		body += sIndent + s + '\n';
 	}
+	var i_each = 0;
 	function stmtGen(a) {
 		switch (a[0]) {
 			case 'if':
@@ -495,14 +494,17 @@ function codegen_js_tran(prog, encodeName) {
 				}
 				break;
 			case 'each':
+				++i_each;
 				var k = a[3] || '$i';
-				emit('var $list = ' + exprGen(a[1]) + ';');
-				emit('for(var ' + k + ' in $list) {');
+				var listName = '$list' + (i_each == 1 ? '' : i_each);
+				emit('var ' + listName + ' = ' + exprGen(a[1]) + ';');
+				emit('for(var ' + k + ' in ' + listName + ') {');
 				indent();
-				emit('var ' + a[4] + ' = $list[' + k + '];');
+				emit('var ' + a[4] + ' = ' + listName + '[' + k + '];');
 				stmtsGen(a[2]);
 				outdent();
 				emit('}');
+				--i_each;
 				break;
 			case 'set':
 				emit('var ' + a[1] + '=' + exprGen(a[2]) + ';');
@@ -748,6 +750,7 @@ function codegen_vm_tran(prog, nl) {
 	function emit(s) {
 		body += s;
 	}
+	var i_each = 0;
 	function stmtGen(a) {
 		switch (a[0]) {
 			case 'if':
@@ -760,13 +763,16 @@ function codegen_vm_tran(prog, nl) {
 				emit('#{end}');
 				break;
 			case 'each':
-				emit('#set ($list = ' + exprGen(a[1]) + ')');
-				emit('#foreach($_' + a[4] + ' in $list)');
+				++i_each;
+				var listName = '$list' + (i_each == 1 ? '' : i_each);
+				emit('#set (' + listName + ' = ' + exprGen(a[1]) + ')');
+				emit('#foreach($_' + a[4] + ' in ' + listName + ')');
 				if (a[3]) {
 					emit('#set($_' + a[3] + ' = $velocityCount - 1)');
 				}
 				stmtsGen(a[2]);
 				emit('#{end}');
+				--i_each;
 				break;
 			case 'set':
 				emit('#set ($' + encodeCommonName(a[1]) + '=' + exprGen(a[2]) + ')');
@@ -864,23 +870,4 @@ Crox.compileToVM = function(s, currentPath) {
 	return codegen_vm_tran(parsetmpl(s));
 };
 
-    Crox.version = '1.2.6';
-    return Crox;
-})();
-
-if (typeof module == "object" && module && typeof module.exports == "object") {
-    module.exports = Crox;
-} else if (typeof define == "function" && (define.amd || define.cmd)) {
-    define(function() {
-        return Crox; 
-    });
-} else if (typeof KISSY != "undefined") {
-    KISSY.add(function(){
-        return Crox;
-    });
-}
-if (root) {
-    root.Crox = Crox; 
-}
-
-})(this);
+Crox.version = "1.2.6";return Crox;})();if ( typeof module == "object" && module && typeof module.exports == "object" ) module.exports = Crox;else if (typeof define == "function" && (define.amd || define.cmd) ) define(function () { return Crox; } );else if (typeof KISSY != "undefined") KISSY.add(function(){ return Crox; });if (root) root.Crox = Crox; })(this);

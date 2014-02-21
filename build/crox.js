@@ -1,13 +1,11 @@
-/*!
- * Crox v1.2.6
+/**
+ * @preserve Crox v1.2.6
  * https://github.com/thx/crox
  *
  * Released under the MIT license
+ * md5: 7b8f2d37387983b4428d2ebf65417353
  */
-(function(root) { 
-
-var Crox = (function() {
-    
+(function(root) {var Crox = (function() {
 function Class(base, constructor, methods) {
 	/// <param name="base" type="Function"></param>
 	/// <param name="constructor" type="Function"></param>
@@ -478,6 +476,7 @@ function codegen_js_tran(prog, encodeName) {
 	function emit(s) {
 		body += sIndent + s + '\n';
 	}
+	var i_each = 0;
 	function stmtGen(a) {
 		switch (a[0]) {
 			case 'if':
@@ -495,14 +494,17 @@ function codegen_js_tran(prog, encodeName) {
 				}
 				break;
 			case 'each':
+				++i_each;
 				var k = a[3] || '$i';
-				emit('var $list = ' + exprGen(a[1]) + ';');
-				emit('for(var ' + k + ' in $list) {');
+				var listName = '$list' + (i_each == 1 ? '' : i_each);
+				emit('var ' + listName + ' = ' + exprGen(a[1]) + ';');
+				emit('for(var ' + k + ' in ' + listName + ') {');
 				indent();
-				emit('var ' + a[4] + ' = $list[' + k + '];');
+				emit('var ' + a[4] + ' = ' + listName + '[' + k + '];');
 				stmtsGen(a[2]);
 				outdent();
 				emit('}');
+				--i_each;
 				break;
 			case 'set':
 				emit('var ' + a[1] + '=' + exprGen(a[2]) + ';');
@@ -621,23 +623,4 @@ var Crox = {
 	}
 };
 
-    Crox.version = '1.2.6';
-    return Crox;
-})();
-
-if (typeof module == "object" && module && typeof module.exports == "object") {
-    module.exports = Crox;
-} else if (typeof define == "function" && (define.amd || define.cmd)) {
-    define(function() {
-        return Crox; 
-    });
-} else if (typeof KISSY != "undefined") {
-    KISSY.add(function(){
-        return Crox;
-    });
-}
-if (root) {
-    root.Crox = Crox; 
-}
-
-})(this);
+Crox.version = "1.2.6";return Crox;})();if ( typeof module == "object" && module && typeof module.exports == "object" ) module.exports = Crox;else if (typeof define == "function" && (define.amd || define.cmd) ) define(function () { return Crox; } );else if (typeof KISSY != "undefined") KISSY.add(function(){ return Crox; });if (root) root.Crox = Crox; })(this);

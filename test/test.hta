@@ -56,7 +56,13 @@
 			['$t{{set t="t"}}{{set s=root}}{{s}}#a', '$_t', '$t$_t#a'],
 			['{{#each root "val" "key"}}{{key}}:{{val}}$velocityCount{{/each}}$velocityCount', [1, 2], '0:1$velocityCount1:2$velocityCount$velocityCount'],
 			['{{#each root "val" "key"}}{{key}}:{{val}}$velocityCount{{/each}}$velocityCount', { a: 1, b: 2 }, 'a:1$velocityCountb:2$velocityCount$velocityCount'],
-			['{{#each root "val" "key"}}\n{{key}}:{{val}}\n{{/each}}\n', [1, 2, 3], '\n0:1\n\n1:2\n\n2:3\n\n']
+			['{{#each root "val" "key"}}\n{{key}}:{{val}}\n{{/each}}\n', [1, 2, 3], '\n0:1\n\n1:2\n\n2:3\n\n'],
+			['{{#each root.arr "val"}}{{#if val.list}}{{#each val.list "sub"}}{{sub.name}}{{/each}}{{/if}}{{/each}}', {
+				"arr": [
+					{ "list": [{ "name": "test" }] },
+					{}
+				]
+			}, 'test']
 		];
 
 		function toPhpJson(v) {

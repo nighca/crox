@@ -9,6 +9,7 @@ function codegen_vm_tran(prog, nl) {
 	function emit(s) {
 		body += s;
 	}
+	var i_each = 0;
 	function stmtGen(a) {
 		switch (a[0]) {
 			case 'if':
@@ -21,13 +22,16 @@ function codegen_vm_tran(prog, nl) {
 				emit('#{end}');
 				break;
 			case 'each':
-				emit('#set ($list = ' + exprGen(a[1]) + ')');
-				emit('#foreach($_' + a[4] + ' in $list)');
+				++i_each;
+				var listName = '$list' + (i_each == 1 ? '' : i_each);
+				emit('#set (' + listName + ' = ' + exprGen(a[1]) + ')');
+				emit('#foreach($_' + a[4] + ' in ' + listName + ')');
 				if (a[3]) {
 					emit('#set($_' + a[3] + ' = $velocityCount - 1)');
 				}
 				stmtsGen(a[2]);
 				emit('#{end}');
+				--i_each;
 				break;
 			case 'set':
 				emit('#set ($' + encodeCommonName(a[1]) + '=' + exprGen(a[2]) + ')');
