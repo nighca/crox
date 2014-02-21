@@ -1,6 +1,6 @@
 {
   "name": "crox",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "Crox is a high performance cross-language template engine, written by the JavaScript.",
   "homepage": "http://thx.github.io/crox/",
   "keywords": [
