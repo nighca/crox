@@ -1,0 +1,22 @@
+{
+  "name": "crox",
+  "version": "1.2.7",
+  "main": "./build/crox-all-min.js",
+  "ignore": [
+    "**/.*",
+    "bin",
+    "docs",
+    "lib",
+    "node_modules",
+    "src",
+    "tasks",
+    "test",
+    "build.wsf",
+    "config.js",
+    "Gruntfile.js",
+    "LICENSE",
+    "package.json",
+    "release_notes.md",
+    "README.md"
+  ]
+}
