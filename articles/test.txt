@@ -1,7 +1,0 @@
-如何运行 test.hta？
-
-1. 在 windows 系统下
-
-2. 需要 php，可以从 http://php.net/downloads.php 下载，安装到 E:\php\ 下（因为程序需要 E:\php\php.exe。该路径可在 config.js 内更改）
-
-3. 双击 test.hta，点击相应的按钮，就可以开始了（会产生一个临时文件 temp.php 在当前目录，可以自己删掉）
