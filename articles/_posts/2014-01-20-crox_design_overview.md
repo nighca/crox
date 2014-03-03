@@ -64,49 +64,34 @@ Crox模板:
 
 翻译后的JavaScript函数:
 
-```
-function (root){
-    function $htmlEncode(s) {
-        var obj = { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' };
-        return String(s).replace(/[<>&"]/g, function(c) {
-            return obj[c];
-        });
-    }
-    function $print(s){ $s += s; }
+```js
+function (root) {
+    // 忽略$htmlEncode源码
     var $s = '';
-    $print("你好 ");
-    $print($htmlEncode(root.name));
-    $print("\n你刚赢了 ￥");
-    $print($htmlEncode(root.value));
-    $print("\n");
-    if(root.in_ca){
-        $print("\n嗯，税后 ￥");
-        $print($htmlEncode(root.taxed_value));
-        $print("\n");
+    $s += "你好 ";
+    $s += $htmlEncode(root.name);
+    $s += " \n你刚赢了 ￥";
+    $s += $htmlEncode(root.value);
+    $s += "\n";
+    if (root.in_ca) {
+        $s += "\n    嗯，税后 ￥";
+        $s += $htmlEncode(root.taxed_value);
+        $s += "\n";
     }
     return $s;
 }
 ```
 
-翻译后的Php函数:
+翻译后的Php文件内容:
 
-```javascript
-function temp($i_root) {
-    $t_r = '';
-    $t_r .= '你好 ';
-    $t_r .= htmlspecialchars(ToString($i_root->name), ENT_COMPAT, 'GB2312');
-    $t_r .= '你刚赢了 ￥';
-    $t_r .= htmlspecialchars(ToString($i_root->value), ENT_COMPAT, 'GB2312');
-    $t_r .= '';
-    if($i_root->in_ca){
-      $t_r .= '嗯，税后 ￥';
-      $t_r .= htmlspecialchars(ToString($i_root->taxed_value), ENT_COMPAT, 'GB2312');
-      $t_r .= '';
-    }
-    $t_r .= ' ';
-    return $t_r;
-}
+```php
+你好 <?php echo crox_encode($crox_root->name);?> 
+你刚赢了 ￥<?php echo crox_encode($crox_root->value);?>
+<?php if($crox_root->in_ca){?>
+    嗯，税后 ￥<?php echo crox_encode($crox_root->taxed_value);?>
+<?php }?>
 ```
+
 可以看出无论是翻译成JavaScript还是Php,翻译后代码的样子和大家读模板时直观的印象一致,遇到判断就是一个判断,遇到一个循环就是一个循环,每次输出什么数据十分明确,和徒手写出的代码一样.也正是这样的"直译"让我们明确每一行代码的性能消耗都是充分和必要的.
 
 XTemplate翻译后的JavaScript函数:
