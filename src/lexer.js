@@ -61,7 +61,7 @@ var Lexer = function() {
 				return a;
 			}],
 			// {{/if}} {{else}} {{/each}} {{/raw}}
-			[/{{(?:\/if|else|\/each|\/raw)}}/, function(a) {
+			[/{{(?:\/if|else|\/each|\/forin|\/raw)}}/, function(a) {
 				return a;
 			}],
 			[/{{#raw}}/, function(a) {

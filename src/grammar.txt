@@ -10,7 +10,7 @@ statement:
 	"{{#if" expr "}}" statements "{{/if}}" { $$ = ['if', $2, $4]; }
 |	"{{#if" expr "}}" statements "{{else}}" statements "{{/if}}" { $$ = ['if', $2, $4, $6]; }
 |	"{{#each" expr name name? "}}" statements "{{/each}}" { $$ = ['each', $2, $6, $4, $3, true]; }
-|	"{{#forin" expr name name? "}}" statements "{{/each}}" { $$ = ['each', $2, $6, $4, $3, false]; }
+|	"{{#forin" expr name name? "}}" statements "{{/forin}}" { $$ = ['each', $2, $6, $4, $3, false]; }
 |	"{{" "set" id "=" expr "}}" { $$ = ['set', $3.text, $5]; }
 |	"{{" expr "}}" { $$ = ['eval', $2, true]; }
 |	"{{{" expr "}}}" { $$ = ['eval', $2, false]; }

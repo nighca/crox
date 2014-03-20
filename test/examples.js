@@ -201,7 +201,7 @@ var examples = [
 		'\n\t0=>1\n\n\t1=>2\n\n\t2=>3\n'),
 	new Example('循环对象',
 		'输出名和值',
-		'{{#forin root "value" "key"}}\n\t{{key}}=>{{value}}\n{{/each}}',
+		'{{#forin root "value" "key"}}\n\t{{key}}=>{{value}}\n{{/forin}}',
 		{ a: 1, b: 2, c: 3 },
 		'\n\ta=>1\n\n\tb=>2\n\n\tc=>3\n'),
 
@@ -217,7 +217,7 @@ var examples = [
 		'\n\t0=>1\n\n\t1=>2\n\n\t2=>3\n'),
 	new Example('循环对象，不带引号',
 		'输出名和值',
-		'{{#forin root value key}}\n\t{{key}}=>{{value}}\n{{/each}}',
+		'{{#forin root value key}}\n\t{{key}}=>{{value}}\n{{/forin}}',
 		{ a: 1, b: 2, c: 3 },
 		'\n\ta=>1\n\n\tb=>2\n\n\tc=>3\n')
 ];
