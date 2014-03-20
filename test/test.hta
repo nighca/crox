@@ -55,7 +55,7 @@
 			['{{set t="t"}}{{set s="$"+root}}{{s}}', '_t', '$_t'],
 			['$t{{set t="t"}}{{set s=root}}{{s}}#a', '$_t', '$t$_t#a'],
 			['{{#each root "val" "key"}}{{key}}:{{val}}$velocityCount{{/each}}$velocityCount', [1, 2], '0:1$velocityCount1:2$velocityCount$velocityCount'],
-			['{{#each root "val" "key"}}{{key}}:{{val}}$velocityCount{{/each}}$velocityCount', { a: 1, b: 2 }, 'a:1$velocityCountb:2$velocityCount$velocityCount'],
+			['{{#forin root "val" "key"}}{{key}}:{{val}}$velocityCount{{/each}}$velocityCount', { a: 1, b: 2 }, 'a:1$velocityCountb:2$velocityCount$velocityCount'],
 			['{{#each root "val" "key"}}\n{{key}}:{{val}}\n{{/each}}\n', [1, 2, 3], '\n0:1\n\n1:2\n\n2:3\n\n'],
 			['{{#each root.arr "val"}}{{#if val.list}}{{#each val.list "sub"}}{{sub.name}}{{/each}}{{/if}}{{/each}}', {
 				"arr": [
@@ -115,7 +115,7 @@
 			s += '$crox_root = ' + toPhpJson(data) + ';\n';
 			s += '?>';
 			s += t;
-			saveFile('temp.php', s, 'gb2312');
+			saveFile(testPath + 'temp.php', s, 'gb2312');
 			var wsh = new ActiveXObject('WScript.shell');
 			wsh.CurrentDirectory = testPath;
 			var obj = wsh.Exec(phpPath + ' temp.php');
@@ -182,6 +182,7 @@
 			if (bVm) s += '<th>输出（vm）</th>';
 			s += '</tr>';
 			for (var i = 0; i < a.length; ++i) {
+				document.getElementById('status').innerText = (i + 1) + '/' + a.length;
 				var tmpl = a[i][0];
 				var data = a[i][1];
 				var out = a[i][2];
@@ -192,7 +193,7 @@
 				} catch (e) { jsErr = e; }
 
 				s += '<tr>';
-				s += '<td><pre>' + (tmpl) + '</pre></td>';
+				s += '<td><pre>' + htmlEncode(tmpl) + '</pre></td>';
 				s += '<td><pre>' + (JSON.stringify(data)) + '</pre></td>';
 				s += '<td><pre>' + (jsErr ? errToStr(jsErr).fontcolor('red') : htmlEncode(jsOut).fontcolor(out == jsOut ? 'green' : 'red')) + '</pre></td>';
 				if (bPhp) {
@@ -259,7 +260,7 @@
 		}
 		function testInc() {
 			runTest([
-				['111{{include "F:/gitlab/crox/test/inc.txt"}}', null, '111inc.txt content好啊\r\n']
+				['111{{include "E:/gitlab/crox/test/inc.txt"}}', null, '111inc.txt content好啊\r\n']
 			]);
 		}
 	</script>
@@ -277,6 +278,7 @@
 	<input type="button" value="test2" onclick="test2()" />
 	<input type="button" value="test3" onclick="test3()" />
 	<input type="button" value="test include" onclick="testInc()" />
+	<span id="status"></span>
 	<div id="d1"></div>
 </body>
 </html>

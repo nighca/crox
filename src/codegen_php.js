@@ -9,12 +9,7 @@ function codegen_php_tran(prog) {
 	}
 	function compileEval(stmt) {
 		var t = walkExpr(stmt[1]);
-		if (stmt[2]) {
-			t = 'crox_encode(' + t + ')';
-		} else {
-			t = 'crox_ToString(' + t + ')';
-		}
-		emit('echo ' + t + ';');
+		emit('crox_echo(' + t + ', ' + !!stmt[2] + ');');
 	}
 	function compileContent(stmt) {
 		var t = stmt[1];
@@ -91,9 +86,11 @@ function codegen_php_tran(prog) {
 				return exprToStr(x[1], isAdd) + '- ' + exprToStr(x[2], isMul);
 			case '<': case '>': case '<=': case '>=':
 				return exprToStr(x[1], isRel) + x[0] + exprToStr(x[2], isAdd);
-			case 'eq': case 'ne':
-				var op = x[0] == 'eq' ? '===' : '!==';
-				return exprToStr(x[1], isEquality) + op + exprToStr(x[2], isRel);
+			case '==':
+			case '!=':
+			case '===':
+			case '!==':
+				return exprToStr(x[1], isEquality) + x[0] + exprToStr(x[2], isRel);
 			case '&&':
 				return 'crox_logical_and(' + exprToStr(x[1], null) + ', ' + exprToStr(x[2], null) + ')';
 			case '||':

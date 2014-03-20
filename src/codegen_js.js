@@ -35,9 +35,16 @@ function codegen_js_tran(prog, encodeName) {
 			case 'each':
 				++i_each;
 				var k = a[3] || '$i';
-				var listName = '$list' + (i_each == 1 ? '' : i_each);
-				emit('var ' + listName + ' = ' + exprGen(a[1]) + ';');
-				emit('for(var ' + k + ' in ' + listName + ') {');
+				var sExpr = exprGen(a[1]);
+				if (/^[$\w]+$/.test(sExpr)) {
+					var listName = sExpr;
+				}
+				else {
+					listName = '$list' + (i_each == 1 ? '' : i_each);
+					emit('var ' + listName + ' = ' + sExpr + ';');
+				}
+				if (a[5]) emit('for(var ' + k + '=0;' + k + '<' + listName + '.length;' + k + '++){');
+				else emit('for(var ' + k + ' in ' + listName + ') {');
 				indent();
 				emit('var ' + a[4] + ' = ' + listName + '[' + k + '];');
 				stmtsGen(a[2]);
@@ -50,8 +57,7 @@ function codegen_js_tran(prog, encodeName) {
 				break;
 			case 'eval':
 				var s = exprGen(a[1]);
-				if (a[2]) s = encodeName + '(' + s + ')';
-				emit('$s += ' + s + ';');
+				emit('var $t = ' + s + ';if($t!=null)$s += ' + (a[2] ? encodeName + '($t)' : '$t') + ';');
 				break;
 			case 'text':
 				emit('$s += ' + quote(a[1]) + ';');
@@ -96,8 +102,11 @@ function codegen_js_tran(prog, encodeName) {
 				return exprToStr(x[1], isAdd) + x[0] + ' ' + exprToStr(x[2], isMul);
 			case '<': case '>': case '<=': case '>=':
 				return exprToStr(x[1], isRel) + x[0] + exprToStr(x[2], isAdd);
-			case 'eq': case 'ne':
-				return exprToStr(x[1], isEquality) + (x[0] == 'eq' ? '===' : '!==') + exprToStr(x[2], isRel);
+			case '==':
+			case '!=':
+			case '===':
+			case '!==':
+				return exprToStr(x[1], isEquality) + x[0] + exprToStr(x[2], isRel);
 			case '&&':
 				return exprToStr(x[1], isLogicalAnd) + '&&' + exprToStr(x[2], isEquality);
 			case '||':

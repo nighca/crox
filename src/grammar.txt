@@ -9,13 +9,18 @@ statements:
 statement:
 	"{{#if" expr "}}" statements "{{/if}}" { $$ = ['if', $2, $4]; }
 |	"{{#if" expr "}}" statements "{{else}}" statements "{{/if}}" { $$ = ['if', $2, $4, $6]; }
-|	"{{#each" expr string string? "}}" statements "{{/each}}" { $$ = ['each', $2, $6, $4 && eval($4.text), eval($3.text)];
- }
+|	"{{#each" expr name name? "}}" statements "{{/each}}" { $$ = ['each', $2, $6, $4, $3, true]; }
+|	"{{#forin" expr name name? "}}" statements "{{/each}}" { $$ = ['each', $2, $6, $4, $3, false]; }
 |	"{{" "set" id "=" expr "}}" { $$ = ['set', $3.text, $5]; }
 |	"{{" expr "}}" { $$ = ['eval', $2, true]; }
 |	"{{{" expr "}}}" { $$ = ['eval', $2, false]; }
 |	texts { $$ = ['text', $1]; }
 |	"{{" include string "}}" { $$ = ['inc', eval($3.text)]; }
+;
+
+name:
+	string { $$ = eval($1.text); }
+|	id { $$ = $1.text; }
 ;
 texts:
 	_text { $$ = $1; }
@@ -64,8 +69,7 @@ RelationalExpression:
 ;
 EqualityExpression:
 	RelationalExpression
-|	EqualityExpression eq RelationalExpression { $$ = ['eq', $1, $3]; }
-|	EqualityExpression ne RelationalExpression { $$ = ['ne', $1, $3]; }
+|	EqualityExpression eq RelationalExpression { $$ = [$2.text, $1, $3]; }
 ;
 LogicalAndExpression:
 	EqualityExpression

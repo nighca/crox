@@ -30,7 +30,11 @@ function crox_ToBoolean($a) {
 	if (is_array($a) || is_object($a)) return true;
 	return (bool)$a;
 }
-function crox_encode($s) {
-	return htmlspecialchars(crox_ToString($s), ENT_COMPAT, 'GB2312');
+function crox_echo($s, $e) {
+	if (!is_null($s)) {
+		$s = crox_ToString($s);
+		if ($e) $s = htmlspecialchars($s, ENT_COMPAT, 'GB2312');
+		echo $s;
+	}
 }
 ?>

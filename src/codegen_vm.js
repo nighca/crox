@@ -25,9 +25,20 @@ function codegen_vm_tran(prog, nl) {
 				++i_each;
 				var listName = '$list' + (i_each == 1 ? '' : i_each);
 				emit('#set (' + listName + ' = ' + exprGen(a[1]) + ')');
-				emit('#foreach($_' + a[4] + ' in ' + listName + ')');
-				if (a[3]) {
-					emit('#set($_' + a[3] + ' = $velocityCount - 1)');
+				if (a[5]) { //array
+					emit('#foreach($_' + a[4] + ' in ' + listName + ')');
+					if (a[3]) {
+						emit('#set($_' + a[3] + ' = $velocityCount - 1)');
+					}
+				}
+				else { //object
+					if (a[3]) {
+						emit('#foreach($_' + a[3] + ' in ' + listName + '.keySet())');
+						emit('#set($_' + a[4] + ' =' + listName + '.get($_' + a[3] + '))');
+					}
+					else {
+						emit('#foreach($_' + a[4] + ' in ' + listName + ')');
+					}
 				}
 				stmtsGen(a[2]);
 				emit('#{end}');
@@ -39,7 +50,7 @@ function codegen_vm_tran(prog, nl) {
 			case 'eval':
 				var s = exprGen(a[1]);
 				if (/^\$([\w-]+)$/.test(s))
-					emit('${' + RegExp.$1 + '}');
+					emit('$!{' + RegExp.$1 + '}');
 				else {
 					emit('#set($t = ' + s + ')$!{t}');
 				}
@@ -91,8 +102,11 @@ function codegen_vm_tran(prog, nl) {
 				return exprToStr(x[1], isAdd) + x[0] + ' ' + exprToStr(x[2], isMul);
 			case '<': case '>': case '<=': case '>=':
 				return exprToStr(x[1], isRel) + x[0] + exprToStr(x[2], isAdd);
-			case 'eq': case 'ne':
-				return exprToStr(x[1], isEquality) + (x[0] == 'eq' ? '==' : '!=') + exprToStr(x[2], isRel);
+			case '==':
+			case '!=':
+			case '===':
+			case '!==':
+				return exprToStr(x[1], isEquality) + x[0].slice(0, 2) + exprToStr(x[2], isRel);
 			case '&&':
 				return exprToStr(x[1], isLogicalAnd) + '&&' + exprToStr(x[2], isEquality);
 			case '||':
