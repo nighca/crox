@@ -3,7 +3,7 @@
  * https://github.com/thx/crox
  *
  * Released under the MIT license
- * md5: ef8f5c9bc78608c4ea27fa5e680c2637
+ * md5: 77d7ac397c7dac9b8b4417fa03ecaf6a
  */
 (function(root) {var Crox = (function() {
 function Class(base, constructor, methods) {
@@ -360,7 +360,9 @@ var parse = function() {
 				var $$; $$ = 'else{' + $2 + '}'; return $$;
 			}, function($1) {
 				var $$; $$ = evalStr($1.text); return $$;
-			}, $f3, , , , $f3, $f3, $f3, $f3, function($1, $2, $3) {
+			}, $f3, , , , $f3, $f3, $f3, function($1) {
+				var $$; $$ = encodeCommonName($1.text); return $$;
+			}, function($1, $2, $3) {
 				var $$; $$ = '(' + $2 + ')'; return $$;
 			}, , function($1, $2, $3) {
 				var $$; $$ = $1 + '.' + $3; return $$;

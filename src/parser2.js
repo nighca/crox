@@ -47,7 +47,9 @@ var parse = function() {
 				var $$; $$ = 'else{' + $2 + '}'; return $$;
 			}, function($1) {
 				var $$; $$ = evalStr($1.text); return $$;
-			}, $f3, , , , $f3, $f3, $f3, $f3, function($1, $2, $3) {
+			}, $f3, , , , $f3, $f3, $f3, function($1) {
+				var $$; $$ = encodeCommonName($1.text); return $$;
+			}, function($1, $2, $3) {
 				var $$; $$ = '(' + $2 + ')'; return $$;
 			}, , function($1, $2, $3) {
 				var $$; $$ = $1 + '.' + $3; return $$;

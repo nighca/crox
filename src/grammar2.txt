@@ -35,7 +35,7 @@ PrimaryExpression:
 	string { $$ = $1.text; }
 |	number { $$ = $1.text; }
 |	boolean { $$ = $1.text; }
-|	id { $$ = $1.text; }
+|	id { $$ = encodeCommonName($1.text); }
 |	"(" expr ")" { $$ = '(' + $2 + ')'; }
 ;
 MemberExpression:
