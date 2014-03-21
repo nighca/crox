@@ -123,3 +123,14 @@ function phpQuote(s) {
 	/// <returns type="String" />
 	return "'" + String(s).replace(/['\\]/g, '\\$&') + "'";
 }
+function evalNum(s) {
+	return +s;
+}
+function evalStr(s) {
+	return eval(s);
+}
+
+function encodeCommonName(s) {
+	/// <param name="s" type="String"></param>
+	return s.replace(/^_+/, '$&$&');
+}

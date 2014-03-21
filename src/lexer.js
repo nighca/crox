@@ -8,7 +8,7 @@ var Lexer = function() {
 		return " abstract boolean break byte case catch char class const continue debugger default delete do double else enum export extends final finally float for function goto if implements import in instanceof int interface let long native new package private protected public return short static super switch synchronized this throw throws transient try typeof var void volatile while with yield ".indexOf(' ' + s + ' ') != -1;
 	}
 	var code = [
-		[/\s+/, function() { return null; }],
+		[/\s+/],
 		[re_id, function(a) {
 			switch (a) {
 				case 'true':
@@ -35,32 +35,19 @@ var Lexer = function() {
 				a[i] = a[i].replace(/[()*+?.[\]|]/g, '\\$&');
 			return RegExp(a.join('|'));
 		}(["!", "%", "&&", "(", ")", "*", "+", "-", ".", "/", "<", "<=", "=", ">", ">=", "[", "]", "||", "===", "!==", "==", "!="]), function(a) {
-			switch (a) {
-				case '==':
-				case '===':
-				case '!=':
-				case '!==':
-					return 'eq';
-				default:
-					return a;
-			}
+			return /[!=]=/.test(a) ? 'eq' : a;
 		}]
 	];
 
 	var Lexer = createLexer({
 		'': [
 			[/(?:(?!{{)[\s\S])+/, function(a) {
-				if (a.substring(0, 2) == '{{') {
-					this.pushState(a);
-					return a;
-				}
 				return 'text';
 			}],
 			[/{{{/, function(a) {
 				this.pushState(a);
 				return a;
 			}],
-			// {{/if}} {{else}} {{/each}} {{/raw}}
 			[/{{(?:\/if|else|\/each|\/forin|\/raw)}}/, function(a) {
 				return a;
 			}],
@@ -68,7 +55,6 @@ var Lexer = function() {
 				this.pushState('raw');
 				return a;
 			}],
-			// {{ {{#if {{#each
 			[/{{(?:#(?:if|each|forin)(?=\s))?/, function(a) {
 				this.pushState('{{');
 				return a;

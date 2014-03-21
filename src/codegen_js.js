@@ -1,66 +1,63 @@
 /// <reference path="common.js"/>
 /// <reference path="codegen_common.js"/>
-function codegen_js_tran(prog, encodeName) {
+function codegen_js_tran(prog, encodeName, defaultEncode) {
 	/// <param name="prog" type="Array">AST</param>
 	/// <param name="encodeName" type="String"></param>
+	/// <param name="defaultEncode" type="Boolean"></param>
 	/// <returns type="String" />
 
-	var sIndent = '\t';
-	function indent() {
-		sIndent += '\t';
+	var i_tmake = 0;
+	function TMake() {
+		return '_' + (i_tmake++);
 	}
-	function outdent() {
-		sIndent = sIndent.slice(0, -1);
-	}
+
 	function emit(s) {
-		body += sIndent + s + '\n';
+		body += s;
 	}
-	var i_each = 0;
+
 	function stmtGen(a) {
 		switch (a[0]) {
 			case 'if':
 				emit('if(' + exprGen(a[1]) + '){');
-				indent();
 				stmtsGen(a[2]);
-				outdent();
 				emit('}');
 				if (a[3]) {
 					emit('else{');
-					indent();
 					stmtsGen(a[3]);
-					outdent();
 					emit('}');
 				}
 				break;
 			case 'each':
-				++i_each;
-				var k = a[3] || '$i';
+				var keyName = a[3] ? encodeCommonName(a[3]) : TMake();
 				var sExpr = exprGen(a[1]);
-				if (/^[$\w]+$/.test(sExpr)) {
+				if (/^\w+$/.test(sExpr)) {
 					var listName = sExpr;
 				}
 				else {
-					listName = '$list' + (i_each == 1 ? '' : i_each);
+					listName = TMake();
 					emit('var ' + listName + ' = ' + sExpr + ';');
 				}
-				if (a[5]) emit('for(var ' + k + '=0;' + k + '<' + listName + '.length;' + k + '++){');
-				else emit('for(var ' + k + ' in ' + listName + ') {');
-				indent();
-				emit('var ' + a[4] + ' = ' + listName + '[' + k + '];');
+				if (a[5]) emit('for(var ' + keyName + '=0;' + keyName + '<' + listName + '.length;' + keyName + '++){');
+				else emit('for(var ' + keyName + ' in ' + listName + ') {');
+				emit('var ' + a[4] + ' = ' + listName + '[' + keyName + '];');
 				stmtsGen(a[2]);
-				outdent();
 				emit('}');
-				--i_each;
 				break;
 			case 'set':
-				emit('var ' + a[1] + '=' + exprGen(a[2]) + ';');
+				emit('var ' + encodeCommonName(a[1]) + '=' + exprGen(a[2]) + ';');
 				break;
 			case 'eval':
 				var s = exprGen(a[1]);
-				emit('var $t = ' + s + ';if($t!=null)$s += ' + (a[2] ? encodeName + '($t)' : '$t') + ';');
+				if (/^\w+$/.test(s))
+					var tName = s;
+				else {
+					tName = '_t';
+					emit('_t = ' + s + ';');
+				}
+				emit('if(' + tName + ' !=null)_s += ' + ((defaultEncode ? !a[2] : a[2]) ? encodeName + '(' + tName + ')' : tName) + ';');
 				break;
 			case 'text':
-				emit('$s += ' + quote(a[1]) + ';');
+				emit('_s += ' + quote(a[1]) + ';');
 				break;
 			case 'inc':
 				//stmtsGen(a[2][1]);
@@ -83,7 +80,7 @@ function codegen_js_tran(prog, encodeName) {
 	function exprGen(x) {
 		switch (x[0]) {
 			case 'id':
-				return x[1];
+				return encodeCommonName(x[1]);
 			case 'lit':
 				if (typeof x[1] == 'string')
 					return quote(x[1]);
@@ -120,26 +117,4 @@ function codegen_js_tran(prog, encodeName) {
 	stmtsGen(prog[1]);
 
 	return body;
-}
-function codegen_js_tofn(prog, config) {
-	/// <param name="prog" type="Array">AST</param>
-	/// <param name="config" type="Object" optional="true"></param>
-	/// <returns type="Function" />
-	var encodeName;
-	if (config) encodeName = config.htmlEncode;
-	var s = codegen_js_tran(prog, encodeName || '$htmlEncode');
-	var body = '';
-	if (!encodeName)
-		body += "var obj = { '<': '&lt;', '>': '&gt;', '&': '&amp;', '\"': '&quot;' };\n\
-	function $htmlEncode(s) {\n\
-		return String(s).replace(/[<>&\"]/g, function(c) {\n\
-			return obj[c];\n\
-		});\n\
-	}";
-	body += "var $s = '';";
-	body += s;
-	body += "return $s;";
-
-	var f = Function('root', body);
-	return f;
 }

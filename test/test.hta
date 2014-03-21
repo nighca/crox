@@ -13,6 +13,9 @@
 	<script src="examples.js"></script>
 	<script src="../config.js"></script>
 	<script>
+		var WshShell = new ActiveXObject("WScript.Shell");
+		var testPath = WshShell.CurrentDirectory;
+
 		function fromExamples(examples) {
 			var a = [];
 			for (var i = 0; i < examples.length; ++i) {
@@ -115,7 +118,7 @@
 			s += '$crox_root = ' + toPhpJson(data) + ';\n';
 			s += '?>';
 			s += t;
-			saveFile(testPath + 'temp.php', s, 'gb2312');
+			saveFile(testPath + '\\temp.php', s, 'gb2312');
 			var wsh = new ActiveXObject('WScript.shell');
 			wsh.CurrentDirectory = testPath;
 			var obj = wsh.Exec(phpPath + ' temp.php');
@@ -149,8 +152,10 @@
 					classpath.push(prefix + file.name);
 			}
 		}
-		appendVELCP(velocityPath, '..\\..\\');
-		appendVELCP(velocityPath + 'lib\\', '..\\');
+		try {
+			appendVELCP(velocityPath, '..\\..\\');
+			appendVELCP(velocityPath + 'lib\\', '..\\');
+		} catch (e) { }
 
 		function renderVM(vm, data) {
 			var vmPath = velocityPath + 'examples\\myexample\\';
@@ -171,7 +176,7 @@
 		function approxEqual(s1, s2) {
 			/// <param name="s1" type="String"></param>
 			/// <param name="s2" type="String"></param>
-			return s1.replace(/[\r\n]/g, '') == s2.replace(/[\r\n]/g, '');
+			return s1.replace(/\s+/g, '') == s2.replace(/\s+/g, '');
 		}
 
 		function runTest(a) {
@@ -202,13 +207,13 @@
 					var php = Crox.compileToPhp(tmpl);
 					var phpOut = renderPhp(php, data);
 					//} catch (e) { phpErr = e; }
-					s += '<td><pre>' + (phpErr ? errToStr(phpErr).fontcolor('red') : htmlEncode(phpOut).fontcolor(out == phpOut ? 'green' : 'red')) + '</pre></td>';
+					s += '<td><pre>' + (phpErr ? errToStr(phpErr).fontcolor('red') : htmlEncode(phpOut).fontcolor(out == phpOut ? 'green' : approxEqual(out, phpOut) ? 'blue' : 'red')) + '</pre></td>';
 				}
 				if (bVm) {
 					var vmErr = null;
 					var vm = Crox.compileToVM(tmpl);
 					var vmOut = renderVM(vm, data);
-					s += '<td><pre>' + (vmErr ? errToStr(vmErr).fontcolor('red') : htmlEncode(vmOut).fontcolor(approxEqual(out, vmOut) ? 'green' : 'red')) + '</pre></td>';
+					s += '<td><pre>' + (vmErr ? errToStr(vmErr).fontcolor('red') : htmlEncode(vmOut).fontcolor(out == vmOut ? 'green' : approxEqual(out, vmOut) ? 'blue' : 'red')) + '</pre></td>';
 				}
 				s += '</tr>';
 			}

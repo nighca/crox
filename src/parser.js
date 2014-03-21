@@ -16,10 +16,7 @@ var parse = function() {
 			function $f2($1) {
 				var $$; $$ = $1.text; return $$;
 			}
-			function $f3($1) {
-				var $$; $$ = ['lit', eval($1.text)]; return $$;
-			}
-			function $f4($1, $2, $3) {
+			function $f3($1, $2, $3) {
 				var $$; $$ = [$2.text, $1, $3]; return $$;
 			}
 			return [, function($1) {
@@ -35,22 +32,26 @@ var parse = function() {
 			}, $f0, $f0, $f1, $f1, function($1, $2, $3, $4, $5, $6) {
 				var $$; $$ = ['set', $3.text, $5]; return $$;
 			}, function($1, $2, $3) {
-				var $$; $$ = ['eval', $2, true]; return $$;
-			}, function($1, $2, $3) {
 				var $$; $$ = ['eval', $2, false]; return $$;
+			}, function($1, $2, $3) {
+				var $$; $$ = ['eval', $2, true]; return $$;
 			}, function($1) {
 				var $$; $$ = ['text', $1]; return $$;
 			}, function($1, $2, $3, $4) {
-				var $$; $$ = ['inc', eval($3.text)]; return $$;
+				var $$; $$ = ['inc', evalStr($3.text)]; return $$;
 			}, function($1) {
-				var $$; $$ = eval($1.text); return $$;
+				var $$; $$ = evalStr($1.text); return $$;
 			}, $f2, function($1) {
 				var $$; $$ = $1; return $$;
 			}, function($1, $2) {
 				var $$; $$ = $1 + $2; return $$;
 			}, $f2, function($1, $2, $3) {
 				var $$; $$ = $2.text; return $$;
-			}, , , , $f3, $f3, function($1) {
+			}, , , , function($1) {
+				var $$; $$ = ['lit', evalStr($1.text)]; return $$;
+			}, function($1) {
+				var $$; $$ = ['lit', evalNum($1.text)]; return $$;
+			}, function($1) {
 				var $$; $$ = ['lit', $1.text == 'true']; return $$;
 			}, function($1) {
 				var $$; $$ = ['id', $1.text]; return $$;
@@ -64,7 +65,7 @@ var parse = function() {
 				var $$; $$ = ['!', $2]; return $$;
 			}, function($1, $2) {
 				var $$; $$ = ['u-', $2]; return $$;
-			}, , $f4, $f4, $f4, , $f4, $f4, , $f4, $f4, $f4, $f4, , $f4, , $f4, , $f4];
+			}, , $f3, $f3, $f3, , $f3, $f3, , $f3, $f3, $f3, $f3, , $f3, , $f3, , $f3];
 		}()
 	};
 	return function(a) {

@@ -3,7 +3,7 @@
  * https://github.com/thx/crox
  *
  * Released under the MIT license
- * md5: 3aeed72312b5835ad4f2e8af35a34e67
+ * md5: 7c37208c1dbf841f3e94b327369a0663
  */
 (function(root) {var Crox = (function() {
 function Class(base, constructor, methods) {
@@ -131,6 +131,17 @@ function phpQuote(s) {
 	/// <returns type="String" />
 	return "'" + String(s).replace(/['\\]/g, '\\$&') + "'";
 }
+function evalNum(s) {
+	return +s;
+}
+function evalStr(s) {
+	return eval(s);
+}
+
+function encodeCommonName(s) {
+	/// <param name="s" type="String"></param>
+	return s.replace(/^_+/, '$&$&');
+}
 
 /// <reference path="common.js"/>
 function createLexer(g) {
@@ -240,7 +251,7 @@ var Lexer = function() {
 		return " abstract boolean break byte case catch char class const continue debugger default delete do double else enum export extends final finally float for function goto if implements import in instanceof int interface let long native new package private protected public return short static super switch synchronized this throw throws transient try typeof var void volatile while with yield ".indexOf(' ' + s + ' ') != -1;
 	}
 	var code = [
-		[/\s+/, function() { return null; }],
+		[/\s+/],
 		[re_id, function(a) {
 			switch (a) {
 				case 'true':
@@ -267,32 +278,19 @@ var Lexer = function() {
 				a[i] = a[i].replace(/[()*+?.[\]|]/g, '\\$&');
 			return RegExp(a.join('|'));
 		}(["!", "%", "&&", "(", ")", "*", "+", "-", ".", "/", "<", "<=", "=", ">", ">=", "[", "]", "||", "===", "!==", "==", "!="]), function(a) {
-			switch (a) {
-				case '==':
-				case '===':
-				case '!=':
-				case '!==':
-					return 'eq';
-				default:
-					return a;
-			}
+			return /[!=]=/.test(a) ? 'eq' : a;
 		}]
 	];
 
 	var Lexer = createLexer({
 		'': [
 			[/(?:(?!{{)[\s\S])+/, function(a) {
-				if (a.substring(0, 2) == '{{') {
-					this.pushState(a);
-					return a;
-				}
 				return 'text';
 			}],
 			[/{{{/, function(a) {
 				this.pushState(a);
 				return a;
 			}],
-			// {{/if}} {{else}} {{/each}} {{/raw}}
 			[/{{(?:\/if|else|\/each|\/forin|\/raw)}}/, function(a) {
 				return a;
 			}],
@@ -300,7 +298,6 @@ var Lexer = function() {
 				this.pushState('raw');
 				return a;
 			}],
-			// {{ {{#if {{#each
 			[/{{(?:#(?:if|each|forin)(?=\s))?/, function(a) {
 				this.pushState('{{');
 				return a;
@@ -346,10 +343,7 @@ var parse = function() {
 			function $f2($1) {
 				var $$; $$ = $1.text; return $$;
 			}
-			function $f3($1) {
-				var $$; $$ = ['lit', eval($1.text)]; return $$;
-			}
-			function $f4($1, $2, $3) {
+			function $f3($1, $2, $3) {
 				var $$; $$ = [$2.text, $1, $3]; return $$;
 			}
 			return [, function($1) {
@@ -365,22 +359,26 @@ var parse = function() {
 			}, $f0, $f0, $f1, $f1, function($1, $2, $3, $4, $5, $6) {
 				var $$; $$ = ['set', $3.text, $5]; return $$;
 			}, function($1, $2, $3) {
-				var $$; $$ = ['eval', $2, true]; return $$;
-			}, function($1, $2, $3) {
 				var $$; $$ = ['eval', $2, false]; return $$;
+			}, function($1, $2, $3) {
+				var $$; $$ = ['eval', $2, true]; return $$;
 			}, function($1) {
 				var $$; $$ = ['text', $1]; return $$;
 			}, function($1, $2, $3, $4) {
-				var $$; $$ = ['inc', eval($3.text)]; return $$;
+				var $$; $$ = ['inc', evalStr($3.text)]; return $$;
 			}, function($1) {
-				var $$; $$ = eval($1.text); return $$;
+				var $$; $$ = evalStr($1.text); return $$;
 			}, $f2, function($1) {
 				var $$; $$ = $1; return $$;
 			}, function($1, $2) {
 				var $$; $$ = $1 + $2; return $$;
 			}, $f2, function($1, $2, $3) {
 				var $$; $$ = $2.text; return $$;
-			}, , , , $f3, $f3, function($1) {
+			}, , , , function($1) {
+				var $$; $$ = ['lit', evalStr($1.text)]; return $$;
+			}, function($1) {
+				var $$; $$ = ['lit', evalNum($1.text)]; return $$;
+			}, function($1) {
 				var $$; $$ = ['lit', $1.text == 'true']; return $$;
 			}, function($1) {
 				var $$; $$ = ['id', $1.text]; return $$;
@@ -394,7 +392,7 @@ var parse = function() {
 				var $$; $$ = ['!', $2]; return $$;
 			}, function($1, $2) {
 				var $$; $$ = ['u-', $2]; return $$;
-			}, , $f4, $f4, $f4, , $f4, $f4, , $f4, $f4, $f4, $f4, , $f4, , $f4, , $f4];
+			}, , $f3, $f3, $f3, , $f3, $f3, , $f3, $f3, $f3, $f3, , $f3, , $f3, , $f3];
 		}()
 	};
 	return function(a) {
@@ -468,67 +466,64 @@ function changeExt(s, ext) {
 
 /// <reference path="common.js"/>
 /// <reference path="codegen_common.js"/>
-function codegen_js_tran(prog, encodeName) {
+function codegen_js_tran(prog, encodeName, defaultEncode) {
 	/// <param name="prog" type="Array">AST</param>
 	/// <param name="encodeName" type="String"></param>
+	/// <param name="defaultEncode" type="Boolean"></param>
 	/// <returns type="String" />
 
-	var sIndent = '\t';
-	function indent() {
-		sIndent += '\t';
+	var i_tmake = 0;
+	function TMake() {
+		return '_' + (i_tmake++);
 	}
-	function outdent() {
-		sIndent = sIndent.slice(0, -1);
-	}
+
 	function emit(s) {
-		body += sIndent + s + '\n';
+		body += s;
 	}
-	var i_each = 0;
+
 	function stmtGen(a) {
 		switch (a[0]) {
 			case 'if':
 				emit('if(' + exprGen(a[1]) + '){');
-				indent();
 				stmtsGen(a[2]);
-				outdent();
 				emit('}');
 				if (a[3]) {
 					emit('else{');
-					indent();
 					stmtsGen(a[3]);
-					outdent();
 					emit('}');
 				}
 				break;
 			case 'each':
-				++i_each;
-				var k = a[3] || '$i';
+				var keyName = a[3] ? encodeCommonName(a[3]) : TMake();
 				var sExpr = exprGen(a[1]);
-				if (/^[$\w]+$/.test(sExpr)) {
+				if (/^\w+$/.test(sExpr)) {
 					var listName = sExpr;
 				}
 				else {
-					listName = '$list' + (i_each == 1 ? '' : i_each);
+					listName = TMake();
 					emit('var ' + listName + ' = ' + sExpr + ';');
 				}
-				if (a[5]) emit('for(var ' + k + '=0;' + k + '<' + listName + '.length;' + k + '++){');
-				else emit('for(var ' + k + ' in ' + listName + ') {');
-				indent();
-				emit('var ' + a[4] + ' = ' + listName + '[' + k + '];');
+				if (a[5]) emit('for(var ' + keyName + '=0;' + keyName + '<' + listName + '.length;' + keyName + '++){');
+				else emit('for(var ' + keyName + ' in ' + listName + ') {');
+				emit('var ' + a[4] + ' = ' + listName + '[' + keyName + '];');
 				stmtsGen(a[2]);
-				outdent();
 				emit('}');
-				--i_each;
 				break;
 			case 'set':
-				emit('var ' + a[1] + '=' + exprGen(a[2]) + ';');
+				emit('var ' + encodeCommonName(a[1]) + '=' + exprGen(a[2]) + ';');
 				break;
 			case 'eval':
 				var s = exprGen(a[1]);
-				emit('var $t = ' + s + ';if($t!=null)$s += ' + (a[2] ? encodeName + '($t)' : '$t') + ';');
+				if (/^\w+$/.test(s))
+					var tName = s;
+				else {
+					tName = '_t';
+					emit('_t = ' + s + ';');
+				}
+				emit('if(' + tName + ' !=null)_s += ' + ((defaultEncode ? !a[2] : a[2]) ? encodeName + '(' + tName + ')' : tName) + ';');
 				break;
 			case 'text':
-				emit('$s += ' + quote(a[1]) + ';');
+				emit('_s += ' + quote(a[1]) + ';');
 				break;
 			case 'inc':
 				//stmtsGen(a[2][1]);
@@ -551,7 +546,7 @@ function codegen_js_tran(prog, encodeName) {
 	function exprGen(x) {
 		switch (x[0]) {
 			case 'id':
-				return x[1];
+				return encodeCommonName(x[1]);
 			case 'lit':
 				if (typeof x[1] == 'string')
 					return quote(x[1]);
@@ -589,28 +584,6 @@ function codegen_js_tran(prog, encodeName) {
 
 	return body;
 }
-function codegen_js_tofn(prog, config) {
-	/// <param name="prog" type="Array">AST</param>
-	/// <param name="config" type="Object" optional="true"></param>
-	/// <returns type="Function" />
-	var encodeName;
-	if (config) encodeName = config.htmlEncode;
-	var s = codegen_js_tran(prog, encodeName || '$htmlEncode');
-	var body = '';
-	if (!encodeName)
-		body += "var obj = { '<': '&lt;', '>': '&gt;', '&': '&amp;', '\"': '&quot;' };\n\
-	function $htmlEncode(s) {\n\
-		return String(s).replace(/[<>&\"]/g, function(c) {\n\
-			return obj[c];\n\
-		});\n\
-	}";
-	body += "var $s = '';";
-	body += s;
-	body += "return $s;";
-
-	var f = Function('root', body);
-	return f;
-}
 
 /// <reference path="codegen_js.js"/>
 function parsetmpl(s) {
@@ -625,7 +598,21 @@ function compile2jsfn(s, config) {
 	/// <param name="s" type="String">模板</param>
 	/// <returns type="Function" />
 	var ast = parsetmpl(s);
-	return codegen_js_tofn(ast, config);
+	var encodeName;
+	if (config) encodeName = config.htmlEncode;
+	s = codegen_js_tran(ast, encodeName || '_htmlEncode', true);
+	var body = '';
+	if (!encodeName)
+		body = "var _obj = { '<': '&lt;', '>': '&gt;', '&': '&amp;', '\"': '&quot;' };\
+	function _htmlEncode(s) {\
+		return String(s).replace(/[<>&\"]/g, function(c) {\
+			return _obj[c];\
+		});\
+	}";
+	body += "var _t,_s = '';" + s + "return _s;";
+
+	var f = Function('root', body);
+	return f;
 }
 var Crox = {
 	parse: parsetmpl,
@@ -641,16 +628,21 @@ var Crox = {
 
 /// <reference path="common.js"/>
 /// <reference path="codegen_common.js"/>
-function codegen_php_tran(prog) {
+function codegen_php_tran(prog, defaultEncode) {
 	/// <param name="prog" type="Array">AST</param>
+	/// <param name="defaultEncode" type="Boolean"></param>
 	/// <returns type="String" />
 
+	//�û������� ���������»��߿�ͷ
+	function encodeId(s) {
+		return '$crox_' + encodeCommonName(s);
+	}
 	function emit(t) {
 		s += t;
 	}
 	function compileEval(stmt) {
 		var t = walkExpr(stmt[1]);
-		emit('crox_echo(' + t + ', ' + !!stmt[2] + ');');
+		emit('crox_echo(' + t + ', ' + (defaultEncode ? !stmt[2] : stmt[2]) + ');');
 	}
 	function compileContent(stmt) {
 		var t = stmt[1];
@@ -671,14 +663,13 @@ function codegen_php_tran(prog) {
 		}
 	}
 	function compileEach(stmt) {
-		var idKey = stmt[3] ? '$crox_' + stmt[3] + '=>' : '';
-		emit('foreach(' + walkExpr(stmt[1]) + ' as ' + idKey + '$crox_' + stmt[4] + ')');
+		emit('foreach(' + walkExpr(stmt[1]) + ' as ' + (stmt[3] ? encodeId(stmt[3]) + '=>' : '') + encodeId(stmt[4]) + ')');
 		emit('{');
 		compileStmts(stmt[2]);
 		emit('}');
 	}
 	function compileSet(stmt) {
-		emit('$crox_' + stmt[1] + ' = ' + walkExpr(stmt[2]) + ';');
+		emit(encodeId(stmt[1]) + ' = ' + walkExpr(stmt[2]) + ';');
 	}
 	function compileStmt(a) {
 		switch (a[0]) {
@@ -706,7 +697,7 @@ function codegen_php_tran(prog) {
 	function walkExpr(x) {
 		switch (x[0]) {
 			case 'id':
-				return '$crox_' + x[1];
+				return encodeId(x[1]);
 			case 'lit':
 				if (typeof x[1] == 'string')
 					return phpQuote(x[1]);
@@ -754,12 +745,17 @@ function codegen_php_tran(prog) {
 
 /// <reference path="common.js"/>
 /// <reference path="codegen_common.js"/>
-function codegen_vm_tran(prog, nl) {
+function codegen_vm_tran(prog) {
 	/// <param name="prog" type="Array">AST</param>
-	/// <param name="nl" type="String" optional="true"></param>
 	/// <returns type="String" />
 
-	if (!nl) nl = '\r\n';
+	//用户变量名 都奇数个下划线开头，临时变量都不下划线开头
+	function encodeId(s) {
+		return '$crox_' + encodeCommonName(s);
+	}
+	function isName(s) {
+		return /^$\w+$/.test(s);
+	}
 	function emit(s) {
 		body += s;
 	}
@@ -777,21 +773,26 @@ function codegen_vm_tran(prog, nl) {
 				break;
 			case 'each':
 				++i_each;
-				var listName = '$list' + (i_each == 1 ? '' : i_each);
-				emit('#set (' + listName + ' = ' + exprGen(a[1]) + ')');
+				var sExpr = exprGen(a[1]);
+				if (isName(sExpr))
+					var listName = sExpr;
+				else {
+					listName = '$list' + (i_each == 1 ? '' : i_each);
+					emit('#set (' + listName + ' = ' + sExpr + ')');
+				}
 				if (a[5]) { //array
-					emit('#foreach($_' + a[4] + ' in ' + listName + ')');
+					emit('#foreach(' + encodeId(a[4]) + ' in ' + listName + ')');
 					if (a[3]) {
-						emit('#set($_' + a[3] + ' = $velocityCount - 1)');
+						emit('#set(' + encodeId(a[3]) + ' = $velocityCount - 1)');
 					}
 				}
 				else { //object
 					if (a[3]) {
-						emit('#foreach($_' + a[3] + ' in ' + listName + '.keySet())');
-						emit('#set($_' + a[4] + ' =' + listName + '.get($_' + a[3] + '))');
+						emit('#foreach(' + encodeId(a[3]) + ' in ' + listName + '.keySet())');
+						emit('#set(' + encodeId(a[4]) + ' =' + listName + '.get(' + encodeId(a[3]) + '))');
 					}
 					else {
-						emit('#foreach($_' + a[4] + ' in ' + listName + ')');
+						emit('#foreach(' + encodeId(a[4]) + ' in ' + listName + ')');
 					}
 				}
 				stmtsGen(a[2]);
@@ -799,19 +800,18 @@ function codegen_vm_tran(prog, nl) {
 				--i_each;
 				break;
 			case 'set':
-				emit('#set ($' + encodeCommonName(a[1]) + '=' + exprGen(a[2]) + ')');
+				emit('#set (' + encodeId(a[1]) + '=' + exprGen(a[2]) + ')');
 				break;
 			case 'eval':
 				var s = exprGen(a[1]);
-				if (/^\$([\w-]+)$/.test(s))
-					emit('$!{' + RegExp.$1 + '}');
+				if (isName(s))
+					emit('$!{' + s.slice(1) + '}');
 				else {
 					emit('#set($t = ' + s + ')$!{t}');
 				}
 				break;
 			case 'text':
 				emit(a[1].replace(/\$/g, '$${dollar}').replace(/#/g, '$${sharp}'));
-				//emit('#set($t = ' + vmQuote(a[1]) + ')${t}');
 				break;
 			case 'inc':
 				emit("#parse('" + changeExt(a[1], 'vm') + "')");
@@ -824,9 +824,6 @@ function codegen_vm_tran(prog, nl) {
 		for (var i = 0; i < a.length; ++i)
 			stmtGen(a[i]);
 	}
-	function encodeCommonName(s) {
-		return s == 'root' ? 'crox_root' : '_' + s;
-	}
 
 	function exprToStr(x, check) {
 		var t = exprGen(x);
@@ -836,7 +833,7 @@ function codegen_vm_tran(prog, nl) {
 	function exprGen(x) {
 		switch (x[0]) {
 			case 'id':
-				return '$' + encodeCommonName(x[1]);
+				return encodeId(x[1]);
 			case 'lit':
 				if (typeof x[1] == 'string')
 					return vmQuote(x[1]);
@@ -888,7 +885,7 @@ Crox.compileToPhp = function(s) {
 	/// <summary>返回编译后的 php</summary>
 	/// <param name="s" type="String"></param>
 	/// <returns type="String" />
-	return codegen_php_tran(parsetmpl(s));
+	return codegen_php_tran(parsetmpl(s), true);
 };
 Crox.compileToVM = function(s, currentPath) {
 	/// <summary>返回编译后的 VM 模板</summary>

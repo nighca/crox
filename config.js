@@ -1,9 +1,10 @@
-var gccPath = "D:\\gcc\\compiler.jar";
-(function() {
+function AutoPath(s) {
 	var fso = new ActiveXObject('Scripting.FileSystemObject');
-	if (!fso.FileExists(gccPath))
-		gccPath = gccPath.replace('D', 'E');
-})();
-var phpPath = "E:\\php\\php.exe";
-var velocityPath = "E:\\velocity-1.7\\";
-var testPath = "E:\\github\\crox.git\\trunk\\test\\";
+	if (!fso.FileExists(s) && !fso.FolderExists(s))
+		s = s.replace('D', 'E');
+	return s;
+}
+var gccPath = AutoPath("D:\\gcc\\compiler.jar");
+var phpPath = AutoPath("D:\\php\\php.exe");
+var velocityPath = AutoPath("D:\\velocity-1.7\\");
+var fcivPath = AutoPath("D:\\fciv.exe");

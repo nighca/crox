@@ -12,14 +12,14 @@ statement:
 |	"{{#each" expr name name? "}}" statements "{{/each}}" { $$ = ['each', $2, $6, $4, $3, true]; }
 |	"{{#forin" expr name name? "}}" statements "{{/forin}}" { $$ = ['each', $2, $6, $4, $3, false]; }
 |	"{{" "set" id "=" expr "}}" { $$ = ['set', $3.text, $5]; }
-|	"{{" expr "}}" { $$ = ['eval', $2, true]; }
-|	"{{{" expr "}}}" { $$ = ['eval', $2, false]; }
+|	"{{" expr "}}" { $$ = ['eval', $2, false]; }
+|	"{{{" expr "}}}" { $$ = ['eval', $2, true]; }
 |	texts { $$ = ['text', $1]; }
-|	"{{" include string "}}" { $$ = ['inc', eval($3.text)]; }
+|	"{{" include string "}}" { $$ = ['inc', evalStr($3.text)]; }
 ;
 
 name:
-	string { $$ = eval($1.text); }
+	string { $$ = evalStr($1.text); }
 |	id { $$ = $1.text; }
 ;
 texts:
@@ -33,8 +33,8 @@ _text:
 id: realId | set | include;
 
 PrimaryExpression:
-	string { $$ = ['lit', eval($1.text)]; }
-|	number { $$ = ['lit', eval($1.text)]; }
+	string { $$ = ['lit', evalStr($1.text)]; }
+|	number { $$ = ['lit', evalNum($1.text)]; }
 |	boolean { $$ = ['lit', $1.text == 'true']; }
 |	id { $$ = ['id', $1.text]; }
 |	"(" expr ")" { $$ = $2; }

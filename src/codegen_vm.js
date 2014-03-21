@@ -1,11 +1,16 @@
 /// <reference path="common.js"/>
 /// <reference path="codegen_common.js"/>
-function codegen_vm_tran(prog, nl) {
+function codegen_vm_tran(prog) {
 	/// <param name="prog" type="Array">AST</param>
-	/// <param name="nl" type="String" optional="true"></param>
 	/// <returns type="String" />
 
-	if (!nl) nl = '\r\n';
+	//用户变量名 都奇数个下划线开头，临时变量都不下划线开头
+	function encodeId(s) {
+		return '$crox_' + encodeCommonName(s);
+	}
+	function isName(s) {
+		return /^$\w+$/.test(s);
+	}
 	function emit(s) {
 		body += s;
 	}
@@ -23,21 +28,26 @@ function codegen_vm_tran(prog, nl) {
 				break;
 			case 'each':
 				++i_each;
-				var listName = '$list' + (i_each == 1 ? '' : i_each);
-				emit('#set (' + listName + ' = ' + exprGen(a[1]) + ')');
+				var sExpr = exprGen(a[1]);
+				if (isName(sExpr))
+					var listName = sExpr;
+				else {
+					listName = '$list' + (i_each == 1 ? '' : i_each);
+					emit('#set (' + listName + ' = ' + sExpr + ')');
+				}
 				if (a[5]) { //array
-					emit('#foreach($_' + a[4] + ' in ' + listName + ')');
+					emit('#foreach(' + encodeId(a[4]) + ' in ' + listName + ')');
 					if (a[3]) {
-						emit('#set($_' + a[3] + ' = $velocityCount - 1)');
+						emit('#set(' + encodeId(a[3]) + ' = $velocityCount - 1)');
 					}
 				}
 				else { //object
 					if (a[3]) {
-						emit('#foreach($_' + a[3] + ' in ' + listName + '.keySet())');
-						emit('#set($_' + a[4] + ' =' + listName + '.get($_' + a[3] + '))');
+						emit('#foreach(' + encodeId(a[3]) + ' in ' + listName + '.keySet())');
+						emit('#set(' + encodeId(a[4]) + ' =' + listName + '.get(' + encodeId(a[3]) + '))');
 					}
 					else {
-						emit('#foreach($_' + a[4] + ' in ' + listName + ')');
+						emit('#foreach(' + encodeId(a[4]) + ' in ' + listName + ')');
 					}
 				}
 				stmtsGen(a[2]);
@@ -45,19 +55,18 @@ function codegen_vm_tran(prog, nl) {
 				--i_each;
 				break;
 			case 'set':
-				emit('#set ($' + encodeCommonName(a[1]) + '=' + exprGen(a[2]) + ')');
+				emit('#set (' + encodeId(a[1]) + '=' + exprGen(a[2]) + ')');
 				break;
 			case 'eval':
 				var s = exprGen(a[1]);
-				if (/^\$([\w-]+)$/.test(s))
-					emit('$!{' + RegExp.$1 + '}');
+				if (isName(s))
+					emit('$!{' + s.slice(1) + '}');
 				else {
 					emit('#set($t = ' + s + ')$!{t}');
 				}
 				break;
 			case 'text':
 				emit(a[1].replace(/\$/g, '$${dollar}').replace(/#/g, '$${sharp}'));
-				//emit('#set($t = ' + vmQuote(a[1]) + ')${t}');
 				break;
 			case 'inc':
 				emit("#parse('" + changeExt(a[1], 'vm') + "')");
@@ -70,9 +79,6 @@ function codegen_vm_tran(prog, nl) {
 		for (var i = 0; i < a.length; ++i)
 			stmtGen(a[i]);
 	}
-	function encodeCommonName(s) {
-		return s == 'root' ? 'crox_root' : '_' + s;
-	}
 
 	function exprToStr(x, check) {
 		var t = exprGen(x);
@@ -82,7 +88,7 @@ function codegen_vm_tran(prog, nl) {
 	function exprGen(x) {
 		switch (x[0]) {
 			case 'id':
-				return '$' + encodeCommonName(x[1]);
+				return encodeId(x[1]);
 			case 'lit':
 				if (typeof x[1] == 'string')
 					return vmQuote(x[1]);

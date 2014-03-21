@@ -219,5 +219,11 @@ var examples = [
 		'输出名和值',
 		'{{#forin root value key}}\n\t{{key}}=>{{value}}\n{{/forin}}',
 		{ a: 1, b: 2, c: 3 },
-		'\n\ta=>1\n\n\tb=>2\n\n\tc=>3\n')
+		'\n\ta=>1\n\n\tb=>2\n\n\tc=>3\n'),
+
+	new Example('多层循环',
+		'输出名和值',
+		'{{#each root v1 k1}}{{#each v1 v2 k2}}{{k1}}_{{k2}}:{{v2}},{{/each}}{{/each}}',
+		[[1, 2, 3], [4, 5, 6]],
+		'0_0:1,0_1:2,0_2:3,1_0:4,1_1:5,1_2:6,')
 ];

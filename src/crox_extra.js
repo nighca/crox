@@ -5,7 +5,7 @@ Crox.compileToPhp = function(s) {
 	/// <summary>返回编译后的 php</summary>
 	/// <param name="s" type="String"></param>
 	/// <returns type="String" />
-	return codegen_php_tran(parsetmpl(s));
+	return codegen_php_tran(parsetmpl(s), true);
 };
 Crox.compileToVM = function(s, currentPath) {
 	/// <summary>返回编译后的 VM 模板</summary>

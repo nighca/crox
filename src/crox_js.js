@@ -11,7 +11,21 @@ function compile2jsfn(s, config) {
 	/// <param name="s" type="String">模板</param>
 	/// <returns type="Function" />
 	var ast = parsetmpl(s);
-	return codegen_js_tofn(ast, config);
+	var encodeName;
+	if (config) encodeName = config.htmlEncode;
+	s = codegen_js_tran(ast, encodeName || '_htmlEncode', true);
+	var body = '';
+	if (!encodeName)
+		body = "var _obj = { '<': '&lt;', '>': '&gt;', '&': '&amp;', '\"': '&quot;' };\
+	function _htmlEncode(s) {\
+		return String(s).replace(/[<>&\"]/g, function(c) {\
+			return _obj[c];\
+		});\
+	}";
+	body += "var _t,_s = '';" + s + "return _s;";
+
+	var f = Function('root', body);
+	return f;
 }
 var Crox = {
 	parse: parsetmpl,

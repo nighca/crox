@@ -1,15 +1,20 @@
 /// <reference path="common.js"/>
 /// <reference path="codegen_common.js"/>
-function codegen_php_tran(prog) {
+function codegen_php_tran(prog, defaultEncode) {
 	/// <param name="prog" type="Array">AST</param>
+	/// <param name="defaultEncode" type="Boolean"></param>
 	/// <returns type="String" />
 
+	//用户变量名 都奇数个下划线开头
+	function encodeId(s) {
+		return '$crox_' + encodeCommonName(s);
+	}
 	function emit(t) {
 		s += t;
 	}
 	function compileEval(stmt) {
 		var t = walkExpr(stmt[1]);
-		emit('crox_echo(' + t + ', ' + !!stmt[2] + ');');
+		emit('crox_echo(' + t + ', ' + (defaultEncode ? !stmt[2] : stmt[2]) + ');');
 	}
 	function compileContent(stmt) {
 		var t = stmt[1];
@@ -30,14 +35,13 @@ function codegen_php_tran(prog) {
 		}
 	}
 	function compileEach(stmt) {
-		var idKey = stmt[3] ? '$crox_' + stmt[3] + '=>' : '';
-		emit('foreach(' + walkExpr(stmt[1]) + ' as ' + idKey + '$crox_' + stmt[4] + ')');
+		emit('foreach(' + walkExpr(stmt[1]) + ' as ' + (stmt[3] ? encodeId(stmt[3]) + '=>' : '') + encodeId(stmt[4]) + ')');
 		emit('{');
 		compileStmts(stmt[2]);
 		emit('}');
 	}
 	function compileSet(stmt) {
-		emit('$crox_' + stmt[1] + ' = ' + walkExpr(stmt[2]) + ';');
+		emit(encodeId(stmt[1]) + ' = ' + walkExpr(stmt[2]) + ';');
 	}
 	function compileStmt(a) {
 		switch (a[0]) {
@@ -65,7 +69,7 @@ function codegen_php_tran(prog) {
 	function walkExpr(x) {
 		switch (x[0]) {
 			case 'id':
-				return '$crox_' + x[1];
+				return encodeId(x[1]);
 			case 'lit':
 				if (typeof x[1] == 'string')
 					return phpQuote(x[1]);
