@@ -16,6 +16,9 @@
 		var a_all_js = a_js.concat('codegen_php.js', 'codegen_vm.js', 'crox_extra.js');
 		var out_all_js = ['crox-all.js', 'crox-all-min.js'];
 
+		var amini_js = ['common.js', 'createLexer.js', 'lexer2.js', 'parser2.js', 'codeg2.js', 'crox_js2.js'];
+		var amini_out_js = ['croxmini.js', 'croxmini-min.js'];
+
 		function md5xor(a, b) {
 			if (a && b) {
 				var c = '';
@@ -81,6 +84,8 @@ if (root) root.Crox = Crox; })(this);';
 		build(wrap(jscode.s), jscode.md5, out_js);
 		var allcode = comb(a_all_js);
 		build(wrap(allcode.s), allcode.md5, out_all_js);
+		var minicode = comb(amini_js);
+		build(wrap(minicode.s), minicode.md5, amini_out_js);
 
 		WScript.Echo('done!');
 

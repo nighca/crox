@@ -87,10 +87,6 @@ function createLexer(g) {
 			},
 			getPos: function(i) {
 				return getPos(s, i);
-			},
-			reset: function() {
-				i = 0;
-				stateStack = [''];
 			}
 		};
 	}

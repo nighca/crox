@@ -48,22 +48,12 @@ var Lexer = function() {
 				this.pushState(a);
 				return a;
 			}],
-			[/{{(?:\/if|else|\/each|\/forin|\/raw)}}/, function(a) {
-				return a;
-			}],
-			[/{{#raw}}/, function(a) {
-				this.pushState('raw');
+			[/{{(?:\/if|else|\/each|\/forin)}}/, function(a) {
 				return a;
 			}],
 			[/{{(?:#(?:if|each|forin)(?=\s))?/, function(a) {
 				this.pushState('{{');
 				return a;
-			}]
-		],
-		raw: [
-			[/(?:(?!{{\/raw}})[\s\S])+/, function(a) {
-				this.popState();
-				return 'rawtext';
 			}]
 		],
 		'{{': code.concat([
