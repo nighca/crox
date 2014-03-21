@@ -5,7 +5,7 @@ function codegen_php_tran(prog, defaultEncode) {
 	/// <param name="defaultEncode" type="Boolean"></param>
 	/// <returns type="String" />
 
-	//ÓÃ»§±äÁ¿Ãû ¶¼ÆæÊı¸öÏÂ»®Ïß¿ªÍ·
+	//ç”¨æˆ·å˜é‡å éƒ½å¥‡æ•°ä¸ªä¸‹åˆ’çº¿å¼€å¤´
 	function encodeId(s) {
 		return '$crox_' + encodeCommonName(s);
 	}
