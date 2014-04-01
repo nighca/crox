@@ -16,8 +16,8 @@
 		var a_all_js = a_js.concat('codegen_php.js', 'codegen_vm.js', 'crox_extra.js');
 		var out_all_js = ['crox-all.js', 'crox-all-min.js'];
 
-		var amini_js = ['common.js', 'createLexer.js', 'lexer2.js', 'parser2.js', 'codeg2.js', 'crox_js2.js'];
-		var amini_out_js = ['croxmini.js', 'croxmini-min.js'];
+		var a2_js = ['common.js', 'createLexer.js', 'lexer2.js', 'parser2.js', 'codeg2.js', 'crox_js2.js'];
+		var out2_js = ['crox2.js', 'crox2-min.js'];
 
 		function md5xor(a, b) {
 			if (a && b) {
@@ -31,15 +31,23 @@
 			}
 		}
 		function comb(a) {
+			var t = comb2(a);
+			return {
+				s: 'var Crox = (function() {\r\n'
+					+ t.s
+					+ 'Crox.version = "' + buildVersion + '";'
+					+ 'return Crox;'
+					+ '})();',
+				md5: t.md5
+			};
+		}
+		function comb2(a) {
 			var md5 = '';
-			var s = 'var Crox = (function() {\r\n';
+			var s = '';
 			for (var i = 0; i < a.length; ++i) {
 				s += readFile('src/' + a[i]) + '\r\n';
 				md5 = md5xor(md5, calcMd5('src/' + a[i]));
 			}
-			s += 'Crox.version = "' + buildVersion + '";';
-			s += 'return Crox;';
-			s += '})();';
 			return { s: s, md5: md5 };
 		}
 
@@ -84,8 +92,8 @@ if (root) root.Crox = Crox; })(this);';
 		build(wrap(jscode.s), jscode.md5, out_js);
 		var allcode = comb(a_all_js);
 		build(wrap(allcode.s), allcode.md5, out_all_js);
-		var minicode = comb(amini_js);
-		build(wrap(minicode.s), minicode.md5, amini_out_js);
+		var jscode2 = comb2(a2_js);
+		build('KISSY.add("crox", function(){' + jscode2.s + 'return Crox;});', jscode2.md5, out2_js);
 
 		WScript.Echo('done!');
 

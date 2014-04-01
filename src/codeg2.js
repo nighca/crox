@@ -13,8 +13,9 @@ function makeLoop(a1, a2, a3, a4, a5) {
 		listName = TMake();
 		s = ('var ' + listName + ' = ' + sExpr + ';');
 	}
-	if (a5) s += ('for(var ' + keyName + '=0;' + keyName + '<' + listName + '.length;' + keyName + '++){');
-	else s += ('for(var ' + keyName + ' in ' + listName + ') {');
-	s += 'var ' + a4 + ' = ' + listName + '[' + keyName + '];' + a2 + '}';
+	s += 'for(var ' + keyName +
+		(a5 ? '=0;' + keyName + '<' + listName + '.length; ++' + keyName
+			: ' in ' + listName)
+	+ '){var ' + a4 + ' = ' + listName + '[' + keyName + '];' + a2 + '}';
 	return s;
 }

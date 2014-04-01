@@ -1,10 +1,10 @@
-function compile2jsfn(s) {
+function compile(s) {
+	i_tmake = 0;
 	return parse(Lexer(s));
 }
 var Crox = {
-	compile: compile2jsfn,
+	compile: compile,
 	render: function(s, data) {
-		var fn = compile2jsfn(s);
-		return fn(data);
+		return compile(s)(data);
 	}
 };
