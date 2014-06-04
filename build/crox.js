@@ -1,9 +1,9 @@
 /**
- * @preserve Crox v1.2.7
+ * @preserve Crox v1.2.8
  * https://github.com/thx/crox
  *
  * Released under the MIT license
- * md5: f9150092d0146d7501cafa72ba97a807
+ * md5: 4cc066add7e894810ec32787c137d023
  */
 (function(root) {var Crox = (function() {
 function Class(base, constructor, methods) {
@@ -248,6 +248,7 @@ var Lexer = function() {
 	}
 	var code = [
 		[/\s+/],
+		[/\/\/[^\r\n]*|\/\*[\s\S]*?\*\//],
 		[re_id, function(a) {
 			switch (a) {
 				case 'true':
@@ -622,4 +623,4 @@ var Crox = {
 	}
 };
 
-Crox.version = "1.2.7";return Crox;})();if ( typeof module == "object" && module && typeof module.exports == "object" ) module.exports = Crox;else if (typeof define == "function" && (define.amd || define.cmd) ) define(function () { return Crox; } );else if (typeof KISSY != "undefined") KISSY.add(function(){ return Crox; });if (root) root.Crox = Crox; })(this);
+Crox.version = "1.2.8";return Crox;})();if ( typeof module == "object" && module && typeof module.exports == "object" ) module.exports = Crox;else if (typeof define == "function" && (define.amd || define.cmd) ) define(function () { return Crox; } );else if (typeof KISSY != "undefined") KISSY.add(function(){ return Crox; });if (root) root.Crox = Crox; })(this);

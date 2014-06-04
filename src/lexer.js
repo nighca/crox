@@ -9,6 +9,7 @@ var Lexer = function() {
 	}
 	var code = [
 		[/\s+/],
+		[/\/\/[^\r\n]*|\/\*[\s\S]*?\*\//],
 		[re_id, function(a) {
 			switch (a) {
 				case 'true':
