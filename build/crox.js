@@ -1,5 +1,5 @@
 /**
- * @preserve Crox v1.2.8
+ * @preserve Crox v1.3.0
  * https://github.com/thx/crox
  *
  * Released under the MIT license
@@ -629,4 +629,4 @@ var Crox = {
 	}
 };
 
-Crox.version = "1.2.8";return Crox;})();if ( typeof module == "object" && module && typeof module.exports == "object" ) module.exports = Crox;else if (typeof define == "function" && (define.amd || define.cmd) ) define(function () { return Crox; } );else if (typeof KISSY != "undefined") KISSY.add(function(){ return Crox; });if (root) root.Crox = Crox; })(this);
+Crox.version = "1.3.0";return Crox;})();if ( typeof module == "object" && module && typeof module.exports == "object" ) module.exports = Crox;else if (typeof define == "function" && (define.amd || define.cmd) ) define(function () { return Crox; } );else if (typeof KISSY != "undefined") KISSY.add(function(){ return Crox; });if (root) root.Crox = Crox; })(this);

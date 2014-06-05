@@ -1,5 +1,5 @@
 /*
- Crox v1.2.8
+ Crox v1.3.0
  https://github.com/thx/crox
 
  Released under the MIT license
@@ -26,5 +26,5 @@ _:0},{30:61,_:0},{35:62,_:0},{_:-18},{_:-33},{4:63,_:0},{_:-34},{34:64,_:0},{8:6
 17:12},{9:10,15:11,17:12},{9:10,15:11,17:12},{9:10,15:11,17:12},{9:10,15:11,17:12}],tRules:[[54,50],[50,52],[52],[52,52,51],[51,25,47,34,52,29],[51,25,47,34,52,31,52,29],[51,23,47,49,46,34,52,27],[51,23,47,49,49,34,52,27],[51,24,47,49,46,34,52,28],[51,24,47,49,49,34,52,28],[51,22,19,48,8,47,34],[51,22,47,34],[51,32,47,35],[51,53],[51,22,13,20,34],[49,20],[49,48],[53,45],[53,53,45],[45,21],[45,26,16,30],[48,17],[48,19],[48,13],[42,20],[42,15],[42,11],[42,48],[42,3,47,4],[40,42],[40,40,7,48],[40,40,
 9,47,10],[44,40],[44,1,44],[44,6,44],[41,44],[41,41,14,44],[36,41],[36,36,5,41],[36,36,6,41],[43,36],[43,43,18,36],[37,43],[37,37,12,43],[38,37],[38,38,2,37],[39,38],[39,39,33,38],[47,39],[46]],tFuncs:function(){function a(a,b,c,d,e,g,n){return["each",b,g,d,c,!0]}function c(a,b,c,d,e,g,n){return["each",b,g,d,c,!1]}function e(a){return a.text}function d(a,b,c){return[b.text,a,c]}return[,function(a){return["prog",a]},function(){return[]},function(a,b){a.push(b);return a},function(a,b,c,d,e){return["if",
 b,d]},function(a,b,c,d,e,g,n){return["if",b,d,g]},a,a,c,c,function(a,b,c,d,e,g){return["set",c.text,e]},function(a,b,c){return["eval",b,!1]},function(a,b,c){return["eval",b,!0]},function(a){return["text",a]},function(a,b,c,d){return["inc",A(c.text)]},function(a){return A(a.text)},e,function(a){return a},function(a,b){return a+b},e,function(a,b,c){return b.text},,,,function(a){return["lit",A(a.text)]},function(a){return["lit",+a.text]},function(a){return["lit","true"==a.text]},function(a){return["id",
-a.text]},function(a,b,c){return b},,function(a,b,c){return[".",a,c.text]},function(a,b,c,d){return["[]",a,c]},,function(a,b){return["!",b]},function(a,b){return["u-",b]},,d,,d,d,,d,,d,,d,,d]}()})}();return{parse:G,compile:H,render:function(a,c){return H(a)(c)},version:"1.2.8"}}();"object"==typeof module&&module&&"object"==typeof module.exports?module.exports=n:"function"==typeof define&&(define.amd||define.cmd)?define(function(){return n}):"undefined"!=typeof KISSY&&KISSY.add(function(){return n});
+a.text]},function(a,b,c){return b},,function(a,b,c){return[".",a,c.text]},function(a,b,c,d){return["[]",a,c]},,function(a,b){return["!",b]},function(a,b){return["u-",b]},,d,,d,d,,d,,d,,d,,d]}()})}();return{parse:G,compile:H,render:function(a,c){return H(a)(c)},version:"1.3.0"}}();"object"==typeof module&&module&&"object"==typeof module.exports?module.exports=n:"function"==typeof define&&(define.amd||define.cmd)?define(function(){return n}):"undefined"!=typeof KISSY&&KISSY.add(function(){return n});
 t&&(t.Crox=n)})(this);
