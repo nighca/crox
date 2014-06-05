@@ -12,7 +12,8 @@ statements:
 |	statements statement { $$ = $1 + $2; }
 ;
 statement:
-	"{{#if" expr "}}" statements elsepart? "{{/if}}" { $$ = 'if(' + $2 + '){' + $4 + '}' + ($5 || ''); }
+	"{{#if" expr "}}" statements "{{/if}}" { $$ = 'if(' + $2 + '){' + $4 + '}'; }
+|	"{{#if" expr "}}" statements "{{else}}" statements "{{/if}}" { $$ = 'if(' + $2 + '){' + $4 + '}else{' + $6 + '}'; }
 |	"{{#each" expr name name? "}}" statements "{{/each}}" {
 	$$ = makeLoop($2, $6, $4, $3, false); 
   }
@@ -20,14 +21,21 @@ statement:
 |	"{{" "set" id "=" expr "}}" { $$ = 'var ' + encodeCommonName($3.text) + '=' + $5 + ';'; }
 |	"{{" expr "}}" { $$ = '_print(' + $2 + ',1);'; }
 |	"{{{" expr "}}}" { $$ = '_print(' + $2 + ');'; }
-|	text { $$ = '_print(' + quote($1.text) + ');'; }
+|	texts { $$ = '_print(' + quote($1) + ');'; }
+|	"{{" include string "}}" { throw Error("unimplemented: include"); }
 ;
-elsepart:
-	"{{else}}" statements { $$ = 'else{' + $2 + '}'; }
-;
+
 name:
 	string { $$ = evalStr($1.text); }
 |	id { $$ = $1.text; }
+;
+texts:
+	_text { $$ = $1; }
+|	texts _text { $$ = $1 + $2; }
+;
+_text:
+	text { $$ = $1.text; }
+|	"{{#raw}}" rawtext "{{/raw}}" { $$ = $2.text; }
 ;
 id: realId | set | include;
 

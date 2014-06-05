@@ -16,7 +16,7 @@
 		var a_all_js = a_js.concat('codegen_php.js', 'codegen_vm.js', 'crox_extra.js');
 		var out_all_js = ['crox-all.js', 'crox-all-min.js'];
 
-		var a2_js = ['common.js', 'createLexer.js', 'lexer2.js', 'parser2.js', 'codeg2.js', 'crox_js2.js'];
+		var a2_js = ['common.js', 'createLexer.js', 'lexer.js', 'parser2.js', 'codeg2.js', 'crox_js2.js'];
 		var out2_js = ['crox2.js', 'crox2-min.js'];
 
 		function md5xor(a, b) {

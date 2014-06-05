@@ -3,7 +3,7 @@
  * https://github.com/thx/crox
  *
  * Released under the MIT license
- * md5: 912613ebf674b2d4a9e47ab63011d26c
+ * md5: 1148cc38533540fc0e33aeaab155c241
  */
 (function(root) {var Crox = (function() {
 function Class(base, constructor, methods) {
@@ -274,7 +274,7 @@ var Lexer = function() {
 			for (var i = 0; i < a.length; ++i)
 				a[i] = a[i].replace(/[()*+?.[\]|]/g, '\\$&');
 			return RegExp(a.join('|'));
-		}(["!", "%", "&&", "(", ")", "*", "+", "-", ".", "/", "<", "<=", "=", ">", ">=", "[", "]", "||", "===", "!==", "==", "!="]), function(a) {
+		}(["!", "%", "&&", "(", ")", "*", "+", "-", ".", "/", "<", "<=", "=", ">", ">=", "[", "]", "||", "===", "!==", "==", "!=", ","]), function(a) {
 			return /[*/%]/.test(a) ? 'mul' : /[<>]/.test(a) ? 'rel' : /[!=]=/.test(a) ? 'eq' : a;
 		}]
 	];
@@ -552,6 +552,12 @@ function codegen_js_tran(prog, encodeName, defaultEncode) {
 				return exprToStr(x[1], isMember) + '.' + x[2];
 			case '[]':
 				return exprToStr(x[1], isMember) + '[' + exprGen(x[2]) + ']';
+			case '()':
+				var a = [];
+				if (x[2])
+					for (var i = 0; i < x[2].length; ++i)
+						a.push(exprGen(x[2][i]));
+				return exprToStr(x[1], isMember) + '(' + a.join(',') + ')';
 			case '!':
 				return '!' + exprToStr(x[1], isUnary);
 			case 'u-':

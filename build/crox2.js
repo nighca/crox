@@ -3,7 +3,7 @@
  * https://github.com/thx/crox
  *
  * Released under the MIT license
- * md5: 6f741f9675dcf102446d5d0c76810a08
+ * md5: 58c139cd4c3c2574fadaec9e51db2e90
  */
 KISSY.add("crox", function(){function Class(base, constructor, methods) {
 	/// <param name="base" type="Function"></param>
@@ -287,12 +287,22 @@ var Lexer = function() {
 				this.pushState(a);
 				return a;
 			}],
-			[/{{(?:\/if|else|\/each|\/forin)}}/, function(a) {
+			[/{{(?:\/if|else|\/each|\/forin|\/raw)}}/, function(a) {
+				return a;
+			}],
+			[/{{#raw}}/, function(a) {
+				this.pushState('raw');
 				return a;
 			}],
 			[/{{(?:#(?:if|each|forin)(?=\s))?/, function(a) {
 				this.pushState('{{');
 				return a;
+			}]
+		],
+		raw: [
+			[/(?:(?!{{\/raw}})[\s\S])+/, function(a) {
+				this.popState();
+				return 'rawtext';
 			}]
 		],
 		'{{': code.concat([
