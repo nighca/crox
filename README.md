@@ -17,7 +17,7 @@ Crox模板可以直接在JavaScript环境中使用，也可以翻译成PHP等其
 
 {{root.value * 2}} 输出 2 倍的 data.value
 
-还支持多种运算符：. [] ! * / % + - < > <= >= === !==
+还支持多种运算符：. [] ! * / % + - < > <= >= == !=
 ```
 
 
@@ -30,12 +30,16 @@ Crox模板可以直接在JavaScript环境中使用，也可以翻译成PHP等其
 
 ```
 
-* 循环语句,用于循环数组或对象
+* 循环语句, each 用于数组，forin 用于对象
 
 ```
-{{#each root 'val'}}{{val}}{{/each}}
+{{#each root val}}{{val}}{{/each}}
 
-{{#each root 'val' 'key'}}{{key}}=>{{val}}{{/each}}
+{{#each root val key}}{{key}}=>{{val}}{{/each}}
+
+{{#forin root val}}{{val}}{{/forin}}
+
+{{#forin root val key}}{{key}}=>{{val}}{{/forin}}
 ```
 
 
