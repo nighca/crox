@@ -3,7 +3,8 @@ program:
 
 stmt:
 	['if', expr, stmts, stmts?]
-	['each', expr, stmts, strValName, strKeyName?]
+	['each', expr, stmts, strKeyName?, strValName]
+	['forin', expr, stmts, strKeyName?, strValName]
 	['set', strName, expr]
 	['eval', expr, blnEncode]
 	['text', string]
@@ -16,8 +17,9 @@ expr:
 	['id', strName]
 	['.', expr, strProperty]
 	['[]', expr, exprProperty]
+	['()', expr, exprs]
 	['!', expr]
 	['u-', expr]
 	[binaryOp, expr, expr]
 
-binaryOp: * / % + - < > <= >= eq ne && ||
+binaryOp: * / % + - < > <= >= == != && ||
