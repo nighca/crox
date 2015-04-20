@@ -65,13 +65,15 @@
 			var tempFile = gccPath + "temp.js";
 
 			function gcc(jspath, outName) {
-				wshShell.Run("java -jar " + gccPath + " --js=" + jspath + ' --js_output_file=' + outName, 0, true);
+				var oExec = wshShell.Exec("java -jar " + gccPath + " --js=" + jspath + ' --js_output_file=' + outName);
+				while (oExec.Status == 0)
+					WScript.Sleep(100);
 			}
 			gcc(outfile, outfilemin);
 		}
 
 		function calcMd5(fpath) {
-			var t = wshShell.Exec('E:\\fciv ' + fpath);
+			var t = wshShell.Exec(fcivPath + ' ' + fpath);
 			t = t.StdOut.ReadAll();
 			return /\w{32}/.exec(t)[0];
 		}
