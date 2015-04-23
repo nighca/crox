@@ -15,7 +15,16 @@ statement:
 |	"{{" expr "}}" { $$ = ['eval', $2, false]; }
 |	"{{{" expr "}}}" { $$ = ['eval', $2, true]; }
 |	texts { $$ = ['text', $1]; }
-|	"{{" include string "}}" { $$ = ['inc', evalStr($3.text)]; }
+|	"{{" include string assigns? "}}" { $$ = ['inc', evalStr($3.text), $4]; }
+;
+
+assigns:
+	assign { $$ = [$1]; }
+|	assigns "," assign { $$ = $1.concat([$3]); }
+;
+
+assign:
+	id "=" expr { $$ = [$1.text, $3]; }
 ;
 
 name:
