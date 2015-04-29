@@ -38,6 +38,7 @@ texts:
 _text:
 	text { $$ = $1.text; }
 |	"{{#raw}}" rawtext "{{/raw}}" { $$ = $2.text; }
+|	"{*" commenttext "*}" { $$ = ''; }
 ;
 id: realId | set | include;
 

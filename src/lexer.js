@@ -42,7 +42,11 @@ var Lexer = function() {
 
 	var Lexer = createLexer({
 		'': [
-			[/(?:(?!{{)[\s\S])+/, function(a) {
+			[/{\*/, function(a) {
+				this.pushState('{*');
+				return a;
+			}],
+			[/(?:(?!{{|{\*|\*})[\s\S])+/, function(a) {
 				return 'text';
 			}],
 			[/{{{/, function(a) {
@@ -50,6 +54,9 @@ var Lexer = function() {
 				return a;
 			}],
 			[/{{(?:\/if|else|\/each|\/forin|\/raw)}}/, function(a) {
+				return a;
+			}],
+			[/\*}/, function(a) {
 				return a;
 			}],
 			[/{{#raw}}/, function(a) {
@@ -78,7 +85,13 @@ var Lexer = function() {
 				this.popState();
 				return a;
 			}]
-		])
+		]),
+		'{*': [
+			[/(?:(?!\*})[\s\S])+/, function(a) {
+				this.popState();
+				return 'commenttext';
+			}]
+		]
 	});
 	return Lexer;
 }();
