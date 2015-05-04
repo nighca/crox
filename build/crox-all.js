@@ -624,7 +624,7 @@ function codegen_js_tran(prog, encodeName, defaultEncode) {
 				if (x[2])
 					for (var i = 0; i < x[2].length; ++i)
 						a.push(exprGen(x[2][i]));
-				return exprToStr(x[1], isMember) + '(' + a.join(',') + ')';
+				return 'crox.helpers[\'' + exprToStr(x[1], isMember) + '\'](' + a.join(',') + ')';
 			case '!':
 				return '!' + exprToStr(x[1], isUnary);
 			case 'u-':
@@ -796,6 +796,8 @@ function codegen_php_tran(prog, defaultEncode) {
 				return exprToStr(x[1], isMember) + "->" + x[2];
 			case '[]':
 				return exprToStr(x[1], isMember) + '[' + walkExpr(x[2]) + ']';
+			case '()':
+				return exprToStr(x[1], isMember) + '(' + (x[2] || []).map(walkExpr).join(', ') + ')'; 
 			case '!':
 				return '!crox_ToBoolean(' + exprToStr(x[1], isUnary) + ')';
 			case 'u-':
