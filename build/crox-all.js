@@ -755,7 +755,7 @@ function codegen_php_tran(prog, defaultEncode) {
 		emit('$crox_include = function ($crox_root) {');
 		emit('include dirname(__FILE__) . \'/' + changeExt(path, 'php') + '\';');
 		emit('};');
-		emit('$crox_params = (object) array(')
+		emit('$crox_params = array(')
 		assigns.forEach(function (assign) {
 			emit('"' + assign[0] + '" => ' + walkExpr(assign[1]) + ',');
 		});
@@ -793,7 +793,8 @@ function codegen_php_tran(prog, defaultEncode) {
 					return phpQuote(x[1]);
 				return String(x[1]);
 			case '.':
-				return exprToStr(x[1], isMember) + "->" + x[2];
+				//return exprToStr(x[1], isMember) + "->" + x[2];
+				return 'crox_getProperty(' + exprToStr(x[1], isMember) + ", '" + x[2] + "')";
 			case '[]':
 				return exprToStr(x[1], isMember) + '[' + walkExpr(x[2]) + ']';
 			case '()':
