@@ -798,7 +798,7 @@ function codegen_php_tran(prog, defaultEncode) {
 			case '[]':
 				return exprToStr(x[1], isMember) + '[' + walkExpr(x[2]) + ']';
 			case '()':
-				return exprToStr(x[1], isMember) + '(' + (x[2] || []).map(walkExpr).join(', ') + ')'; 
+				return 'crox_' + x[1][1] + '(' + (x[2] || []).map(walkExpr).join(', ') + ')'; 
 			case '!':
 				return '!crox_ToBoolean(' + exprToStr(x[1], isUnary) + ')';
 			case 'u-':
