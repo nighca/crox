@@ -1,35 +1,39 @@
-# 高性能跨语言模板引擎 Crox
+# crox-p
 
-## 综述
+crox-p是在[crox](http://thx.github.io/crox/)的基础上改进得到的模板引擎，用于m-nuomi-com项目。
 
-Crox是一个由JavaScript语言实现的 `高性能` `跨语言` 模板引擎。
+兼容crox模板现有所有语法，crox已有语法[见此](http://thx.github.io/crox/apis/tpl-api/)。
 
-Crox模板可以直接在JavaScript环境中使用，也可以翻译成PHP、JSP等其他编程语言的可执行方法，或翻译成Velocity、Smarty等其他模板引擎的源模板。
+注意：crox本身支持直接在JavaScript环境中使用，也可以翻译成PHP、JSP等其他编程语言的可执行方法，或翻译成Velocity、Smarty等其他模板引擎的源模板。crox-p的改动则仅实现了JS及PHP部分，可以认为crox-p仅支持JS及PHP。
 
-Crox将保证翻译后的结果具备最佳执行效率。
+crox-p的改动包括：
 
-* 版本：1.2
-* 作者：三冰，李牧，思竹，陆辉，思霏
+* 注释
 
-##说明
-* 遍历数组用 each，遍历对象用 forin
-* === !== == != 目前都允许，翻译成 js 时保持不变
-* build 目录下，是用 build.wsf（windows 下双击运行，需要 java、google closure compiler）生成的。
-  * crox.js 是 web（js）版的
-  * crox-all.js 还包含到 php、vm 的翻译
-  * crox2.js 是移动 web 版（比 crox.js 更轻量一点，不过差不多）
-  * xxx-min.js 是相应的压缩版
+  ```
+  {* 这里是注释 *}
+  ```
 
+* 自定义helper方法的能力
 
-## Crox官网导航
+  在dep/crox/crox-extra.js及dep/crox/crox-extra.php进行方法的定义，在全站模板中均可使用。
+  
+  名为`foo`的方法，在crox-extra.js中添加`crox.helpers.foo = function () {...}`定义，在crox-extra.php中添加`function crox_foo () {...}`定义，在模板中使用示例：
+  
+  ```
+  {{foo(root.name)}}
+  ```
+  
+* `include`支持作用域及传参
 
-- [Crox官网首页](http://thx.github.io/crox/)
-- [快速上手](http://thx.github.io/crox/tutorials)
-- [Demos](http://thx.github.io/crox/demos)
-- [API介绍](http://thx.github.io/crox/apis)
-- [Crox Nodejs命令行工具](http://thx.github.io/crox/apis/nodejs-api/)
-- [利用Crox命令行工具，将Crox模板翻译成多种文件或模块](http://thx.github.io/crox/demos/generate/)
-- [Crox相关文章](http://thx.github.io/crox/articles)
-- [Crox相关其他资源](http://thx.github.io/crox/resources)
-- [常见问题与回答](http://thx.github.io/crox/faq)
-- [发布历史](http://thx.github.io/crox/releases)
+  每个模板中的变量作用域都是独立的，在`include`其他模板时可以选择传入参数，子模板可以通过`root`获取到传入的变量，语法如下：
+  
+  ```
+  {{include "../../widget/entry/entry.tpl"
+    page = page,
+    webSpeedId = webSpeedId
+  }}
+  {* entry.tpl中可以通过root.page及root.webSpeedId获取到对应的值 *}
+  ```
+
+* 修复了一些crox在实现PHP代码生成时的bug（包括获取属性的方式及PHP `include` 相对路径的问题）
